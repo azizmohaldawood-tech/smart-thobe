@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Tag Generator — Smart Thobe</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar"><div class="brand"><span class="brand-dot"></span> Smart Thobe ID</div><a class="ghost link" href="index.html">Home</a></header>
+<main class="container narrow">
+  <span class="pill">TAG SETUP</span>
+  <h1>Generate the QR target</h1>
+  <p class="sub">Deploy the site first, then replace the demo URL with your real public URL.</p>
+
+  <section class="panel column">
+    <label for="baseUrl">Public website URL</label>
+    <input id="baseUrl" type="url" placeholder="https://your-site.example">
+    <label for="tagId">Tag ID</label>
+    <input id="tagId" value="SAIF-001">
+    <button id="makeQR" class="btn primary">Generate QR</button>
+    <div id="qrcode" class="qrbox"></div>
+    <code id="targetUrl"></code>
+    <p class="hint">The exact URL shown here is also the URL you write to the NFC tag.</p>
+  </section>
+
+  <section class="panel">
+    <div><h2>NFC setup</h2><p>Use an NFC tag that supports NDEF URL records. On a compatible Android phone, write the target URL to the tag with an NFC-writing app. iPhones can usually read a properly formatted NFC URL by tapping it, but writing NFC tags from an iPhone is more limited.</p></div>
+  </section>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+const base = document.getElementById('baseUrl');
+const id = document.getElementById('tagId');
+const out = document.getElementById('targetUrl');
+const box = document.getElementById('qrcode');
+document.getElementById('makeQR').onclick = () => {
+  let url = (base.value || location.origin).replace(/\/+$/,'') + '/emergency.html?id=' + encodeURIComponent(id.value || 'SAIF-001');
+  box.innerHTML = '';
+  new QRCode(box, {text:url, width:240, height:240});
+  out.textContent = url;
+};
+</script>
+</body>
+</html>

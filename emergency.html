@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Emergency ID — Smart Thobe</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-dot"></span> Smart Thobe ID</div>
+    <a class="ghost link" href="index.html">Home</a>
+  </header>
+
+  <main class="container narrow">
+    <div class="emergency-banner">⚠️ EMERGENCY ID • DEMO</div>
+
+    <section class="profile-card">
+      <div class="avatar">A</div>
+      <div>
+        <span class="eyebrow">IDENTITY</span>
+        <h1 id="personName">Demo Person</h1>
+        <p id="personId">ID: SAIF-001</p>
+      </div>
+      <span class="verified">✓ Verified tag</span>
+    </section>
+
+    <section class="action-grid">
+      <button class="action danger" id="locationBtn">📍 Share current location</button>
+      <button class="action" id="contactBtn">📞 Contact emergency person</button>
+    </section>
+
+    <section class="info-card">
+      <h2>Information available to a helper</h2>
+      <div class="info-row"><span>Emergency contact</span><strong>Family contact (demo)</strong></div>
+      <div class="info-row"><span>Language</span><strong>Arabic / English</strong></div>
+      <div class="info-row"><span>Tag status</span><strong>Active</strong></div>
+    </section>
+
+    <section class="locked">
+      <div class="lock">🔒</div>
+      <div>
+        <h2>Private information is locked</h2>
+        <p>Medical and family details should never be exposed by a public QR scan.</p>
+        <button id="unlockBtn" class="btn secondary">Open protected demo</button>
+      </div>
+    </section>
+
+    <div id="status" class="status" hidden></div>
+
+    <section id="protected" class="info-card" hidden>
+      <h2>Protected area — DEMO</h2>
+      <p>This proves the concept of access control. In a real deployment, authentication must happen on a secure server, not inside browser code.</p>
+      <div class="info-row"><span>Emergency person</span><strong>Verified family contact</strong></div>
+      <div class="info-row"><span>Owner control</span><strong>Enabled</strong></div>
+    </section>
+
+    <p class="disclaimer">Prototype only. Do not put real medical information into this demo.</p>
+  </main>
+  <script src="app.js"></script>
+  <script src="emergency.js"></script>
+</body>
+</html>

@@ -1,0 +1,1 @@
+document.getElementById('langBtn')?.addEventListener('click',()=>alert('Arabic mode can be added after the core prototype is working.'));

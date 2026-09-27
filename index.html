@@ -1,1092 +1,601 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Smart Thobe ID — Emergency Identification for the Saudi Thobe</title>
-  <meta name="description" content="A smart emergency ID system for the traditional Saudi thobe. Tap or scan to reveal life-saving information instantly.">
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --bg: #07110d;
-      --bg-soft: #0c1913;
-      --bg-softer: #0a1710;
-      --border: #1f392c;
-      --border-strong: #294438;
-      --green: #65f29a;
-      --green-soft: #65f29a22;
-      --text: #eef8f1;
-      --text-dim: #a9bbb0;
-      --text-dimmer: #91a69a;
-      --text-faint: #607568;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      line-height: 1.55;
-      overflow-x: hidden;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    /* ---------- BACKGROUND GLOW ---------- */
-    .bg-glow {
-      position: fixed;
-      top: -200px; left: 50%;
-      transform: translateX(-50%);
-      width: 900px; height: 900px;
-      background: radial-gradient(circle, #65f29a15 0%, transparent 60%);
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    /* ---------- TOPBAR ---------- */
-    .topbar {
-      height: 72px;
-      border-bottom: 1px solid #183126;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 6%;
-      background: #08140fcc;
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    .brand {
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 17px;
-    }
-
-    .brand-dot {
-      display: inline-block;
-      width: 10px; height: 10px;
-      border-radius: 50%;
-      background: var(--green);
-      box-shadow: 0 0 18px var(--green);
-      animation: pulse 2.5s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { box-shadow: 0 0 18px var(--green); }
-      50%      { box-shadow: 0 0 28px var(--green); }
-    }
-
-    .nav {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
-
-    .ghost {
-      border: 1px solid var(--border-strong);
-      background: transparent;
-      color: #d7e7dd;
-      border-radius: 12px;
-      padding: 9px 16px;
-      font-weight: 500;
-      font-size: 15px;
-      text-decoration: none;
-      transition: all 0.15s ease;
-      cursor: pointer;
-      font-family: inherit;
-    }
-
-    .ghost:hover {
-      background: #12231b;
-      border-color: #65f29a55;
-      color: #fff;
-    }
-
-    .container {
-      width: min(1150px, 90%);
-      margin: auto;
-      position: relative;
-      z-index: 1;
-    }
-
-    /* ---------- PILLS ---------- */
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      border: 1px solid var(--border-strong);
-      border-radius: 40px;
-      padding: 6px 14px;
-      background: #0c1913;
-      font-size: 12px;
-      letter-spacing: 0.15em;
-      color: var(--green);
-      font-weight: 800;
-      text-transform: uppercase;
-    }
-
-    .pill::before {
-      content: '';
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: var(--green);
-      box-shadow: 0 0 8px var(--green);
-    }
-
-    .eyebrow {
-      font-size: 12px;
-      letter-spacing: 0.15em;
-      color: var(--green);
-      font-weight: 800;
-      text-transform: uppercase;
-    }
-
-    /* ---------- HERO ---------- */
-    .hero {
-      min-height: 660px;
-      display: grid;
-      grid-template-columns: 1.15fr 0.85fr;
-      gap: 60px;
-      align-items: center;
-      padding: 70px 0 50px;
-    }
-
-    .hero h1 {
-      font-size: clamp(52px, 7.5vw, 96px);
-      line-height: 0.92;
-      letter-spacing: -0.055em;
-      margin: 22px 0 24px;
-      font-weight: 800;
-    }
-
-    .hero h1 .accent { color: var(--green); }
-
-    .sub {
-      color: var(--text-dim);
-      font-size: 19px;
-      line-height: 1.55;
-      max-width: 560px;
-      margin-bottom: 32px;
-    }
-
-    .hero-actions {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-bottom: 40px;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 9px;
-      border: 0;
-      border-radius: 13px;
-      padding: 15px 24px;
-      font-weight: 800;
-      font-size: 16px;
-      cursor: pointer;
-      font-family: inherit;
-      transition: all 0.18s ease;
-      text-decoration: none;
-      width: fit-content;
-      white-space: nowrap;
-    }
-
-    .primary {
-      background: var(--green);
-      color: #06110b;
-      box-shadow: 0 0 0 0 var(--green);
-    }
-
-    .primary:hover {
-      background: #85f7b0;
-      transform: translateY(-1px);
-      box-shadow: 0 12px 32px #65f29a33;
-    }
-
-    .primary:active { transform: translateY(0); }
-
-    .secondary {
-      background: #12231b;
-      border: 1px solid var(--border-strong);
-      color: var(--text);
-    }
-
-    .secondary:hover {
-      background: #1a3025;
-      border-color: #65f29a55;
-      transform: translateY(-1px);
-    }
-
-    /* hero stats */
-    .hero-stats {
-      display: flex;
-      gap: 32px;
-      flex-wrap: wrap;
-      padding-top: 32px;
-      border-top: 1px solid var(--border);
-      max-width: 560px;
-    }
-
-    .stat-item { display: flex; flex-direction: column; gap: 2px; }
-
-    .stat-value {
-      font-size: 22px;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      color: var(--text);
-    }
-
-    .stat-label {
-      font-size: 12px;
-      color: var(--text-faint);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      font-weight: 600;
-    }
-
-    /* mock tag */
-    .mock-tag {
-      width: 300px;
-      height: 380px;
-      border: 1px solid #355546;
-      border-radius: 32px;
-      background: linear-gradient(145deg, #11251b 0%, #08130e 100%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 20px;
-      box-shadow: 0 35px 90px #000a, inset 0 0 60px #65f29a08;
-      justify-self: center;
-      transform: rotate(3deg);
-      padding: 24px;
-      position: relative;
-      transition: transform 0.4s ease;
-    }
-
-    .mock-tag:hover { transform: rotate(0deg) scale(1.02); }
-
-    .mock-tag::before {
-      content: '';
-      position: absolute;
-      inset: -1px;
-      border-radius: 32px;
-      background: linear-gradient(145deg, #65f29a44, transparent 40%);
-      z-index: -1;
-      opacity: 0.5;
-    }
-
-    .tag-ring {
-      width: 105px;
-      height: 105px;
-      border: 2px solid var(--green);
-      border-radius: 50%;
-      box-shadow: 0 0 45px #65f29a55, inset 0 0 30px #65f29a33;
-      animation: ringPulse 3s ease-in-out infinite;
-    }
-
-    @keyframes ringPulse {
-      0%, 100% { box-shadow: 0 0 45px #65f29a55, inset 0 0 30px #65f29a33; }
-      50%      { box-shadow: 0 0 65px #65f29a88, inset 0 0 40px #65f29a55; }
-    }
-
-    .tag-nfc {
-      font-weight: 900;
-      letter-spacing: 0.2em;
-      font-size: 19px;
-    }
-
-    .tag-qr {
-      border: 1px solid #496457;
-      border-radius: 8px;
-      padding: 9px 16px;
-      font-size: 12px;
-      letter-spacing: 0.1em;
-      color: var(--text-dimmer);
-    }
-
-    .mock-tag small {
-      color: #8da295;
-      letter-spacing: 0.18em;
-      font-size: 11px;
-      font-weight: 600;
-    }
-
-    /* ---------- SECTIONS ---------- */
-    .section {
-      padding: 90px 0;
-      position: relative;
-    }
-
-    .section-head {
-      max-width: 640px;
-      margin-bottom: 50px;
-    }
-
-    .section h2 {
-      font-size: clamp(30px, 4vw, 46px);
-      letter-spacing: -0.035em;
-      margin-top: 12px;
-      line-height: 1.1;
-      font-weight: 800;
-    }
-
-    .section .lead {
-      color: var(--text-dim);
-      font-size: 17px;
-      margin-top: 16px;
-      line-height: 1.6;
-    }
-
-    /* ---------- CARDS GRID ---------- */
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-    }
-
-    .card {
-      border: 1px solid var(--border);
-      background: linear-gradient(180deg, #0c1913 0%, #0a1710 100%);
-      border-radius: 22px;
-      padding: 32px 26px;
-      transition: all 0.25s ease;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, #65f29a55, transparent);
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-
-    .card:hover {
-      border-color: #2d5240;
-      background: linear-gradient(180deg, #0e1d15 0%, #0a1710 100%);
-      transform: translateY(-3px);
-    }
-
-    .card:hover::before { opacity: 1; }
-
-    .card .number {
-      color: var(--green);
-      font-weight: 800;
-      font-size: 13px;
-      letter-spacing: 0.15em;
-      display: block;
-      margin-bottom: 16px;
-    }
-
-    .card h3 {
-      font-size: 21px;
-      letter-spacing: -0.02em;
-      margin-bottom: 12px;
-      font-weight: 700;
-    }
-
-    .card p {
-      color: var(--text-dimmer);
-      font-size: 15px;
-      line-height: 1.6;
-    }
-
-    .card .icon {
-      font-size: 28px;
-      display: inline-block;
-      margin-bottom: 18px;
-    }
-
-    /* ---------- PROTOTYPE BANNER ---------- */
-    .prototype {
-      border: 1px solid var(--border-strong);
-      background: linear-gradient(145deg, #0c1913 0%, #0a1710 100%);
-      border-radius: 28px;
-      padding: 56px 44px;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 18px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .prototype::before {
-      content: '';
-      position: absolute;
-      top: -100px; left: 50%;
-      transform: translateX(-50%);
-      width: 500px; height: 500px;
-      background: radial-gradient(circle, #65f29a20, transparent 65%);
-      pointer-events: none;
-    }
-
-    .prototype > * { position: relative; }
-
-    .prototype h2 {
-      margin: 0;
-      font-size: clamp(28px, 3.5vw, 40px);
-    }
-
-    .prototype p {
-      color: var(--text-dim);
-      max-width: 540px;
-      font-size: 16px;
-    }
-
-    .prototype .btn { margin-top: 10px; }
-
-    /* ---------- REGISTER + QR ---------- */
-    .register-wrap {
-      border: 1px solid var(--border-strong);
-      background: linear-gradient(145deg, #0c1913 0%, #0a1710 100%);
-      border-radius: 28px;
-      padding: 52px 44px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .register-wrap::before {
-      content: '';
-      position: absolute;
-      top: -200px; right: -200px;
-      width: 500px; height: 500px;
-      background: radial-gradient(circle, #65f29a15, transparent 60%);
-      pointer-events: none;
-    }
-
-    .register-wrap > * { position: relative; }
-
-    .register-header {
-      text-align: center;
-      margin-bottom: 40px;
-    }
-
-    .register-header h2 {
-      margin-top: 12px;
-    }
-
-    .register-header .lead {
-      margin-left: auto;
-      margin-right: auto;
-      max-width: 560px;
-    }
-
-    .register-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 44px;
-      align-items: start;
-    }
-
-    /* form */
-    .form-side { display: flex; flex-direction: column; }
-
-    .form-side label {
-      display: block;
-      margin: 14px 0 7px;
-      color: var(--text-dim);
-      font-weight: 600;
-      font-size: 14px;
-    }
-
-    .form-side label:first-child { margin-top: 0; }
-
-    .form-side input {
-      width: 100%;
-      padding: 14px 16px;
-      border-radius: 12px;
-      border: 1px solid var(--border-strong);
-      background: #07110d;
-      color: #fff;
-      font-size: 16px;
-      font-family: inherit;
-      transition: all 0.15s ease;
-    }
-
-    .form-side input::placeholder { color: #4a5c52; }
-
-    .form-side input:focus {
-      outline: none;
-      border-color: var(--green);
-      box-shadow: 0 0 0 3px var(--green-soft);
-    }
-
-    .form-side .btn { margin-top: 24px; width: 100%; }
-
-    .info-banner {
-      background: #0e1a25;
-      border: 1px solid #1e3a4d;
-      color: #9ec5e0;
-      font-size: 13px;
-      padding: 12px 16px;
-      border-radius: 12px;
-      margin-bottom: 20px;
-      line-height: 1.5;
-      word-break: break-all;
-    }
-
-    .info-banner strong { color: var(--green); }
-
-    /* result side */
-    .result-side {
-      border: 1px dashed #2d4a3a;
-      background: #0a1710;
-      border-radius: 22px;
-      padding: 32px 26px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 16px;
-      min-height: 440px;
-      text-align: center;
-      transition: all 0.3s ease;
-    }
-
-    .result-side.active {
-      border-style: solid;
-      border-color: #2d6b44;
-      background: linear-gradient(145deg, #0c1913, #0e2018);
-    }
-
-    .result-placeholder {
-      color: var(--text-faint);
-      font-size: 15px;
-      line-height: 1.7;
-      max-width: 280px;
-    }
-
-    .result-placeholder .big-icon {
-      font-size: 56px;
-      display: block;
-      margin-bottom: 16px;
-      opacity: 0.4;
-    }
-
-    .result-content {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      gap: 14px;
-      width: 100%;
-    }
-
-    .result-content.visible { display: flex; }
-
-    .result-content .check {
-      font-size: 36px;
-      animation: pop 0.4s ease;
-    }
-
-    @keyframes pop {
-      0% { transform: scale(0.5); opacity: 0; }
-      60% { transform: scale(1.15); }
-      100% { transform: scale(1); opacity: 1; }
-    }
-
-    .result-content h3 {
-      font-size: 21px;
-      color: var(--green);
-      letter-spacing: -0.01em;
-      margin-bottom: 2px;
-    }
-
-    .tag-id-display {
-      font-family: 'Courier New', monospace;
-      font-size: 20px;
-      font-weight: 800;
-      color: var(--green);
-      letter-spacing: 0.08em;
-      background: #07110d;
-      border: 1px solid var(--border-strong);
-      padding: 11px 22px;
-      border-radius: 12px;
-      margin: 4px 0;
-    }
-
-    .qr-box {
-      background: #fff;
-      padding: 16px;
-      border-radius: 16px;
-      width: max-content;
-      margin: 6px auto;
-      box-shadow: 0 12px 44px #000a;
-      line-height: 0;
-    }
-
-    .qr-box img, .qr-box canvas { display: block; }
-
-    .result-actions {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin-top: 8px;
-    }
-
-    .result-actions .btn {
-      padding: 11px 16px;
-      font-size: 14px;
-    }
-
-    .warning-note {
-      background: #2a1f0c;
-      border: 1px solid #6b4f1c;
-      color: #ffcf87;
-      font-size: 12.5px;
-      padding: 12px 14px;
-      border-radius: 12px;
-      margin-top: 16px;
-      line-height: 1.55;
-      text-align: left;
-      width: 100%;
-    }
-
-    .status {
-      padding: 14px 18px;
-      border-radius: 12px;
-      background: #12231b;
-      border: 1px solid var(--border-strong);
-      margin-top: 14px;
-      word-break: break-word;
-      font-size: 14px;
-      display: none;
-    }
-
-    .status.visible { display: block; }
-
-    .status.error {
-      background: #3a1b15;
-      border-color: #744133;
-      color: #ffcf87;
-    }
-
-    /* ---------- EMERGENCY PREVIEW ---------- */
-    .preview-card {
-      border: 1px solid var(--border-strong);
-      background: linear-gradient(145deg, #0c1913, #0a1710);
-      border-radius: 22px;
-      padding: 32px;
-      max-width: 560px;
-      margin: 0 auto;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .preview-banner {
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      background: #25170e;
-      border-bottom: 1px solid #67401e;
-      color: #ffcf87;
-      font-size: 12px;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      padding: 8px 16px;
-      text-align: center;
-      text-transform: uppercase;
-    }
-
-    .preview-body {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      margin: 32px 0 24px;
-    }
-
-    .preview-avatar {
-      width: 54px; height: 54px;
-      border-radius: 50%;
-      background: var(--green);
-      color: #07110d;
-      display: grid; place-items: center;
-      font-weight: 900;
-      font-size: 22px;
-      flex-shrink: 0;
-    }
-
-    .preview-body h3 { font-size: 20px; letter-spacing: -0.02em; }
-    .preview-body p  { font-size: 14px; color: var(--text-dimmer); }
-
-    .preview-verified {
-      margin-left: auto;
-      color: var(--green);
-      font-size: 12px;
-      font-weight: 700;
-      white-space: nowrap;
-    }
-
-    .preview-rows {
-      border-top: 1px solid var(--border);
-      margin-top: 12px;
-    }
-
-    .preview-row {
-      display: flex;
-      justify-content: space-between;
-      padding: 13px 0;
-      border-bottom: 1px solid var(--border);
-      font-size: 14.5px;
-    }
-
-    .preview-row:last-child { border-bottom: 0; }
-
-    .preview-row span { color: var(--text-dimmer); }
-    .preview-row strong { font-weight: 600; }
-
-    /* ---------- FOOTER ---------- */
-    footer {
-      border-top: 1px solid #183126;
-      padding: 48px 0 40px;
-      margin-top: 80px;
-      text-align: center;
-      color: var(--text-faint);
-      font-size: 14px;
-    }
-
-    footer strong { color: var(--text-dim); font-weight: 700; }
-    footer p { margin-top: 8px; }
-    footer .footer-links {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-    }
-
-    footer .footer-links a {
-      color: var(--text-dimmer);
-      text-decoration: none;
-      font-size: 14px;
-      transition: color 0.15s;
-    }
-
-    footer .footer-links a:hover { color: var(--green); }
-
-    /* ---------- RESPONSIVE ---------- */
-    @media (max-width: 1000px) {
-      .register-grid { grid-template-columns: 1fr; gap: 30px; }
-    }
-
-    @media (max-width: 900px) {
-      .hero {
-        grid-template-columns: 1fr;
-        min-height: auto;
-        padding: 40px 0;
-        gap: 60px;
-      }
-
-      .hero-stats { gap: 24px; }
-      .mock-tag { width: 240px; height: 300px; }
-      .tag-ring { width: 80px; height: 80px; }
-      .cards { grid-template-columns: 1fr; }
-      .register-wrap, .prototype { padding: 40px 24px; }
-      .section { padding: 60px 0; }
-    }
-
-    @media (max-width: 600px) {
-      .topbar { padding: 0 5%; }
-      .container { width: 92%; }
-      .hero h1 { font-size: clamp(42px, 12vw, 60px); }
-      .sub { font-size: 16px; }
-      .btn { font-size: 15px; padding: 13px 18px; }
-      .hero-actions { flex-direction: column; }
-      .hero-actions .btn { width: 100%; }
-      .nav .ghost { font-size: 14px; padding: 8px 12px; }
-      .hero-stats { flex-direction: column; gap: 16px; }
-      .preview-card { padding: 24px 20px; }
-    }
-
-    /* print — only the QR */
-    @media print {
-      body * { visibility: hidden; }
-      .result-side, .result-side * { visibility: visible; }
-      .result-side {
-        position: absolute;
-        top: 0; left: 0;
-        width: 100%;
-        border: none;
-        background: white;
-        color: black;
-        box-shadow: none;
-      }
-      .result-actions, .warning-note { display: none !important; }
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Smart Thobe ID — Emergency Identification</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#07110d;--border:#1f392c;--border-strong:#294438;--green:#65f29a;--green-soft:#65f29a22;--text:#eef8f1;--text-dim:#a9bbb0;--text-dimmer:#91a69a;--text-faint:#607568}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;line-height:1.55;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body.lang-ar{font-family:'Tajawal','Inter',sans-serif;direction:rtl}
+body.lang-ar .hero h1,body.lang-ar .section h2,body.lang-ar .card h3{letter-spacing:0}
+body.lang-ar .mock-tag{transform:rotate(-3deg)}
+body.lang-ar .mock-tag:hover{transform:rotate(0) scale(1.02)}
+body.lang-ar .preview-verified{margin-left:0;margin-right:auto}
+body.lang-ar .form-side input{text-align:right}
+.bg-glow{position:fixed;top:-200px;left:50%;transform:translateX(-50%);width:900px;height:900px;background:radial-gradient(circle,#65f29a15 0%,transparent 60%);pointer-events:none;z-index:0}
+.topbar{height:72px;border-bottom:1px solid #183126;display:flex;align-items:center;justify-content:space-between;padding:0 6%;background:#08140fcc;backdrop-filter:blur(14px);position:sticky;top:0;z-index:100}
+.brand{font-weight:800;letter-spacing:-.02em;display:flex;align-items:center;gap:10px;font-size:17px}
+.brand-dot{width:10px;height:10px;border-radius:50%;background:var(--green);box-shadow:0 0 18px var(--green);animation:pulse 2.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 18px var(--green)}50%{box-shadow:0 0 28px var(--green)}}
+.nav{display:flex;gap:10px;align-items:center}
+.ghost{border:1px solid var(--border-strong);background:transparent;color:#d7e7dd;border-radius:12px;padding:9px 16px;font-weight:500;font-size:15px;text-decoration:none;transition:all .15s;cursor:pointer;font-family:inherit}
+.ghost:hover{background:#12231b;border-color:#65f29a55;color:#fff}
+.lang-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;background:#12231b;border:1px solid var(--border-strong);color:var(--text);border-radius:12px;padding:9px 14px;font-weight:700;font-size:14px;cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap;min-width:110px}
+.lang-btn:hover{background:#1a3025;border-color:var(--green);color:var(--green);transform:translateY(-1px)}
+.container{width:min(1150px,90%);margin:auto;position:relative;z-index:1}
+.pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border-strong);border-radius:40px;padding:6px 14px;background:#0c1913;font-size:12px;letter-spacing:.15em;color:var(--green);font-weight:800;text-transform:uppercase}
+.pill::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green)}
+.eyebrow{font-size:12px;letter-spacing:.15em;color:var(--green);font-weight:800;text-transform:uppercase}
+body.lang-ar .pill,body.lang-ar .eyebrow,body.lang-ar .stat-label,body.lang-ar .card .number{letter-spacing:0}
+.hero{min-height:660px;display:grid;grid-template-columns:1.15fr .85fr;gap:60px;align-items:center;padding:70px 0 50px}
+.hero h1{font-size:clamp(52px,7.5vw,96px);line-height:.92;letter-spacing:-.055em;margin:22px 0 24px;font-weight:800}
+.hero h1 .accent{color:var(--green)}
+.sub{color:var(--text-dim);font-size:19px;line-height:1.55;max-width:560px;margin-bottom:32px}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:40px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;border:0;border-radius:13px;padding:15px 24px;font-weight:800;font-size:16px;cursor:pointer;font-family:inherit;transition:all .18s;text-decoration:none;width:fit-content;white-space:nowrap}
+.primary{background:var(--green);color:#06110b}
+.primary:hover{background:#85f7b0;transform:translateY(-1px);box-shadow:0 12px 32px #65f29a33}
+.secondary{background:#12231b;border:1px solid var(--border-strong);color:var(--text)}
+.secondary:hover{background:#1a3025;border-color:#65f29a55;transform:translateY(-1px)}
+.hero-stats{display:flex;gap:32px;flex-wrap:wrap;padding-top:32px;border-top:1px solid var(--border);max-width:560px}
+.stat-item{display:flex;flex-direction:column;gap:2px}
+.stat-value{font-size:22px;font-weight:800;color:var(--text)}
+.stat-label{font-size:12px;color:var(--text-faint);letter-spacing:.1em;text-transform:uppercase;font-weight:600}
+.mock-tag{width:300px;height:380px;border:1px solid #355546;border-radius:32px;background:linear-gradient(145deg,#11251b,#08130e);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;box-shadow:0 35px 90px #000a,inset 0 0 60px #65f29a08;justify-self:center;transform:rotate(3deg);padding:24px;transition:transform .4s}
+.mock-tag:hover{transform:rotate(0) scale(1.02)}
+.tag-ring{width:105px;height:105px;border:2px solid var(--green);border-radius:50%;box-shadow:0 0 45px #65f29a55,inset 0 0 30px #65f29a33;animation:ringPulse 3s ease-in-out infinite}
+@keyframes ringPulse{0%,100%{box-shadow:0 0 45px #65f29a55,inset 0 0 30px #65f29a33}50%{box-shadow:0 0 65px #65f29a88,inset 0 0 40px #65f29a55}}
+.tag-label{font-weight:900;letter-spacing:.2em;font-size:19px}
+.tag-qr{border:1px solid #496457;border-radius:8px;padding:9px 16px;font-size:12px;letter-spacing:.1em;color:var(--text-dimmer)}
+.mock-tag small{color:#8da295;letter-spacing:.18em;font-size:11px;font-weight:600}
+body.lang-ar .tag-label,body.lang-ar .tag-qr,body.lang-ar .mock-tag small{letter-spacing:0}
+.section{padding:90px 0;position:relative}
+.section-head{max-width:640px;margin-bottom:50px}
+.section h2{font-size:clamp(30px,4vw,46px);letter-spacing:-.035em;margin-top:12px;line-height:1.15;font-weight:800}
+.section .lead{color:var(--text-dim);font-size:17px;margin-top:16px;line-height:1.6}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.card{border:1px solid var(--border);background:linear-gradient(180deg,#0c1913,#0a1710);border-radius:22px;padding:32px 26px;transition:all .25s;position:relative;overflow:hidden}
+.card:hover{border-color:#2d5240;background:linear-gradient(180deg,#0e1d15,#0a1710);transform:translateY(-3px)}
+.card .number{color:var(--green);font-weight:800;font-size:13px;letter-spacing:.15em;display:block;margin-bottom:16px}
+.card h3{font-size:21px;margin-bottom:12px;font-weight:700}
+.card p{color:var(--text-dimmer);font-size:15px;line-height:1.6}
+.preview-card{border:1px solid var(--border-strong);background:linear-gradient(145deg,#0c1913,#0a1710);border-radius:22px;padding:32px;max-width:560px;margin:0 auto;position:relative;overflow:hidden}
+.preview-banner{position:absolute;top:0;left:0;right:0;background:#25170e;border-bottom:1px solid #67401e;color:#ffcf87;font-size:12px;font-weight:800;letter-spacing:.08em;padding:8px 16px;text-align:center;text-transform:uppercase}
+body.lang-ar .preview-banner{letter-spacing:0}
+.preview-body{display:flex;align-items:center;gap:16px;margin:32px 0 24px}
+.preview-avatar{width:54px;height:54px;border-radius:50%;background:var(--green);color:#07110d;display:grid;place-items:center;font-weight:900;font-size:22px;flex-shrink:0}
+.preview-body h3{font-size:20px}
+.preview-body p{font-size:14px;color:var(--text-dimmer)}
+.preview-verified{margin-left:auto;color:var(--green);font-size:12px;font-weight:700;white-space:nowrap}
+.preview-rows{border-top:1px solid var(--border);margin-top:12px}
+.preview-row{display:flex;justify-content:space-between;padding:13px 0;border-bottom:1px solid var(--border);font-size:14.5px}
+.preview-row:last-child{border-bottom:0}
+.preview-row span{color:var(--text-dimmer)}
+.preview-row strong{font-weight:600}
+.register-wrap{border:1px solid var(--border-strong);background:linear-gradient(145deg,#0c1913,#0a1710);border-radius:28px;padding:52px 44px;position:relative;overflow:hidden}
+.register-header{text-align:center;margin-bottom:40px}
+.register-header h2{margin-top:12px}
+.register-header .lead{margin-left:auto;margin-right:auto;max-width:560px}
+.register-grid{display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:start}
+.form-side{display:flex;flex-direction:column}
+.form-side label{display:block;margin:14px 0 7px;color:var(--text-dim);font-weight:600;font-size:14px}
+.form-side label:first-child{margin-top:0}
+.form-side input{width:100%;padding:14px 16px;border-radius:12px;border:1px solid var(--border-strong);background:#07110d;color:#fff;font-size:16px;font-family:inherit;transition:all .15s}
+.form-side input::placeholder{color:#4a5c52}
+.form-side input:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px var(--green-soft)}
+.form-side .btn{margin-top:24px;width:100%}
+.info-banner{background:#0e1a25;border:1px solid #1e3a4d;color:#9ec5e0;font-size:13px;padding:12px 16px;border-radius:12px;margin-bottom:20px;line-height:1.5;word-break:break-all}
+.info-banner strong{color:var(--green)}
+
+/* --- privacy / lock selector --- */
+.privacy-box{border:1px solid var(--border-strong);background:#0a1710;border-radius:16px;padding:20px;margin-top:22px}
+.privacy-box h4{font-size:15px;margin-bottom:6px;color:var(--text)}
+.privacy-box .hint{font-size:12.5px;color:var(--text-faint);margin-bottom:14px;line-height:1.5}
+.privacy-option{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);cursor:pointer}
+.privacy-option:last-child{border-bottom:0}
+.privacy-option input[type="checkbox"]{appearance:none;-webkit-appearance:none;width:20px;height:20px;border:2px solid var(--border-strong);border-radius:6px;background:#07110d;cursor:pointer;flex-shrink:0;margin-top:1px;position:relative;transition:all .15s}
+.privacy-option input[type="checkbox"]:checked{background:var(--green);border-color:var(--green)}
+.privacy-option input[type="checkbox"]:checked::after{content:"✓";position:absolute;top:-3px;left:2px;color:#07110d;font-weight:900;font-size:15px}
+.privacy-option .p-text{flex:1}
+.privacy-option .p-title{font-size:14.5px;font-weight:700;display:block;margin-bottom:2px}
+.privacy-option .p-desc{font-size:12.5px;color:var(--text-faint);line-height:1.4}
+body.lang-ar .privacy-option{flex-direction:row-reverse}
+body.lang-ar .privacy-option .p-text{text-align:right}
+
+.result-side{border:1px dashed #2d4a3a;background:#0a1710;border-radius:22px;padding:32px 26px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;min-height:440px;text-align:center;transition:all .3s}
+.result-side.active{border-style:solid;border-color:#2d6b44;background:linear-gradient(145deg,#0c1913,#0e2018)}
+.result-placeholder{color:var(--text-faint);font-size:15px;line-height:1.7;max-width:280px}
+.result-placeholder .big-icon{font-size:56px;display:block;margin-bottom:16px;opacity:.4}
+.result-content{display:none;flex-direction:column;align-items:center;gap:14px;width:100%}
+.result-content.visible{display:flex}
+.result-content .check{font-size:36px;animation:pop .4s}
+@keyframes pop{0%{transform:scale(.5);opacity:0}60%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
+.result-content h3{font-size:21px;color:var(--green);margin-bottom:2px}
+.tag-id-display{font-family:'Courier New',monospace;font-size:20px;font-weight:800;color:var(--green);letter-spacing:.08em;background:#07110d;border:1px solid var(--border-strong);padding:11px 22px;border-radius:12px;margin:4px 0;direction:ltr}
+.qr-box{background:#fff;padding:16px;border-radius:16px;width:max-content;margin:6px auto;box-shadow:0 12px 44px #000a;line-height:0}
+.qr-box img,.qr-box canvas{display:block}
+.result-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:8px}
+.result-actions .btn{padding:11px 16px;font-size:14px}
+.warning-note{background:#2a1f0c;border:1px solid #6b4f1c;color:#ffcf87;font-size:12.5px;padding:12px 14px;border-radius:12px;margin-top:16px;line-height:1.55;text-align:left;width:100%}
+body.lang-ar .warning-note{text-align:right}
+.status{padding:14px 18px;border-radius:12px;background:#12231b;border:1px solid var(--border-strong);margin-top:14px;word-break:break-word;font-size:14px;display:none}
+.status.visible{display:block}
+.status.error{background:#3a1b15;border-color:#744133;color:#ffcf87}
+footer{border-top:1px solid #183126;padding:48px 0 40px;margin-top:80px;text-align:center;color:var(--text-faint);font-size:14px}
+footer strong{color:var(--text-dim);font-weight:700}
+footer p{margin-top:8px}
+@media(max-width:1000px){.register-grid{grid-template-columns:1fr;gap:30px}}
+@media(max-width:900px){.hero{grid-template-columns:1fr;min-height:auto;padding:40px 0;gap:60px}.hero-stats{gap:24px}.mock-tag{width:240px;height:300px}.tag-ring{width:80px;height:80px}.cards{grid-template-columns:1fr}.register-wrap{padding:40px 24px}.section{padding:60px 0}}
+@media(max-width:600px){.topbar{padding:0 5%}.container{width:92%}.hero h1{font-size:clamp(42px,12vw,60px)}.sub{font-size:16px}.btn{font-size:15px;padding:13px 18px}.hero-actions{flex-direction:column}.hero-actions .btn{width:100%}.nav .ghost{font-size:13px;padding:8px 10px}.lang-btn{font-size:13px;padding:8px 10px;min-width:90px}.hero-stats{flex-direction:column;gap:16px}.preview-card{padding:24px 20px}}
+
+/* ---------- PRINT: only the QR card, single page ---------- */
+@media print {
+  @page { size: auto; margin: 12mm; }
+  html, body { background: #fff !important; color: #000 !important; }
+  body * { visibility: hidden !important; }
+  #printArea, #printArea * { visibility: visible !important; }
+  #printArea {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    padding: 20px !important;
+    margin: 0 !important;
+    background: #fff !important;
+    color: #000 !important;
+    box-shadow: none !important;
+    border: none !important;
+    text-align: center !important;
+    display: block !important;
+    page-break-inside: avoid;
+    page-break-after: avoid;
+  }
+  #printArea .tag-id-display {
+    color: #000 !important;
+    background: #f2f2f2 !important;
+    border: 1px solid #999 !important;
+    font-size: 18px !important;
+    padding: 8px 18px !important;
+    margin: 10px auto !important;
+  }
+  #printArea .qr-box {
+    background: #fff !important;
+    box-shadow: none !important;
+    padding: 10px !important;
+    margin: 10px auto !important;
+  }
+  #printArea h3 { color: #000 !important; font-size: 20px !important; margin-bottom: 6px !important; }
+  #printArea .result-actions,
+  #printArea .warning-note,
+  #printArea code { display: none !important; }
+  #printArea .print-brand {
+    display: block !important;
+    font-size: 12px !important;
+    color: #666 !important;
+    margin-top: 12px !important;
+  }
+}
+.print-brand { display: none; }
+</style>
 </head>
 <body>
 
 <div class="bg-glow"></div>
 
-<!-- TOPBAR -->
 <header class="topbar">
-  <div class="brand">
-    <span class="brand-dot"></span> Smart Thobe ID
-  </div>
+  <div class="brand"><span class="brand-dot"></span> <span data-i18n="brand">Smart Thobe ID</span></div>
   <nav class="nav">
-    <a class="ghost" href="#how">How it works</a>
-    <a class="ghost" href="#preview">Preview</a>
-    <a class="ghost" href="#register">Register</a>
+    <a class="ghost" href="#how" data-i18n="nav_how">How it works</a>
+    <a class="ghost" href="#preview" data-i18n="nav_preview">Preview</a>
+    <a class="ghost" href="#register" data-i18n="nav_register">Register</a>
+    <button class="lang-btn" id="langToggle" type="button"><span>🌐</span> <span id="langLabel">العربية</span></button>
   </nav>
 </header>
 
 <main class="container">
 
-  <!-- HERO -->
   <section class="hero">
     <div>
-      <span class="pill">SAIF • SECURITY + INNOVATION</span>
-      <h1>
-        One tap.<br>
-        <span class="accent">Critical help.</span>
-      </h1>
-      <p class="sub">
-        A smart emergency identification system designed for the traditional Saudi thobe.
-        Tap or scan to reveal life-saving information — instantly, safely, and respectfully.
-      </p>
-
+      <span class="pill" data-i18n="hero_pill">SAIF • SECURITY + INNOVATION</span>
+      <h1><span data-i18n="hero_line1">One scan.</span><br><span class="accent" data-i18n="hero_line2">Critical help.</span></h1>
+      <p class="sub" data-i18n="hero_sub">A smart emergency identification system designed for the traditional Saudi thobe. Scan to reveal life-saving information — instantly, safely, and respectfully.</p>
       <div class="hero-actions">
-        <a class="btn primary" href="#register">
-          🏷️ Register your Smart Thobe
-        </a>
-        <a class="btn secondary" href="emergency.html?id=SAIF-001">
-          🚨 Try the emergency demo
-        </a>
+        <a class="btn primary" href="#register" data-i18n="hero_btn1">🏷️ Register your Smart Thobe</a>
+        <a class="btn secondary" href="emergency.html?id=SAIF-001" data-i18n="hero_btn2">🚨 Try the emergency demo</a>
       </div>
-
       <div class="hero-stats">
-        <div class="stat-item">
-          <span class="stat-value">NFC</span>
-          <span class="stat-label">Tap to open</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-value">QR</span>
-          <span class="stat-label">Scan to view</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-value">AES-ready</span>
-          <span class="stat-label">Privacy first</span>
-        </div>
+        <div class="stat-item"><span class="stat-value" data-i18n="stat1_value">Instant</span><span class="stat-label" data-i18n="stat1_label">Scan to open</span></div>
+        <div class="stat-item"><span class="stat-value" data-i18n="stat2_value">QR</span><span class="stat-label" data-i18n="stat2_label">One code, any phone</span></div>
+        <div class="stat-item"><span class="stat-value" data-i18n="stat3_value">Private</span><span class="stat-label" data-i18n="stat3_label">Layered access</span></div>
       </div>
     </div>
-
     <div class="mock-tag">
       <div class="tag-ring"></div>
-      <div class="tag-nfc">NFC</div>
-      <div class="tag-qr">QR • SCAN</div>
-      <small>SMART THOBE</small>
+      <div class="tag-label" data-i18n="tag_label">SCAN</div>
+      <div class="tag-qr" data-i18n="tag_qr">QR CODE</div>
+      <small data-i18n="tag_small">SMART THOBE</small>
     </div>
   </section>
 
-  <!-- HOW IT WORKS -->
   <section id="how" class="section">
     <div class="section-head">
-      <span class="eyebrow">HOW IT WORKS</span>
-      <h2>Simple when every second matters.</h2>
-      <p class="lead">
-        Three steps that turn any thobe into a life-saving ID, without changing the way it looks or feels.
-      </p>
+      <span class="eyebrow" data-i18n="how_eyebrow">HOW IT WORKS</span>
+      <h2 data-i18n="how_title">Simple when every second matters.</h2>
+      <p class="lead" data-i18n="how_lead">Three steps that turn any thobe into a life-saving ID, without changing the way it looks or feels.</p>
     </div>
-
     <div class="cards">
-      <div class="card">
-        <span class="number">01</span>
-        <h3>Tap or scan</h3>
-        <p>
-          An emergency helper taps the NFC tag or scans the QR code on the thobe
-          with any modern phone — no app required.
-        </p>
-      </div>
-
-      <div class="card">
-        <span class="number">02</span>
-        <h3>See safe information</h3>
-        <p>
-          The emergency profile shows only the identity and contact details needed
-          to help, keeping private data locked.
-        </p>
-      </div>
-
-      <div class="card">
-        <span class="number">03</span>
-        <h3>Contact family</h3>
-        <p>
-          One tap to share live location or dial the emergency contact, so family
-          can be reached in seconds.
-        </p>
-      </div>
+      <div class="card"><span class="number">01</span><h3 data-i18n="how1_title">Scan the code</h3><p data-i18n="how1_body">An emergency helper scans the QR code on the thobe with any modern phone — no app required.</p></div>
+      <div class="card"><span class="number">02</span><h3 data-i18n="how2_title">See safe information</h3><p data-i18n="how2_body">The emergency profile shows only the identity and contact details needed to help, keeping private data locked.</p></div>
+      <div class="card"><span class="number">03</span><h3 data-i18n="how3_title">Contact family</h3><p data-i18n="how3_body">One tap to share live location or dial the emergency contact, so family can be reached in seconds.</p></div>
     </div>
   </section>
 
-  <!-- EMERGENCY PREVIEW -->
   <section id="preview" class="section">
-    <div class="section-head" style="text-align: center; margin-left: auto; margin-right: auto;">
-      <span class="eyebrow">WHAT A HELPER SEES</span>
-      <h2>Clean, fast, and privacy-first.</h2>
-      <p class="lead" style="margin-left: auto; margin-right: auto;">
-        This is the emergency profile a helper opens when they tap or scan a Smart Thobe.
-      </p>
+    <div class="section-head" style="text-align:center;margin-left:auto;margin-right:auto">
+      <span class="eyebrow" data-i18n="prev_eyebrow">WHAT A HELPER SEES</span>
+      <h2 data-i18n="prev_title">Clean, fast, and privacy-first.</h2>
+      <p class="lead" style="margin-left:auto;margin-right:auto" data-i18n="prev_lead">This is the emergency profile a helper opens when they scan a Smart Thobe.</p>
     </div>
-
     <div class="preview-card">
-      <div class="preview-banner">⚠️ Emergency ID • Demo</div>
-
+      <div class="preview-banner" data-i18n="prev_banner">⚠️ Emergency ID • Demo</div>
       <div class="preview-body">
         <div class="preview-avatar">A</div>
-        <div>
-          <h3>Aziz</h3>
-          <p>ID: SAIF-001</p>
-        </div>
-        <span class="preview-verified">✓ Verified</span>
+        <div><h3 data-i18n="prev_name">Aziz</h3><p data-i18n="prev_id">ID: SAIF-001</p></div>
+        <span class="preview-verified" data-i18n="prev_verified">✓ Verified</span>
       </div>
-
       <div class="preview-rows">
-        <div class="preview-row">
-          <span>Emergency contact</span>
-          <strong>Family Contact</strong>
-        </div>
-        <div class="preview-row">
-          <span>Language</span>
-          <strong>Arabic / English</strong>
-        </div>
-        <div class="preview-row">
-          <span>Tag status</span>
-          <strong style="color: var(--green);">Active</strong>
-        </div>
+        <div class="preview-row"><span data-i18n="prev_contact">Emergency contact</span><strong data-i18n="prev_contact_val">Family Contact</strong></div>
+        <div class="preview-row"><span data-i18n="prev_lang">Language</span><strong data-i18n="prev_lang_val">Arabic / English</strong></div>
+        <div class="preview-row"><span data-i18n="prev_status">Tag status</span><strong style="color:var(--green)" data-i18n="prev_status_val">Active</strong></div>
       </div>
-
-      <div style="text-align: center; margin-top: 24px;">
-        <a class="btn secondary" href="emergency.html?id=SAIF-001">
-          Open full demo →
-        </a>
-      </div>
+      <div style="text-align:center;margin-top:24px"><a class="btn secondary" href="emergency.html?id=SAIF-001" data-i18n="prev_btn">Open full demo →</a></div>
     </div>
   </section>
 
-  <!-- REGISTER + QR -->
   <section id="register" class="section">
     <div class="register-wrap">
       <div class="register-header">
-        <span class="pill">SMART THOBE SETUP</span>
-        <h2>Register & generate your QR code</h2>
-        <p class="lead">
-          Fill in your details. We'll create a unique Tag ID, save your emergency profile,
-          and generate a QR code that opens it on any phone.
-        </p>
+        <span class="pill" data-i18n="reg_pill">SMART THOBE SETUP</span>
+        <h2 data-i18n="reg_title">Register & generate your QR code</h2>
+        <p class="lead" data-i18n="reg_lead">Fill in your details. We'll create a unique Tag ID, save your emergency profile, and generate a QR code that opens it on any phone.</p>
       </div>
 
       <div class="register-grid">
-
-        <!-- LEFT: Form -->
         <div class="form-side">
           <div class="info-banner">
-            🌐 QR codes will point to: <strong id="baseUrlDisplay">loading…</strong>
+            <span data-i18n="reg_base">🌐 QR codes will point to:</span>
+            <strong id="baseUrlDisplay">loading…</strong>
           </div>
 
-          <label for="regName">Name</label>
-          <input id="regName" type="text" placeholder="Example: Ahmed">
+          <label for="regName" data-i18n="reg_name">Name</label>
+          <input id="regName" type="text" data-i18n-ph="reg_name_ph" placeholder="Example: Ahmed">
 
-          <label for="regContact">Emergency contact</label>
-          <input id="regContact" type="text" placeholder="Example: +966 5X XXX XXXX">
+          <label for="regContact" data-i18n="reg_contact">Emergency contact</label>
+          <input id="regContact" type="text" data-i18n-ph="reg_contact_ph" placeholder="Example: +966 5X XXX XXXX">
 
-          <label for="regBlood">Blood type</label>
-          <input id="regBlood" type="text" placeholder="Example: O+">
+          <label for="regBlood" data-i18n="reg_blood">Blood type</label>
+          <input id="regBlood" type="text" data-i18n-ph="reg_blood_ph" placeholder="Example: O+">
 
-          <label for="regMedical">Important medical information</label>
-          <input id="regMedical" type="text" placeholder="Prototype example only">
+          <label for="regMedical" data-i18n="reg_medical">Important medical information</label>
+          <input id="regMedical" type="text" data-i18n-ph="reg_medical_ph" placeholder="Prototype example only">
 
-          <button id="generateBtn" class="btn primary">
-            🏷️ Create Smart Thobe ID + QR
-          </button>
+          <!-- Privacy selector -->
+          <div class="privacy-box">
+            <h4 data-i18n="privacy_title">🔐 Choose what stays locked</h4>
+            <p class="hint" data-i18n="privacy_hint">Select which details require the PIN (2468) to view. Unchecked details will be visible to any helper who scans.</p>
 
+            <label class="privacy-option" for="lockBlood">
+              <input type="checkbox" id="lockBlood" checked>
+              <span class="p-text">
+                <span class="p-title" data-i18n="privacy_blood">Lock blood type</span>
+                <span class="p-desc" data-i18n="privacy_blood_desc">Hidden until PIN is entered</span>
+              </span>
+            </label>
+
+            <label class="privacy-option" for="lockMedical">
+              <input type="checkbox" id="lockMedical" checked>
+              <span class="p-text">
+                <span class="p-title" data-i18n="privacy_medical">Lock medical information</span>
+                <span class="p-desc" data-i18n="privacy_medical_desc">Hidden until PIN is entered</span>
+              </span>
+            </label>
+
+            <label class="privacy-option" for="lockContact">
+              <input type="checkbox" id="lockContact">
+              <span class="p-text">
+                <span class="p-title" data-i18n="privacy_contact">Lock emergency contact</span>
+                <span class="p-desc" data-i18n="privacy_contact_desc">Hidden until PIN is entered (off by default)</span>
+              </span>
+            </label>
+          </div>
+
+          <button id="generateBtn" class="btn primary" data-i18n="reg_btn">🏷️ Create Smart Thobe ID + QR</button>
           <div id="status" class="status"></div>
         </div>
 
-        <!-- RIGHT: QR result -->
         <div class="result-side" id="resultSide">
           <div class="result-placeholder" id="placeholder">
             <span class="big-icon">🔲</span>
-            Your QR code will appear here after you register.
+            <span data-i18n="reg_placeholder">Your QR code will appear here after you register.</span>
           </div>
 
+          <!-- PRINTABLE AREA -->
           <div class="result-content" id="resultContent">
-            <div class="check">✅</div>
-            <h3>Smart Thobe created!</h3>
+            <div id="printArea">
+              <h3 data-i18n="reg_success">Smart Thobe created!</h3>
+              <p style="color:var(--text-dim);font-size:13px;margin-top:6px" data-i18n="reg_tagid">Your Tag ID</p>
+              <div id="tagIdDisplay" class="tag-id-display">SAIF-000</div>
+              <div id="qrcode" class="qr-box"></div>
+              <span class="print-brand">Smart Thobe ID • smart-thobe</span>
+            </div>
 
-            <p style="color: var(--text-dim); font-size: 13px;">Your Tag ID</p>
-            <div id="tagIdDisplay" class="tag-id-display">SAIF-000</div>
-
-            <div id="qrcode" class="qr-box"></div>
-
-            <code id="targetUrl" style="color: var(--green); font-size: 11px; word-break: break-all; max-width: 100%; line-height: 1.5;"></code>
+            <code id="targetUrl" style="color:var(--green);font-size:11px;word-break:break-all;max-width:100%;line-height:1.5"></code>
 
             <div class="result-actions">
-              <a id="openProfileBtn" class="btn primary" href="#" target="_blank" rel="noopener">
-                👤 Open
-              </a>
-              <button id="printQRBtn" class="btn secondary" type="button">
-                🖨️ Print
-              </button>
-              <button id="copyUrlBtn" class="btn secondary" type="button">
-                📋 Copy
-              </button>
+              <a id="openProfileBtn" class="btn primary" href="#" target="_blank" rel="noopener" data-i18n="reg_open">👤 Open</a>
+              <button id="printQRBtn" class="btn secondary" type="button" data-i18n="reg_print">🖨️ Print</button>
+              <button id="copyUrlBtn" class="btn secondary" type="button" data-i18n="reg_copy">📋 Copy</button>
             </div>
-
-            <div class="warning-note">
-              ⚠️ <strong>Prototype:</strong> the QR contains the profile data in the link
-              (encoded, not encrypted). Anyone with the link can read it. Do not enter real medical data.
-            </div>
+            <div class="warning-note" data-i18n="reg_warn">⚠️ Prototype: the QR contains the profile data in the link (encoded, not encrypted). Anyone with the link can read it.</div>
           </div>
         </div>
-
       </div>
     </div>
   </section>
 
-  <!-- SECURITY -->
   <section class="section">
     <div class="section-head">
-      <span class="eyebrow">SECURITY BY DESIGN</span>
-      <h2>Privacy comes first.</h2>
-      <p class="lead">
-        Sensitive information should never be exposed by a public QR scan.
-        Smart Thobe splits the profile into layers, each with its own access rules.
-      </p>
+      <span class="eyebrow" data-i18n="sec_eyebrow">SECURITY BY DESIGN</span>
+      <h2 data-i18n="sec_title">Privacy comes first.</h2>
+      <p class="lead" data-i18n="sec_lead">Sensitive information should never be exposed by a public QR scan. Smart Thobe splits the profile into layers, each with its own access rules.</p>
     </div>
-
     <div class="cards">
-      <div class="card">
-        <span class="icon">🌐</span>
-        <h3>Public layer</h3>
-        <p>
-          Minimal identity and emergency actions are visible to any helper
-          who taps or scans — just enough to start helping.
-        </p>
-      </div>
+      <div class="card"><span style="font-size:28px;display:inline-block;margin-bottom:18px">🌐</span><h3 data-i18n="sec1_title">Public layer</h3><p data-i18n="sec1_body">Minimal identity and emergency actions are visible to any helper who scans — just enough to start helping.</p></div>
+      <div class="card"><span style="font-size:28px;display:inline-block;margin-bottom:18px">🔐</span><h3 data-i18n="sec2_title">Protected layer</h3><p data-i18n="sec2_body">Blood type, medical notes, and family details stay behind a PIN or authenticated access.</p></div>
+      <div class="card"><span style="font-size:28px;display:inline-block;margin-bottom:18px">👤</span><h3 data-i18n="sec3_title">Owner control</h3><p data-i18n="sec3_body">The owner decides what is public, what is protected, and can update their information at any time.</p></div>
+    </div>
+  </section>
 
-      <div class="card">
-        <span class="icon">🔐</span>
-        <h3>Protected layer</h3>
-        <p>
-          Blood type, medical notes, and family details stay behind a PIN
-          or authenticated access.
-        </p>
-      </div>
+  <footer>
+    <strong data-i18n="foot_brand">SAIF Prototype • Smart Thobe ID</strong>
+    <p data-i18n="foot_note">Demo only • No real medical information</p>
+  </footer>
 
-      <div class="card">
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+(function(){
+  const I18N = {
+    en:{
+      brand:"Smart Thobe ID",nav_how:"How it works",nav_preview:"Preview",nav_register:"Register",
+      hero_pill:"SAIF • SECURITY + INNOVATION",hero_line1:"One scan.",hero_line2:"Critical help.",
+      hero_sub:"A smart emergency identification system designed for the traditional Saudi thobe. Scan to reveal life-saving information — instantly, safely, and respectfully.",
+      hero_btn1:"🏷️ Register your Smart Thobe",hero_btn2:"🚨 Try the emergency demo",
+      stat1_value:"Instant",stat1_label:"Scan to open",stat2_value:"QR",stat2_label:"One code, any phone",stat3_value:"Private",stat3_label:"Layered access",
+      tag_label:"SCAN",tag_qr:"QR CODE",tag_small:"SMART THOBE",
+      how_eyebrow:"HOW IT WORKS",how_title:"Simple when every second matters.",
+      how_lead:"Three steps that turn any thobe into a life-saving ID, without changing the way it looks or feels.",
+      how1_title:"Scan the code",how1_body:"An emergency helper scans the QR code on the thobe with any modern phone — no app required.",
+      how2_title:"See safe information",how2_body:"The emergency profile shows only the identity and contact details needed to help, keeping private data locked.",
+      how3_title:"Contact family",how3_body:"One tap to share live location or dial the emergency contact, so family can be reached in seconds.",
+      prev_eyebrow:"WHAT A HELPER SEES",prev_title:"Clean, fast, and privacy-first.",
+      prev_lead:"This is the emergency profile a helper opens when they scan a Smart Thobe.",
+      prev_banner:"⚠️ Emergency ID • Demo",prev_name:"Aziz",prev_id:"ID: SAIF-001",prev_verified:"✓ Verified",
+      prev_contact:"Emergency contact",prev_contact_val:"Family Contact",prev_lang:"Language",prev_lang_val:"Arabic / English",
+      prev_status:"Tag status",prev_status_val:"Active",prev_btn:"Open full demo →",
+      reg_pill:"SMART THOBE SETUP",reg_title:"Register & generate your QR code",
+      reg_lead:"Fill in your details. We'll create a unique Tag ID, save your emergency profile, and generate a QR code that opens it on any phone.",
+      reg_base:"🌐 QR codes will point to:",
+      reg_name:"Name",reg_name_ph:"Example: Ahmed",
+      reg_contact:"Emergency contact",reg_contact_ph:"Example: +966 5X XXX XXXX",
+      reg_blood:"Blood type",reg_blood_ph:"Example: O+",
+      reg_medical:"Important medical information",reg_medical_ph:"Prototype example only",
+      privacy_title:"🔐 Choose what stays locked",
+      privacy_hint:"Select which details require the PIN (2468) to view. Unchecked details will be visible to any helper who scans.",
+      privacy_blood:"Lock blood type",privacy_blood_desc:"Hidden until PIN is entered",
+      privacy_medical:"Lock medical information",privacy_medical_desc:"Hidden until PIN is entered",
+      privacy_contact:"Lock emergency contact",privacy_contact_desc:"Hidden until PIN is entered (off by default)",
+      reg_btn:"🏷️ Create Smart Thobe ID + QR",
+      reg_placeholder:"Your QR code will appear here after you register.",
+      reg_success:"Smart Thobe created!",reg_tagid:"Your Tag ID",
+      reg_open:"👤 Open",reg_print:"🖨️ Print",reg_copy:"📋 Copy",
+      reg_warn:"⚠️ Prototype: the QR contains the profile data in the link (encoded, not encrypted). Anyone with the link can read it.",
+      sec_eyebrow:"SECURITY BY DESIGN",sec_title:"Privacy comes first.",
+      sec_lead:"Sensitive information should never be exposed by a public QR scan. Smart Thobe splits the profile into layers, each with its own access rules.",
+      sec1_title:"Public layer",sec1_body:"Minimal identity and emergency actions are visible to any helper who scans — just enough to start helping.",
+      sec2_title:"Protected layer",sec2_body:"Blood type, medical notes, and family details stay behind a PIN or authenticated access.",
+      sec3_title:"Owner control",sec3_body:"The owner decides what is public, what is protected, and can update their information at any time.",
+      foot_brand:"SAIF Prototype • Smart Thobe ID",foot_note:"Demo only • No real medical information",
+      lang_next:"العربية",
+      err_name:"Please enter a name.",
+      ok_created:"Smart Thobe created! ✅ Tag ID: ",
+      copied:"✅ Copied!",copy_reset:"📋 Copy"
+    },
+    ar:{
+      brand:"الهوية الذكية للثوب",nav_how:"كيف يعمل",nav_preview:"معاينة",nav_register:"تسجيل",
+      hero_pill:"سيف • الأمن والابتكار",hero_line1:"مسح واحد.",hero_line2:"مساعدة حرجة.",
+      hero_sub:"نظام تعريف طارئ ذكي مصمم للثوب السعودي التقليدي. امسح الرمز للكشف عن معلومات منقذة للحياة — فوراً وبأمان واحترام.",
+      hero_btn1:"🏷️ سجّل ثوبك الذكي",hero_btn2:"🚨 جرّب العرض الطارئ",
+      stat1_value:"فوري",stat1_label:"امسح للفتح",stat2_value:"QR",stat2_label:"رمز واحد لأي هاتف",stat3_value:"خاص",stat3_label:"وصول متعدد الطبقات",
+      tag_label:"امسح",tag_qr:"رمز QR",tag_small:"الثوب الذكي",
+      how_eyebrow:"كيف يعمل",how_title:"بسيط عندما تكون كل ثانية مهمة.",
+      how_lead:"ثلاث خطوات تحوّل أي ثوب إلى هوية منقذة للحياة، دون تغيير شكله أو ملمسه.",
+      how1_title:"امسح الرمز",how1_body:"يمسح المسعف رمز QR الموجود على الثوب بأي هاتف حديث — دون الحاجة إلى تطبيق.",
+      how2_title:"اطّلع على المعلومات الآمنة",how2_body:"يعرض الملف الطارئ فقط الهوية وبيانات الاتصال اللازمة للمساعدة، مع إبقاء البيانات الخاصة مقفلة.",
+      how3_title:"تواصل مع العائلة",how3_body:"نقرة واحدة لمشاركة الموقع المباشر أو الاتصال بجهة الطوارئ، ليتم الوصول إلى العائلة في ثوانٍ.",
+      prev_eyebrow:"ما يراه المسعف",prev_title:"واضح، سريع، ويحفظ الخصوصية.",
+      prev_lead:"هذا هو الملف الطارئ الذي يفتحه المسعف عند مسح الثوب الذكي.",
+      prev_banner:"⚠️ هوية طارئة • تجريبي",prev_name:"عزيز",prev_id:"الرقم: SAIF-001",prev_verified:"✓ موثّق",
+      prev_contact:"جهة الاتصال للطوارئ",prev_contact_val:"جهة اتصال العائلة",prev_lang:"اللغة",prev_lang_val:"العربية / الإنجليزية",
+      prev_status:"حالة الرمز",prev_status_val:"نشط",prev_btn:"افتح العرض الكامل ←",
+      reg_pill:"إعداد الثوب الذكي",reg_title:"سجّل وأنشئ رمز QR",
+      reg_lead:"املأ بياناتك. سننشئ رقم هوية فريداً، ونحفظ ملفك الطارئ، وننشئ رمز QR يفتحه على أي هاتف.",
+      reg_base:"🌐 ستشير رموز QR إلى:",
+      reg_name:"الاسم",reg_name_ph:"مثال: أحمد",
+      reg_contact:"جهة الاتصال للطوارئ",reg_contact_ph:"مثال: +966 5X XXX XXXX",
+      reg_blood:"فصيلة الدم",reg_blood_ph:"مثال: +O",
+      reg_medical:"معلومات طبية مهمة",reg_medical_ph:"مثال تجريبي فقط",
+      privacy_title:"🔐 اختر ما يبقى مقفلاً",
+      privacy_hint:"حدد التفاصيل التي تتطلب رمز PIN (2468) لعرضها. التفاصيل غير المحددة ستظهر لأي مسعف يمسح الرمز.",
+      privacy_blood:"قفل فصيلة الدم",privacy_blood_desc:"مخفية حتى يتم إدخال الرمز",
+      privacy_medical:"قفل المعلومات الطبية",privacy_medical_desc:"مخفية حتى يتم إدخال الرمز",
+      privacy_contact:"قفل جهة الاتصال للطوارئ",privacy_contact_desc:"مخفية حتى يتم إدخال الرمز (معطّلة افتراضياً)",
+      reg_btn:"🏷️ أنشئ هوية الثوب الذكي + QR",
+      reg_placeholder:"سيظهر رمز QR هنا بعد التسجيل.",
+      reg_success:"تم إنشاء الثوب الذكي!",reg_tagid:"رقم الهوية",
+      reg_open:"👤 فتح",reg_print:"🖨️ طباعة",reg_copy:"📋 نسخ",
+      reg_warn:"⚠️ نموذج تجريبي: يحتوي رمز QR على بيانات الملف داخل الرابط (مشفّرة بترميز، غير معمّاة). أي شخص لديه الرابط يمكنه قراءتها.",
+      sec_eyebrow:"الأمان بالتصميم",sec_title:"الخصوصية أولاً.",
+      sec_lead:"لا ينبغي أن تُكشف المعلومات الحساسة عبر مسح QR عام. يقسّم الثوب الذكي الملف إلى طبقات، لكل منها قواعد وصول خاصة.",
+      sec1_title:"الطبقة العامة",sec1_body:"تظهر للمسعف فقط الهوية المختصرة وإجراءات الطوارئ — بالحد الكافي للبدء بالمساعدة.",
+      sec2_title:"الطبقة المحمية",sec2_body:"تبقى فصيلة الدم والملاحظات الطبية وبيانات العائلة خلف رمز PIN أو وصول موثّق.",
+      sec3_title:"تحكّم المالك",sec3_body:"يقرّر المالك ما هو عام وما هو محمي، ويستطيع تحديث معلوماته في أي وقت.",
+      foot_brand:"نموذج سيف • الهوية الذكية للثوب",foot_note:"تجريبي فقط • لا توجد معلومات طبية حقيقية",
+      lang_next:"English",
+      err_name:"الرجاء إدخال الاسم.",
+      ok_created:"تم إنشاء الثوب الذكي! ✅ رقم الهوية: ",
+      copied:"✅ تم النسخ!",copy_reset:"📋 نسخ"
+    }
+  };
+
+  let lang = localStorage.getItem("smartThobeLang") || "en";
+
+  function applyLang(l){
+    lang = l;
+    localStorage.setItem("smartThobeLang", l);
+    document.documentElement.lang = l;
+    document.documentElement.dir = l === "ar" ? "rtl" : "ltr";
+    document.body.classList.toggle("lang-ar", l === "ar");
+    document.getElementById("langLabel").textContent = I18N[l].lang_next;
+    document.querySelectorAll("[data-i18n]").forEach(el=>{
+      const k = el.getAttribute("data-i18n");
+      if (I18N[l][k] !== undefined) el.textContent = I18N[l][k];
+    });
+    document.querySelectorAll("[data-i18n-ph]").forEach(el=>{
+      const k = el.getAttribute("data-i18n-ph");
+      if (I18N[l][k] !== undefined) el.placeholder = I18N[l][k];
+    });
+  }
+
+  document.getElementById("langToggle").addEventListener("click", () => {
+    applyLang(lang === "en" ? "ar" : "en");
+  });
+
+  // ── Base URL & encoding ──────────────────────────────
+  const GITHUB_PAGES_URL = "https://azizmohaldawood-tech.github.io/smart-thobe";
+  function getBaseUrl() {
+    const loc = window.location;
+    if (loc.protocol === "file:") return GITHUB_PAGES_URL;
+    const path = loc.pathname;
+    const dir = path.substring(0, path.lastIndexOf("/"));
+    return loc.origin + dir;
+  }
+  function encodePerson(person) {
+    const json = JSON.stringify(person);
+    const utf8 = unescape(encodeURIComponent(json));
+    return btoa(utf8).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
+  }
+
+  document.getElementById("baseUrlDisplay").textContent = getBaseUrl();
+
+  // ── Elements ─────────────────────────────────────────
+  const generateBtn = document.getElementById("generateBtn");
+  const statusEl = document.getElementById("status");
+  const placeholder = document.getElementById("placeholder");
+  const resultContent = document.getElementById("resultContent");
+  const tagIdDisplay = document.getElementById("tagIdDisplay");
+  const qrBox = document.getElementById("qrcode");
+  const targetUrlEl = document.getElementById("targetUrl");
+  const openProfileBtn = document.getElementById("openProfileBtn");
+  const printBtn = document.getElementById("printQRBtn");
+  const copyBtn = document.getElementById("copyUrlBtn");
+  const resultSide = document.getElementById("resultSide");
+
+  function showStatus(msg, isError) {
+    statusEl.textContent = msg;
+    statusEl.classList.add("visible");
+    statusEl.classList.toggle("error", !!isError);
+  }
+
+  generateBtn.addEventListener("click", () => {
+    const name    = document.getElementById("regName").value.trim();
+    const contact = document.getElementById("regContact").value.trim();
+    const blood   = document.getElementById("regBlood").value.trim();
+    const medical = document.getElementById("regMedical").value.trim();
+
+    statusEl.classList.remove("visible","error");
+    if (!name) { showStatus(I18N[lang].err_name, true); return; }
+
+    // Read lock preferences
+    const lockedFields = {
+      blood:   document.getElementById("lockBlood").checked,
+      medical: document.getElementById("lockMedical").checked,
+      contact: document.getElementById("lockContact").checked
+    };
+
+    const tagId = "SAIF-" + Math.floor(100 + Math.random()*900);
+    const person = {
+      name: name,
+      contact: contact || "Not provided",
+      blood: blood || "Not provided",
+      medical: medical || "Not provided",
+      locked: lockedFields
+    };
+
+    try {
+      const people = JSON.parse(localStorage.getItem("smartThobePeople") || "{}");
+      people[tagId] = person;
+      localStorage.setItem("smartThobePeople", JSON.stringify(people));
+    } catch(e){}
+
+    const base = getBaseUrl();
+    const url = base + "/emergency.html?id=" + encodeURIComponent(tagId) + "&d=" + encodePerson(person);
+
+    showStatus(I18N[lang].ok_created + tagId);
+
+    tagIdDisplay.textContent = tagId;
+    placeholder.style.display = "none";
+    resultContent.classList.add("visible");
+    resultSide.classList.add("active");
+
+    qrBox.innerHTML = "";
+    new QRCode(qrBox, { text: url, width: 220, height: 220, colorDark: "#000000", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.L });
+
+    targetUrlEl.textContent = url;
+    openProfileBtn.href = url;
+
+    setTimeout(() => {
+      if (window.innerWidth < 1000) resultSide.scrollIntoView({behavior:"smooth", block:"center"});
+    }, 150);
+  });
+
+  // Print only the #printArea
+  printBtn.addEventListener("click", () => window.print());
+
+  copyBtn.addEventListener("click", async () => {
+    const url = targetUrlEl.textContent;
+    try { await navigator.clipboard.writeText(url); }
+    catch(e){
+      const t = document.createElement("textarea");
+      t.value = url; document.body.appendChild(t); t.select();
+      try { document.execCommand("copy"); } catch(err){}
+      document.body.removeChild(t);
+    }
+    copyBtn.textContent = I18N[lang].copied;
+    setTimeout(() => { copyBtn.textContent = I18N[lang].copy_reset; }, 1800);
+  });
+
+  applyLang(lang);
+})();
+</script>
+
+</body>
+</html>

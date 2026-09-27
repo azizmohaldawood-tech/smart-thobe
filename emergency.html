@@ -41,6 +41,25 @@ body.lang-ar .action{text-align:right}
 .action.call{background:#0e2a1a;border-color:#2d6b44}
 .action.call:hover{background:#143a24;border-color:#65f29a}
 .action.call.disabled{opacity:.55;cursor:not-allowed;pointer-events:none}
+
+/* share panel */
+.share-panel{margin:16px 0;border:1px solid var(--border-strong);background:linear-gradient(145deg,#0c1913,#0a1710);border-radius:20px;padding:24px;display:none}
+.share-panel.visible{display:block}
+.share-panel h3{font-size:18px;margin-bottom:8px}
+.share-panel .lead{color:var(--text-dimmer);font-size:14px;margin-bottom:16px;line-height:1.5}
+.share-loc{background:#07110d;border:1px solid var(--border-strong);padding:12px 14px;border-radius:12px;font-family:'Courier New',monospace;font-size:12.5px;word-break:break-all;color:var(--green);margin-bottom:16px;line-height:1.5}
+.share-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.share-btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:14px 16px;border-radius:12px;font-weight:800;font-size:15px;text-decoration:none;cursor:pointer;border:1px solid var(--border-strong);font-family:inherit;transition:all .15s;text-align:center;color:var(--text)}
+.share-btn:hover{transform:translateY(-1px)}
+.share-sms{background:#1a3a24;border-color:#2d6b44;color:#a8f0c0}
+.share-sms:hover{background:#1f4a2c;border-color:var(--green)}
+.share-wa{background:#0f2e1a;border-color:#1e5c34;color:#8ff0a8}
+.share-wa:hover{background:#144225;border-color:#65f29a}
+.share-copy{background:#12231b;color:var(--text)}
+.share-copy:hover{background:#1a3025;border-color:var(--green);color:var(--green)}
+.share-maps{background:#0e1a25;border-color:#1e3a4d;color:#9ec5e0}
+.share-maps:hover{background:#122a38;border-color:#65f29a}
+
 .info-card{margin:14px 0;border:1px solid var(--border);background:#0c1913;border-radius:20px;padding:24px}
 .info-card h2{font-size:20px;margin-bottom:16px}
 .info-row{display:flex;justify-content:space-between;gap:20px;padding:14px 0;border-bottom:1px solid #1b3025;font-size:15px}
@@ -74,7 +93,7 @@ input:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px var(--gr
 .qr-url{color:var(--green);font-size:11px;word-break:break-all;max-width:100%;font-family:'Courier New',monospace;line-height:1.5;margin-top:8px;display:block}
 .disclaimer{font-size:12px;text-align:center;margin:28px 0 10px;color:var(--text-faint)}
 footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px solid #183126;margin-top:40px;font-size:14px}
-@media(max-width:600px){.action-grid{grid-template-columns:1fr}.verified{display:none}.profile-card h1{font-size:22px}.topbar{padding:0 5%}.container{padding:0 5%}.locked{flex-direction:column;align-items:flex-start}}
+@media(max-width:600px){.action-grid{grid-template-columns:1fr}.share-actions{grid-template-columns:1fr}.verified{display:none}.profile-card h1{font-size:22px}.topbar{padding:0 5%}.container{padding:0 5%}.locked{flex-direction:column;align-items:flex-start}}
 </style>
 </head>
 <body>
@@ -103,8 +122,22 @@ footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px
 
   <section class="action-grid">
     <button class="action danger" id="locationBtn" type="button" data-i18n="btn_loc">📍 Share current location</button>
-    <!-- Real anchor so browsers treat it as a dial link -->
     <a class="action call" id="callBtn" href="tel:" data-i18n="btn_contact">📞 Call emergency contact</a>
+  </section>
+
+  <!-- Share panel (hidden until location is ready) -->
+  <section class="share-panel" id="sharePanel">
+    <h3 data-i18n="share_title">✅ Location ready — send it to the emergency contact</h3>
+    <p class="lead" data-i18n="share_lead">Pick how to send the location. The emergency contact will receive a link to your current position.</p>
+
+    <div class="share-loc" id="shareLoc">—</div>
+
+    <div class="share-actions">
+      <a class="share-btn share-sms" id="shareSms" href="#" data-i18n="share_sms">💬 Send via SMS</a>
+      <a class="share-btn share-wa" id="shareWa" href="#" target="_blank" rel="noopener" data-i18n="share_wa">🟢 Send via WhatsApp</a>
+      <button class="share-btn share-copy" id="shareCopy" type="button" data-i18n="share_copy">📋 Copy link</button>
+      <a class="share-btn share-maps" id="shareMaps" href="#" target="_blank" rel="noopener" data-i18n="share_maps">🗺️ Open in Maps</a>
+    </div>
   </section>
 
   <section class="info-card">
@@ -214,14 +247,22 @@ footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px
       st_denied:"Location permission was denied. Please allow location access and try again.",
       st_unavailable:"Location unavailable. Try again in a moment.",
       st_timeout:"Location request timed out. Try again.",
-      st_ready:"✅ Location ready: ",st_open_map:"Open in Google Maps",st_copied:"✅ Link copied.",
+      st_ready:"✅ Location acquired. Sending options below.",
+      st_no_contact_for_send:"⚠️ No phone number saved for the emergency contact. Ask the owner to update it.",
       st_calling:"📞 Opening phone app to call ",
-      st_no_phone:"⚠️ No phone number saved for this contact. Ask the owner to add one in the register page.",
+      st_no_phone:"⚠️ No phone number saved for this contact.",
       st_locked:"🔒 This contact is locked. Tap \"Open protected demo\" first.",
       st_pin_prompt:"Demo PIN: 2468",st_denied_pin:"Access denied.",
       st_prot_opened:"Protected demo opened for ",st_prot_warn:". ⚠️ Demo only.",
       st_saved:"Information saved successfully! ✅",
-      unknown:"Unknown Person",not_saved:"No emergency contact saved",not_provided:"Not provided"
+      st_copied:"✅ Location link copied. Share it with anyone.",
+      st_sms_opening:"💬 Opening SMS app to send location to ",
+      st_wa_opening:"🟢 Opening WhatsApp to send location to ",
+      unknown:"Unknown Person",not_saved:"No emergency contact saved",not_provided:"Not provided",
+      share_title:"✅ Location ready — send it to the emergency contact",
+      share_lead:"Pick how to send the location. The emergency contact will receive a link to your current position.",
+      share_sms:"💬 Send via SMS",share_wa:"🟢 Send via WhatsApp",share_copy:"📋 Copy link",share_maps:"🗺️ Open in Maps",
+      sms_body_prefix:"EMERGENCY: I need help. My current location: "
     },
     ar:{
       brand:"الهوية الذكية للثوب",home:"الرئيسية",banner:"⚠️ هوية طارئة • تجريبي",identity:"الهوية",verified:"✓ رمز موثّق",
@@ -245,18 +286,27 @@ footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px
       st_denied:"تم رفض إذن الموقع. الرجاء السماح بالوصول إلى الموقع والمحاولة مجدداً.",
       st_unavailable:"الموقع غير متاح. حاول مرة أخرى بعد قليل.",
       st_timeout:"انتهت مهلة طلب الموقع. حاول مجدداً.",
-      st_ready:"✅ الموقع جاهز: ",st_open_map:"افتح في خرائط Google",st_copied:"✅ تم نسخ الرابط.",
+      st_ready:"✅ تم تحديد الموقع. خيارات الإرسال أدناه.",
+      st_no_contact_for_send:"⚠️ لا يوجد رقم هاتف محفوظ لجهة الطوارئ. اطلب من المالك تحديثه.",
       st_calling:"📞 جارٍ فتح تطبيق الهاتف للاتصال بـ ",
-      st_no_phone:"⚠️ لا يوجد رقم هاتف محفوظ لهذه الجهة. اطلب من المالك إضافته في صفحة التسجيل.",
+      st_no_phone:"⚠️ لا يوجد رقم هاتف محفوظ لهذه الجهة.",
       st_locked:"🔒 جهة الاتصال مقفلة. اضغط \"افتح العرض المحمي\" أولاً.",
       st_pin_prompt:"الرمز التجريبي: 2468",st_denied_pin:"تم رفض الوصول.",
       st_prot_opened:"تم فتح العرض المحمي لـ ",st_prot_warn:". ⚠️ تجريبي فقط.",
       st_saved:"تم حفظ المعلومات بنجاح! ✅",
-      unknown:"شخص غير معروف",not_saved:"لا توجد جهة اتصال محفوظة",not_provided:"غير متوفر"
+      st_copied:"✅ تم نسخ رابط الموقع. شاركه مع أي شخص.",
+      st_sms_opening:"💬 جارٍ فتح تطبيق الرسائل لإرسال الموقع إلى ",
+      st_wa_opening:"🟢 جارٍ فتح واتساب لإرسال الموقع إلى ",
+      unknown:"شخص غير معروف",not_saved:"لا توجد جهة اتصال محفوظة",not_provided:"غير متوفر",
+      share_title:"✅ الموقع جاهز — أرسله إلى جهة الطوارئ",
+      share_lead:"اختر طريقة الإرسال. ستستقبل جهة الطوارئ رابطاً لموقعك الحالي.",
+      share_sms:"💬 إرسال برسالة نصية",share_wa:"🟢 إرسال عبر واتساب",share_copy:"📋 نسخ الرابط",share_maps:"🗺️ افتح في الخرائط",
+      sms_body_prefix:"طوارئ: أحتاج المساعدة. موقعي الحالي: "
     }
   };
 
   let lang = localStorage.getItem("smartThobeLang") || "en";
+  let currentLocationUrl = "";
 
   function applyLang(l){
     lang = l;
@@ -271,6 +321,7 @@ footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px
     });
     updatePublicRows();
     updateCallButton();
+    if (currentLocationUrl) updateShareLinks();
   }
 
   document.getElementById("langToggle").addEventListener("click", () => {
@@ -317,25 +368,19 @@ footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px
     document.getElementById("avatarLetter").textContent = person.name ? person.name.charAt(0).toUpperCase() : "?";
   }
 
-  // ── Clean phone: only digits, leading + allowed ──────
   function cleanPhone(raw){
     if (!raw) return "";
-    // strip everything except digits and a single leading +
     let s = String(raw).trim().replace(/[^\d+]/g, "");
-    // keep only the first '+' at position 0
     s = s.replace(/(?!^)\+/g, "");
     return s;
   }
 
-  // ── Determine if the contact value is a real phone ───
   function isPhoneNumber(raw){
     const cleaned = cleanPhone(raw);
-    // needs at least 6 digits to be a real phone number
     const digits = cleaned.replace(/\D/g, "");
     return digits.length >= 6;
   }
 
-  // ── Update public contact row ────────────────────────
   function updatePublicRows(){
     const contactEl = document.getElementById("contactInfo");
     if (person.locked.contact) {
@@ -345,13 +390,11 @@ footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px
     }
   }
 
-  // ── Update the call button href + label ──────────────
   function updateCallButton(){
     const btn = document.getElementById("callBtn");
     const t = I18N[lang];
 
     if (person.locked.contact) {
-      // Locked → no dialer, show locked state
       btn.classList.add("disabled");
       btn.setAttribute("href", "javascript:void(0)");
       btn.textContent = t.btn_contact;
@@ -364,7 +407,6 @@ footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px
       btn.setAttribute("href", "tel:" + cleaned);
       btn.textContent = t.btn_contact;
     } else {
-      // Not a valid number — show a no-phone label
       btn.classList.add("disabled");
       btn.setAttribute("href", "javascript:void(0)");
       btn.textContent = t.btn_no_phone;
@@ -382,9 +424,7 @@ footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px
     if (isHTML) statusEl.innerHTML = html; else statusEl.textContent = html;
   }
 
-  // ── Click handler for the call button (fallback) ────
-  // Even though it's an <a href="tel:...">, we also add a click handler
-  // to show a message and to handle the "locked" case.
+  // ── Call button click handler ────────────────────────
   document.getElementById("callBtn").addEventListener("click", (e) => {
     const t = I18N[lang];
 
@@ -393,22 +433,61 @@ footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px
       showStatus(t.st_locked);
       return;
     }
-
     if (!isPhoneNumber(person.contact)) {
       e.preventDefault();
       showStatus(t.st_no_phone);
       return;
     }
-
-    // Valid phone → let the browser open the dialer via the href,
-    // but also show a helpful message.
     showStatus(`${t.st_calling}<strong>${person.contact}</strong>`, true);
-    // Don't preventDefault — the tel: link will fire
   });
 
   // ═══════════════════════════════════════════════════
-  // LOCATION SHARING
+  // LOCATION SHARING + SEND TO CONTACT
   // ═══════════════════════════════════════════════════
+  const sharePanel = document.getElementById("sharePanel");
+  const shareLocEl = document.getElementById("shareLoc");
+  const shareSms = document.getElementById("shareSms");
+  const shareWa = document.getElementById("shareWa");
+  const shareCopy = document.getElementById("shareCopy");
+  const shareMaps = document.getElementById("shareMaps");
+
+  function updateShareLinks(){
+    if (!currentLocationUrl) return;
+
+    const t = I18N[lang];
+    const phone = isPhoneNumber(person.contact) ? cleanPhone(person.contact) : "";
+
+    shareLocEl.textContent = currentLocationUrl;
+
+    // SMS link
+    if (phone) {
+      const body = t.sms_body_prefix + currentLocationUrl;
+      shareSms.href = `sms:${phone}?body=${encodeURIComponent(body)}`;
+      shareSms.classList.remove("disabled");
+      shareSms.style.pointerEvents = "";
+      shareSms.style.opacity = "";
+    } else {
+      shareSms.href = "javascript:void(0)";
+      shareSms.style.pointerEvents = "none";
+      shareSms.style.opacity = "0.5";
+    }
+
+    // WhatsApp link
+    if (phone) {
+      const text = t.sms_body_prefix + currentLocationUrl;
+      shareWa.href = `https://wa.me/${phone.replace(/^\+/,"")}?text=${encodeURIComponent(text)}`;
+      shareWa.style.pointerEvents = "";
+      shareWa.style.opacity = "";
+    } else {
+      shareWa.href = "javascript:void(0)";
+      shareWa.style.pointerEvents = "none";
+      shareWa.style.opacity = "0.5";
+    }
+
+    // Maps link
+    shareMaps.href = currentLocationUrl;
+  }
+
   document.getElementById("locationBtn").addEventListener("click", () => {
     const t = I18N[lang];
 
@@ -424,18 +503,19 @@ footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px
         const lat = pos.coords.latitude.toFixed(6);
         const lon = pos.coords.longitude.toFixed(6);
         const accuracy = Math.round(pos.coords.accuracy || 0);
-        const mapsUrl = `https://www.google.com/maps?q=${lat},${lon}`;
+        currentLocationUrl = `https://www.google.com/maps?q=${lat},${lon}`;
 
-        showStatus(
-          `${t.st_ready}<a href="${mapsUrl}" target="_blank" rel="noopener">${t.st_open_map}</a> (±${accuracy}m)`,
-          true
-        );
+        // Show share panel
+        sharePanel.classList.add("visible");
+        updateShareLinks();
 
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(mapsUrl).then(() => {
-            statusEl.innerHTML += `<br><small style="color:var(--text-faint)">${t.st_copied}</small>`;
-          }).catch(()=>{});
-        }
+        // Status message
+        showStatus(`${t.st_ready} (±${accuracy}m)`, false);
+
+        // Auto-scroll to share panel
+        setTimeout(() => {
+          sharePanel.scrollIntoView({behavior:"smooth", block:"center"});
+        }, 200);
       },
       (err) => {
         if (err.code === 1) showStatus(t.st_denied);
@@ -445,6 +525,45 @@ footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px
       },
       { enableHighAccuracy: true, timeout: 12000, maximumAge: 0 }
     );
+  });
+
+  // SMS click — just show message; the anchor handles the send
+  shareSms.addEventListener("click", (e) => {
+    const t = I18N[lang];
+    if (!isPhoneNumber(person.contact)) {
+      e.preventDefault();
+      showStatus(t.st_no_contact_for_send);
+      return;
+    }
+    showStatus(`${t.st_sms_opening}<strong>${person.contact}</strong>`, true);
+  });
+
+  // WhatsApp click — just show message
+  shareWa.addEventListener("click", (e) => {
+    const t = I18N[lang];
+    if (!isPhoneNumber(person.contact)) {
+      e.preventDefault();
+      showStatus(t.st_no_contact_for_send);
+      return;
+    }
+    showStatus(`${t.st_wa_opening}<strong>${person.contact}</strong>`, true);
+  });
+
+  // Copy link
+  shareCopy.addEventListener("click", async () => {
+    const t = I18N[lang];
+    try {
+      await navigator.clipboard.writeText(currentLocationUrl);
+      showStatus(t.st_copied);
+    } catch(e){
+      const tmp = document.createElement("textarea");
+      tmp.value = currentLocationUrl;
+      document.body.appendChild(tmp);
+      tmp.select();
+      try { document.execCommand("copy"); } catch(err){}
+      document.body.removeChild(tmp);
+      showStatus(t.st_copied);
+    }
   });
 
   // ═══════════════════════════════════════════════════
@@ -523,6 +642,7 @@ footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px
     renderHeader();
     updatePublicRows();
     updateCallButton();
+    if (currentLocationUrl) updateShareLinks();
     if (!document.getElementById("protected").hidden) renderProtected();
     showStatus(t.st_saved);
   });

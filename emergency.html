@@ -1,63 +1,409 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Emergency ID — Smart Thobe</title>
-  <link rel="stylesheet" href="style.css">
+  <style>
+    * { box-sizing: border-box; margin: 0; }
+    body {
+      background: #07110d;
+      color: #eef8f1;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      line-height: 1.5;
+      padding: 0 0 40px 0;
+    }
+    .topbar {
+      height: 72px;
+      border-bottom: 1px solid #183126;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 6%;
+      background: #08140fdd;
+      backdrop-filter: blur(12px);
+      position: sticky; top: 0; z-index: 10;
+    }
+    .brand {
+      font-weight: 800; letter-spacing: -0.02em;
+      display: flex; align-items: center; gap: 8px; font-size: 17px;
+    }
+    .brand-dot {
+      display: inline-block; width: 10px; height: 10px; border-radius: 50%;
+      background: #65f29a; box-shadow: 0 0 18px #65f29a;
+    }
+    .ghost {
+      border: 1px solid #294438; background: transparent; color: #d7e7dd;
+      border-radius: 12px; padding: 9px 16px; font-weight: 500; font-size: 15px;
+      text-decoration: none; transition: 0.15s;
+    }
+    .ghost:hover { background: #12231b; border-color: #65f29a55; }
+    .container { max-width: 760px; margin: 0 auto; padding: 0 5%; }
+    .narrow { max-width: 760px; }
+
+    .emergency-banner {
+      margin: 28px 0 18px; padding: 14px 18px; border-radius: 14px;
+      background: #25170e; border: 1px solid #67401e; color: #ffcf87;
+      font-weight: 800; font-size: 15px; letter-spacing: 0.04em;
+    }
+
+    .profile-card {
+      display: flex; align-items: center; gap: 17px;
+      border: 1px solid #1f392c; background: #0c1913;
+      border-radius: 20px; padding: 24px; flex-wrap: wrap;
+    }
+    .avatar {
+      width: 58px; height: 58px; border-radius: 50%;
+      background: #65f29a; color: #07110d;
+      display: grid; place-items: center;
+      font-weight: 900; font-size: 24px; flex-shrink: 0;
+    }
+    .profile-card h1 { margin: 3px 0; font-size: 26px; letter-spacing: -0.02em; }
+    .profile-card p { color: #8ea497; margin: 0; font-size: 15px; }
+    .eyebrow {
+      font-size: 12px; letter-spacing: 0.15em; color: #65f29a;
+      font-weight: 800; text-transform: uppercase;
+    }
+    .verified {
+      margin-left: auto; color: #65f29a; font-size: 13px; font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .action-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0;
+    }
+    .action {
+      padding: 18px 16px; border: 1px solid #294438; border-radius: 15px;
+      background: #12231b; color: #fff; font-size: 16px; font-weight: 800;
+      cursor: pointer; transition: 0.15s; font-family: inherit;
+      text-align: left; display: flex; align-items: center; gap: 10px;
+    }
+    .action:hover { background: #1a3025; border-color: #65f29a66; }
+    .action.danger { background: #3a1b15; border-color: #744133; }
+    .action.danger:hover { background: #50251d; border-color: #c9593a; }
+
+    .info-card {
+      margin: 14px 0; border: 1px solid #1f392c; background: #0c1913;
+      border-radius: 20px; padding: 24px;
+    }
+    .info-card h2 { font-size: 20px; margin-bottom: 16px; letter-spacing: -0.01em; }
+    .info-row {
+      display: flex; justify-content: space-between; gap: 20px;
+      padding: 14px 0; border-bottom: 1px solid #1b3025; font-size: 15px;
+    }
+    .info-row:last-child { border-bottom: 0; }
+    .info-row span { color: #91a69a; }
+    .info-row strong { text-align: right; font-weight: 600; }
+
+    .locked {
+      display: flex; gap: 18px; align-items: center;
+      border: 1px solid #1f392c; background: #0c1913;
+      border-radius: 20px; padding: 24px; margin: 14px 0; flex-wrap: wrap;
+    }
+    .lock { font-size: 34px; flex-shrink: 0; }
+    .locked h2 { margin: 0 0 5px; font-size: 20px; }
+    .locked p { color: #91a69a; font-size: 15px; }
+
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: 8px; border: 0; border-radius: 13px; padding: 13px 22px;
+      font-weight: 800; font-size: 15px; cursor: pointer; font-family: inherit;
+      transition: 0.15s; text-decoration: none; width: fit-content;
+    }
+    .primary { background: #65f29a; color: #06110b; }
+    .primary:hover { background: #85f7b0; box-shadow: 0 0 25px #65f29a33; }
+    .secondary {
+      background: #12231b; border: 1px solid #294438; color: #eef8f1;
+    }
+    .secondary:hover { background: #1a3025; border-color: #65f29a55; }
+
+    .status {
+      padding: 15px 18px; border-radius: 14px; background: #12231b;
+      border: 1px solid #294438; margin: 14px 0;
+      word-break: break-word; font-size: 15px;
+    }
+    .status a { color: #65f29a; text-decoration: underline; font-weight: 600; }
+
+    label {
+      display: block; margin: 14px 0 6px; color: #a9bbb0;
+      font-weight: 600; font-size: 14px;
+    }
+    input[type="text"] {
+      width: 100%; padding: 13px 14px; border-radius: 12px;
+      border: 1px solid #294438; background: #07110d; color: white;
+      font-size: 16px; font-family: inherit; transition: 0.15s;
+    }
+    input:focus {
+      outline: none; border-color: #65f29a;
+      box-shadow: 0 0 0 3px #65f29a22;
+    }
+    .disclaimer {
+      font-size: 12px; text-align: center; margin: 28px 0 10px; color: #607568;
+    }
+    footer {
+      text-align: center; color: #607568; padding: 28px 0 0;
+      border-top: 1px solid #183126; margin-top: 40px; font-size: 14px;
+    }
+
+    @media (max-width: 600px) {
+      .action-grid { grid-template-columns: 1fr; }
+      .verified { display: none; }
+      .profile-card h1 { font-size: 22px; }
+      .topbar { padding: 0 5%; }
+      .container { padding: 0 5%; }
+      .locked { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
 </head>
 <body>
-  <header class="topbar">
-    <div class="brand"><span class="brand-dot"></span> Smart Thobe ID</div>
-    <a class="ghost link" href="index.html">Home</a>
-  </header>
 
-  <main class="container narrow">
-    <div class="emergency-banner">⚠️ EMERGENCY ID • DEMO</div>
+<header class="topbar">
+  <div class="brand"><span class="brand-dot"></span> Smart Thobe ID</div>
+  <a class="ghost" href="index.html">Home</a>
+</header>
 
-    <section class="profile-card">
-      <div class="avatar">A</div>
-      <div>
-        <span class="eyebrow">IDENTITY</span>
-        <h1 id="personName">Demo Person</h1>
-        <p id="personId">ID: SAIF-001</p>
-      </div>
-      <span class="verified">✓ Verified tag</span>
-    </section>
+<main class="container narrow">
 
-    <section class="action-grid">
-      <button class="action danger" id="locationBtn">📍 Share current location</button>
-      <button class="action" id="contactBtn">📞 Contact emergency person</button>
-    </section>
+  <div class="emergency-banner">⚠️ EMERGENCY ID • DEMO</div>
 
-    <section class="info-card">
-      <h2>Information available to a helper</h2>
-      <div class="info-row"><span>Emergency contact</span><strong>Family contact (demo)</strong></div>
-      <div class="info-row"><span>Language</span><strong>Arabic / English</strong></div>
-      <div class="info-row"><span>Tag status</span><strong>Active</strong></div>
-    </section>
+  <section class="profile-card">
+    <div class="avatar" id="avatarLetter">?</div>
+    <div>
+      <span class="eyebrow">IDENTITY</span>
+      <h1 id="personName">Loading…</h1>
+      <p id="personId">ID: —</p>
+    </div>
+    <span class="verified">✓ Verified tag</span>
+  </section>
 
-    <section class="locked">
-      <div class="lock">🔒</div>
-      <div>
-        <h2>Private information is locked</h2>
-        <p>Medical and family details should never be exposed by a public QR scan.</p>
-        <button id="unlockBtn" class="btn secondary">Open protected demo</button>
-      </div>
-    </section>
+  <section class="action-grid">
+    <button class="action danger" id="locationBtn">📍 Share current location</button>
+    <button class="action" id="contactBtn">📞 Contact emergency person</button>
+  </section>
 
-    <div id="status" class="status" hidden></div>
+  <section class="info-card">
+    <h2>Information available to a helper</h2>
+    <div class="info-row">
+      <span>Emergency contact</span>
+      <strong id="contactInfo">—</strong>
+    </div>
+    <div class="info-row">
+      <span>Language</span>
+      <strong>Arabic / English</strong>
+    </div>
+    <div class="info-row">
+      <span>Tag status</span>
+      <strong>Active</strong>
+    </div>
+  </section>
 
-    <section id="protected" class="info-card" hidden>
-      <h2>Protected area — DEMO</h2>
-      <p>This proves the concept of access control. In a real deployment, authentication must happen on a secure server, not inside browser code.</p>
-      <div class="info-row"><span>Emergency person</span><strong>Verified family contact</strong></div>
-      <div class="info-row"><span>Owner control</span><strong>Enabled</strong></div>
-    </section>
+  <section class="locked">
+    <div class="lock">🔒</div>
+    <div>
+      <h2>Private information is locked</h2>
+      <p>Medical and family details should never be exposed by a public QR scan.</p>
+      <button id="unlockBtn" class="btn secondary" style="margin-top: 12px;">
+        Open protected demo
+      </button>
+    </div>
+  </section>
 
-    <p class="disclaimer">Prototype only. Do not put real medical information into this demo.</p>
-  </main>
-  <script src="app.js"></script>
-  <script src="emergency.js"></script>
+  <div id="status" class="status" hidden></div>
+
+  <section id="protected" class="info-card" hidden>
+    <h2>Protected area — DEMO</h2>
+    <p style="color: #91a69a; margin-bottom: 16px;">
+      This proves the concept of access control. In a real deployment,
+      authentication must happen on a secure server.
+    </p>
+    <div class="info-row">
+      <span>Emergency person</span>
+      <strong id="protectedContact">Verified family contact</strong>
+    </div>
+    <div class="info-row">
+      <span>Owner control</span>
+      <strong>Enabled</strong>
+    </div>
+    <button id="editBtn" class="btn secondary" style="margin-top: 16px;">
+      ✏️ Edit my information
+    </button>
+  </section>
+
+  <section id="editPanel" class="info-card" hidden>
+    <h2>Edit information</h2>
+    <label for="editName">Name</label>
+    <input id="editName" type="text">
+    <label for="editContact">Emergency contact</label>
+    <input id="editContact" type="text">
+    <label for="editBlood">Blood type</label>
+    <input id="editBlood" type="text" placeholder="Example: O+">
+    <label for="editMedical">Important information</label>
+    <input id="editMedical" type="text" placeholder="Demo only">
+    <button id="saveBtn" class="btn secondary" style="margin-top: 18px;">
+      💾 Save information
+    </button>
+  </section>
+
+  <p class="disclaimer">
+    Prototype only. Do not put real medical information into this demo.
+  </p>
+
+  <footer>
+    <strong>SAIF Prototype • Smart Thobe ID</strong>
+    <p style="margin-top: 6px;">Demo only • No real medical information</p>
+  </footer>
+
+</main>
+
+<script>
+(function () {
+  // ── Built-in demo data ───────────────────────────────────
+  const builtinPeople = {
+    "SAIF-001": {
+      name: "Aziz",
+      contact: "Family Contact",
+      blood: "O+",
+      medical: "No medical information added"
+    },
+    "SAIF-002": {
+      name: "Test Person",
+      contact: "Emergency Contact",
+      blood: "A+",
+      medical: "Demo medical information"
+    }
+  };
+
+  // ── Parse URL ────────────────────────────────────────────
+  const params = new URLSearchParams(window.location.search);
+
+  let rawTag = params.get("id") || "SAIF-001";
+  let tag = rawTag.replace(/^id=/, "").trim();
+  if (!tag) tag = "SAIF-001";
+
+  // ── Decode embedded person from ?d=... ───────────────────
+  function decodePerson(str) {
+    try {
+      let b64 = str.replace(/-/g, "+").replace(/_/g, "/");
+      while (b64.length % 4) b64 += "=";
+      const utf8 = atob(b64);
+      const json = decodeURIComponent(escape(utf8));
+      return JSON.parse(json);
+    } catch (e) {
+      console.warn("Could not decode embedded data:", e);
+      return null;
+    }
+  }
+
+  const embeddedRaw = params.get("d");
+  const embeddedPerson = embeddedRaw ? decodePerson(embeddedRaw) : null;
+
+  // ── Load localStorage saved people ───────────────────────
+  let savedPeople = {};
+  try {
+    savedPeople = JSON.parse(localStorage.getItem("smartThobePeople") || "{}");
+  } catch (e) {
+    savedPeople = {};
+  }
+
+  // ── Priority: embedded > localStorage > builtin > fallback ──
+  const person = embeddedPerson
+    || savedPeople[tag]
+    || builtinPeople[tag]
+    || {
+      name: "Unknown Person",
+      contact: "No emergency contact saved",
+      blood: "Not provided",
+      medical: "Not provided"
+    };
+
+  // ── Render ───────────────────────────────────────────────
+  document.getElementById("personId").textContent = "ID: " + tag;
+  document.getElementById("personName").textContent = person.name;
+  document.getElementById("contactInfo").textContent = person.contact;
+  document.getElementById("avatarLetter").textContent =
+    person.name ? person.name.charAt(0).toUpperCase() : "?";
+
+  const status = document.getElementById("status");
+
+  function showStatus(html, isHTML = false) {
+    status.hidden = false;
+    if (isHTML) status.innerHTML = html;
+    else status.textContent = html;
+  }
+
+  // ── Location ─────────────────────────────────────────────
+  document.getElementById("locationBtn").onclick = () => {
+    if (!navigator.geolocation) {
+      showStatus("Location sharing is not supported on this browser.");
+      return;
+    }
+    showStatus("Requesting location permission…");
+    navigator.geolocation.getCurrentPosition(
+      (p) => {
+        const lat = p.coords.latitude.toFixed(5);
+        const lon = p.coords.longitude.toFixed(5);
+        const maps = `https://www.google.com/maps?q=${lat},${lon}`;
+        showStatus(`Location ready: <a href="${maps}" target="_blank" rel="noopener">open map</a>`, true);
+      },
+      () => showStatus("Location permission was not granted.")
+    );
+  };
+
+  // ── Contact ──────────────────────────────────────────────
+  document.getElementById("contactBtn").onclick = () => {
+    showStatus(`Demo contact action: <strong>${person.contact}</strong>`, true);
+  };
+
+  // ── Unlock protected area ────────────────────────────────
+  document.getElementById("unlockBtn").onclick = () => {
+    const pin = prompt("Demo PIN: 2468");
+    if (pin === "2468") {
+      document.getElementById("protected").hidden = false;
+      document.getElementById("protectedContact").textContent =
+        `Blood type: ${person.blood} • Medical: ${person.medical}`;
+      showStatus(`Protected demo opened for ${person.name}. ⚠️ Demo only.`);
+    } else if (pin !== null) {
+      showStatus("Access denied.");
+    }
+  };
+
+  // ── Edit ─────────────────────────────────────────────────
+  document.getElementById("editBtn").onclick = () => {
+    document.getElementById("editPanel").hidden = false;
+    document.getElementById("editName").value = person.name;
+    document.getElementById("editContact").value = person.contact;
+    document.getElementById("editBlood").value = person.blood;
+    document.getElementById("editMedical").value = person.medical;
+    document.getElementById("editPanel").scrollIntoView({ behavior: "smooth", block: "nearest" });
+  };
+
+  // ── Save ─────────────────────────────────────────────────
+  document.getElementById("saveBtn").onclick = () => {
+    savedPeople[tag] = {
+      name: document.getElementById("editName").value.trim() || "Unknown",
+      contact: document.getElementById("editContact").value.trim() || "Not provided",
+      blood: document.getElementById("editBlood").value.trim() || "Not provided",
+      medical: document.getElementById("editMedical").value.trim() || "Not provided"
+    };
+    localStorage.setItem("smartThobePeople", JSON.stringify(savedPeople));
+
+    person.name = savedPeople[tag].name;
+    person.contact = savedPeople[tag].contact;
+    person.blood = savedPeople[tag].blood;
+    person.medical = savedPeople[tag].medical;
+
+    document.getElementById("personName").textContent = person.name;
+    document.getElementById("contactInfo").textContent = person.contact;
+    document.getElementById("avatarLetter").textContent =
+      person.name.charAt(0).toUpperCase();
+
+    if (!document.getElementById("protected").hidden) {
+      document.getElementById("protectedContact").textContent =
+        `Blood type: ${person.blood} • Medical: ${person.medical}`;
+    }
+
+    showStatus("Information saved successfully! ✅");
+  };
+})();
+</script>
+
 </body>
 </html>

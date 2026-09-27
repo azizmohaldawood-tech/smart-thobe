@@ -38,6 +38,9 @@ body.lang-ar .action{text-align:right}
 .action:active{transform:scale(.98)}
 .action.danger{background:#3a1b15;border-color:#744133}
 .action.danger:hover{background:#50251d;border-color:#c9593a}
+.action.call{background:#0e2a1a;border-color:#2d6b44}
+.action.call:hover{background:#143a24;border-color:#65f29a}
+.action.call.disabled{opacity:.55;cursor:not-allowed;pointer-events:none}
 .info-card{margin:14px 0;border:1px solid var(--border);background:#0c1913;border-radius:20px;padding:24px}
 .info-card h2{font-size:20px;margin-bottom:16px}
 .info-row{display:flex;justify-content:space-between;gap:20px;padding:14px 0;border-bottom:1px solid #1b3025;font-size:15px}
@@ -60,18 +63,15 @@ body.lang-ar .lock-badge{letter-spacing:0}
 .status a{color:var(--green);text-decoration:underline;font-weight:600}
 .status strong{color:var(--green)}
 label{display:block;margin:14px 0 6px;color:var(--text-dim);font-weight:600;font-size:14px}
-input[type="text"]{width:100%;padding:13px 14px;border-radius:12px;border:1px solid var(--border-strong);background:#07110d;color:#fff;font-size:16px;font-family:inherit;transition:all .15s}
-body.lang-ar input[type="text"]{text-align:right}
+input[type="text"],input[type="tel"]{width:100%;padding:13px 14px;border-radius:12px;border:1px solid var(--border-strong);background:#07110d;color:#fff;font-size:16px;font-family:inherit;transition:all .15s}
+body.lang-ar input[type="text"],body.lang-ar input[type="tel"]{text-align:right}
 input:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px var(--green-soft)}
-
-/* QR section */
 .qr-section{margin:14px 0;border:1px solid var(--border);background:#0c1913;border-radius:20px;padding:24px;text-align:center}
 .qr-section h2{font-size:20px;margin-bottom:8px}
 .qr-section .qr-sub{color:var(--text-dimmer);font-size:14px;margin-bottom:16px}
 .qr-wrapper{background:#fff;padding:16px;border-radius:16px;width:max-content;margin:0 auto 14px;box-shadow:0 12px 44px #000a;line-height:0}
 .qr-wrapper img,.qr-wrapper canvas{display:block}
 .qr-url{color:var(--green);font-size:11px;word-break:break-all;max-width:100%;font-family:'Courier New',monospace;line-height:1.5;margin-top:8px;display:block}
-
 .disclaimer{font-size:12px;text-align:center;margin:28px 0 10px;color:var(--text-faint)}
 footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px solid #183126;margin-top:40px;font-size:14px}
 @media(max-width:600px){.action-grid{grid-template-columns:1fr}.verified{display:none}.profile-card h1{font-size:22px}.topbar{padding:0 5%}.container{padding:0 5%}.locked{flex-direction:column;align-items:flex-start}}
@@ -103,7 +103,8 @@ footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px
 
   <section class="action-grid">
     <button class="action danger" id="locationBtn" type="button" data-i18n="btn_loc">📍 Share current location</button>
-    <button class="action" id="contactBtn" type="button" data-i18n="btn_contact">📞 Call emergency contact</button>
+    <!-- Real anchor so browsers treat it as a dial link -->
+    <a class="action call" id="callBtn" href="tel:" data-i18n="btn_contact">📞 Call emergency contact</a>
   </section>
 
   <section class="info-card">
@@ -122,7 +123,6 @@ footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px
     </div>
   </section>
 
-  <!-- QR section -->
   <section class="qr-section">
     <h2 data-i18n="qr_title">📱 QR Code for this profile</h2>
     <p class="qr-sub" data-i18n="qr_sub">Show this QR to anyone so they can open this emergency profile on their phone.</p>
@@ -171,8 +171,8 @@ footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px
     <h2 data-i18n="edit_title">Edit information</h2>
     <label for="editName" data-i18n="edit_name">Name</label>
     <input id="editName" type="text">
-    <label for="editContact" data-i18n="edit_contact">Emergency contact (phone or name)</label>
-    <input id="editContact" type="text">
+    <label for="editContact" data-i18n="edit_contact">Emergency contact (phone number)</label>
+    <input id="editContact" type="tel" placeholder="+966 5X XXX XXXX">
     <label for="editBlood" data-i18n="edit_blood">Blood type</label>
     <input id="editBlood" type="text">
     <label for="editMedical" data-i18n="edit_medical">Important information</label>
@@ -195,6 +195,7 @@ footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px
     en:{
       brand:"Smart Thobe ID",home:"Home",banner:"⚠️ EMERGENCY ID • DEMO",identity:"IDENTITY",verified:"✓ Verified tag",
       btn_loc:"📍 Share current location",btn_contact:"📞 Call emergency contact",
+      btn_no_phone:"📞 No phone number saved",
       info_title:"Information available to a helper",
       info_contact:"Emergency contact",info_lang:"Language",info_lang_val:"Arabic / English",
       info_status:"Tag status",info_status_val:"Active",
@@ -204,7 +205,7 @@ footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px
       prot_title:"Protected area — DEMO",prot_body:"This proves the concept of access control. In a real deployment, authentication must happen on a secure server.",
       prot_blood:"Blood type",prot_medical:"Medical information",prot_contact:"Emergency contact",
       prot_owner:"Owner control",prot_owner_val:"Enabled",prot_edit:"✏️ Edit my information",
-      edit_title:"Edit information",edit_name:"Name",edit_contact:"Emergency contact (phone or name)",edit_blood:"Blood type",edit_medical:"Important information",edit_save:"💾 Save information",
+      edit_title:"Edit information",edit_name:"Name",edit_contact:"Emergency contact (phone number)",edit_blood:"Blood type",edit_medical:"Important information",edit_save:"💾 Save information",
       disclaimer:"Prototype only. Do not put real medical information into this demo.",
       foot_brand:"SAIF Prototype • Smart Thobe ID",foot_note:"Demo only • No real medical information",
       lang_next:"العربية",
@@ -213,23 +214,19 @@ footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px
       st_denied:"Location permission was denied. Please allow location access and try again.",
       st_unavailable:"Location unavailable. Try again in a moment.",
       st_timeout:"Location request timed out. Try again.",
-      st_ready:"✅ Location ready: ",
-      st_open_map:"Open in Google Maps",
-      st_copied:"✅ Location link copied. Share it with anyone.",
-      st_no_contact:"No phone number saved. Use the contact name below.",
-      st_calling:"📞 Opening dialer for ",
-      st_copied_contact:"✅ Contact copied: ",
+      st_ready:"✅ Location ready: ",st_open_map:"Open in Google Maps",st_copied:"✅ Link copied.",
+      st_calling:"📞 Opening phone app to call ",
+      st_no_phone:"⚠️ No phone number saved for this contact. Ask the owner to add one in the register page.",
       st_locked:"🔒 This contact is locked. Tap \"Open protected demo\" first.",
-      st_pin_prompt:"Demo PIN: 2468",
-      st_denied_pin:"Access denied.",
-      st_prot_opened:"Protected demo opened for ",
-      st_prot_warn:". ⚠️ Demo only.",
+      st_pin_prompt:"Demo PIN: 2468",st_denied_pin:"Access denied.",
+      st_prot_opened:"Protected demo opened for ",st_prot_warn:". ⚠️ Demo only.",
       st_saved:"Information saved successfully! ✅",
       unknown:"Unknown Person",not_saved:"No emergency contact saved",not_provided:"Not provided"
     },
     ar:{
       brand:"الهوية الذكية للثوب",home:"الرئيسية",banner:"⚠️ هوية طارئة • تجريبي",identity:"الهوية",verified:"✓ رمز موثّق",
       btn_loc:"📍 شارك الموقع الحالي",btn_contact:"📞 اتصل بجهة الطوارئ",
+      btn_no_phone:"📞 لا يوجد رقم هاتف محفوظ",
       info_title:"المعلومات المتاحة للمسعف",
       info_contact:"جهة الاتصال للطوارئ",info_lang:"اللغة",info_lang_val:"العربية / الإنجليزية",
       info_status:"حالة الرمز",info_status_val:"نشط",
@@ -239,7 +236,7 @@ footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px
       prot_title:"المنطقة المحمية — تجريبي",prot_body:"يوضح هذا مفهوم التحكم في الوصول. في النشر الحقيقي، يجب أن يتم التحقق من الهوية على خادم آمن.",
       prot_blood:"فصيلة الدم",prot_medical:"المعلومات الطبية",prot_contact:"جهة الاتصال للطوارئ",
       prot_owner:"تحكّم المالك",prot_owner_val:"مفعّل",prot_edit:"✏️ تعديل معلوماتي",
-      edit_title:"تعديل المعلومات",edit_name:"الاسم",edit_contact:"جهة الاتصال للطوارئ (رقم أو اسم)",edit_blood:"فصيلة الدم",edit_medical:"معلومات مهمة",edit_save:"💾 حفظ المعلومات",
+      edit_title:"تعديل المعلومات",edit_name:"الاسم",edit_contact:"جهة الاتصال للطوارئ (رقم هاتف)",edit_blood:"فصيلة الدم",edit_medical:"معلومات مهمة",edit_save:"💾 حفظ المعلومات",
       disclaimer:"نموذج تجريبي فقط. لا تضع معلومات طبية حقيقية في هذا العرض.",
       foot_brand:"نموذج سيف • الهوية الذكية للثوب",foot_note:"تجريبي فقط • لا توجد معلومات طبية حقيقية",
       lang_next:"English",
@@ -248,17 +245,12 @@ footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px
       st_denied:"تم رفض إذن الموقع. الرجاء السماح بالوصول إلى الموقع والمحاولة مجدداً.",
       st_unavailable:"الموقع غير متاح. حاول مرة أخرى بعد قليل.",
       st_timeout:"انتهت مهلة طلب الموقع. حاول مجدداً.",
-      st_ready:"✅ الموقع جاهز: ",
-      st_open_map:"افتح في خرائط Google",
-      st_copied:"✅ تم نسخ رابط الموقع. شاركه مع أي شخص.",
-      st_no_contact:"لا يوجد رقم هاتف محفوظ. استخدم اسم جهة الاتصال أدناه.",
-      st_calling:"📞 جارٍ فتح الاتصال بـ ",
-      st_copied_contact:"✅ تم نسخ جهة الاتصال: ",
+      st_ready:"✅ الموقع جاهز: ",st_open_map:"افتح في خرائط Google",st_copied:"✅ تم نسخ الرابط.",
+      st_calling:"📞 جارٍ فتح تطبيق الهاتف للاتصال بـ ",
+      st_no_phone:"⚠️ لا يوجد رقم هاتف محفوظ لهذه الجهة. اطلب من المالك إضافته في صفحة التسجيل.",
       st_locked:"🔒 جهة الاتصال مقفلة. اضغط \"افتح العرض المحمي\" أولاً.",
-      st_pin_prompt:"الرمز التجريبي: 2468",
-      st_denied_pin:"تم رفض الوصول.",
-      st_prot_opened:"تم فتح العرض المحمي لـ ",
-      st_prot_warn:". ⚠️ تجريبي فقط.",
+      st_pin_prompt:"الرمز التجريبي: 2468",st_denied_pin:"تم رفض الوصول.",
+      st_prot_opened:"تم فتح العرض المحمي لـ ",st_prot_warn:". ⚠️ تجريبي فقط.",
       st_saved:"تم حفظ المعلومات بنجاح! ✅",
       unknown:"شخص غير معروف",not_saved:"لا توجد جهة اتصال محفوظة",not_provided:"غير متوفر"
     }
@@ -278,6 +270,7 @@ footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px
       if (I18N[l][k] !== undefined) el.textContent = I18N[l][k];
     });
     updatePublicRows();
+    updateCallButton();
   }
 
   document.getElementById("langToggle").addEventListener("click", () => {
@@ -317,13 +310,32 @@ footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px
 
   if (!person.locked) person.locked = {blood:true, medical:true, contact:false};
 
-  // ── Render header + public rows ──────────────────────
+  // ── Render header ────────────────────────────────────
   function renderHeader(){
     document.getElementById("personId").textContent = "ID: " + tag;
     document.getElementById("personName").textContent = person.name;
     document.getElementById("avatarLetter").textContent = person.name ? person.name.charAt(0).toUpperCase() : "?";
   }
 
+  // ── Clean phone: only digits, leading + allowed ──────
+  function cleanPhone(raw){
+    if (!raw) return "";
+    // strip everything except digits and a single leading +
+    let s = String(raw).trim().replace(/[^\d+]/g, "");
+    // keep only the first '+' at position 0
+    s = s.replace(/(?!^)\+/g, "");
+    return s;
+  }
+
+  // ── Determine if the contact value is a real phone ───
+  function isPhoneNumber(raw){
+    const cleaned = cleanPhone(raw);
+    // needs at least 6 digits to be a real phone number
+    const digits = cleaned.replace(/\D/g, "");
+    return digits.length >= 6;
+  }
+
+  // ── Update public contact row ────────────────────────
   function updatePublicRows(){
     const contactEl = document.getElementById("contactInfo");
     if (person.locked.contact) {
@@ -333,8 +345,35 @@ footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px
     }
   }
 
+  // ── Update the call button href + label ──────────────
+  function updateCallButton(){
+    const btn = document.getElementById("callBtn");
+    const t = I18N[lang];
+
+    if (person.locked.contact) {
+      // Locked → no dialer, show locked state
+      btn.classList.add("disabled");
+      btn.setAttribute("href", "javascript:void(0)");
+      btn.textContent = t.btn_contact;
+      return;
+    }
+
+    if (isPhoneNumber(person.contact)) {
+      const cleaned = cleanPhone(person.contact);
+      btn.classList.remove("disabled");
+      btn.setAttribute("href", "tel:" + cleaned);
+      btn.textContent = t.btn_contact;
+    } else {
+      // Not a valid number — show a no-phone label
+      btn.classList.add("disabled");
+      btn.setAttribute("href", "javascript:void(0)");
+      btn.textContent = t.btn_no_phone;
+    }
+  }
+
   renderHeader();
   updatePublicRows();
+  updateCallButton();
 
   // ── Status helper ────────────────────────────────────
   const statusEl = document.getElementById("status");
@@ -343,8 +382,32 @@ footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px
     if (isHTML) statusEl.innerHTML = html; else statusEl.textContent = html;
   }
 
+  // ── Click handler for the call button (fallback) ────
+  // Even though it's an <a href="tel:...">, we also add a click handler
+  // to show a message and to handle the "locked" case.
+  document.getElementById("callBtn").addEventListener("click", (e) => {
+    const t = I18N[lang];
+
+    if (person.locked.contact) {
+      e.preventDefault();
+      showStatus(t.st_locked);
+      return;
+    }
+
+    if (!isPhoneNumber(person.contact)) {
+      e.preventDefault();
+      showStatus(t.st_no_phone);
+      return;
+    }
+
+    // Valid phone → let the browser open the dialer via the href,
+    // but also show a helpful message.
+    showStatus(`${t.st_calling}<strong>${person.contact}</strong>`, true);
+    // Don't preventDefault — the tel: link will fire
+  });
+
   // ═══════════════════════════════════════════════════
-  // 1. LOCATION SHARING — properly working
+  // LOCATION SHARING
   // ═══════════════════════════════════════════════════
   document.getElementById("locationBtn").addEventListener("click", () => {
     const t = I18N[lang];
@@ -357,28 +420,23 @@ footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px
     showStatus(t.st_requesting);
 
     navigator.geolocation.getCurrentPosition(
-      // success
       (pos) => {
         const lat = pos.coords.latitude.toFixed(6);
         const lon = pos.coords.longitude.toFixed(6);
         const accuracy = Math.round(pos.coords.accuracy || 0);
         const mapsUrl = `https://www.google.com/maps?q=${lat},${lon}`;
 
-        // Show link
         showStatus(
           `${t.st_ready}<a href="${mapsUrl}" target="_blank" rel="noopener">${t.st_open_map}</a> (±${accuracy}m)`,
           true
         );
 
-        // Also try to copy the link automatically
         if (navigator.clipboard && navigator.clipboard.writeText) {
           navigator.clipboard.writeText(mapsUrl).then(() => {
-            // Append a subtle "copied" note
             statusEl.innerHTML += `<br><small style="color:var(--text-faint)">${t.st_copied}</small>`;
           }).catch(()=>{});
         }
       },
-      // error
       (err) => {
         if (err.code === 1) showStatus(t.st_denied);
         else if (err.code === 2) showStatus(t.st_unavailable);
@@ -390,55 +448,14 @@ footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px
   });
 
   // ═══════════════════════════════════════════════════
-  // 2. CONTACT BUTTON — dial or copy
-  // ═══════════════════════════════════════════════════
-  document.getElementById("contactBtn").addEventListener("click", () => {
-    const t = I18N[lang];
-
-    if (person.locked.contact) {
-      showStatus(t.st_locked);
-      return;
-    }
-
-    const raw = (person.contact || "").trim();
-    // Check if it looks like a phone number (digits, +, spaces, dashes, parens)
-    const looksLikePhone = /^[+\d][\d\s\-()]{4,}$/.test(raw);
-
-    if (looksLikePhone) {
-      const cleaned = raw.replace(/[^\d+]/g, "");
-      showStatus(`${t.st_calling}<strong>${raw}</strong>`, true);
-      // Small delay so user sees the message before dialer opens
-      setTimeout(() => {
-        window.location.href = "tel:" + cleaned;
-      }, 250);
-    } else if (raw && raw !== I18N[lang].not_saved) {
-      // Not a phone — copy the contact name to clipboard
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(raw).then(() => {
-          showStatus(`${t.st_copied_contact}<strong>${raw}</strong>`, true);
-        }).catch(() => {
-          showStatus(`${t.st_no_contact}<br><strong>${raw}</strong>`, true);
-        });
-      } else {
-        showStatus(`${t.st_no_contact}<br><strong>${raw}</strong>`, true);
-      }
-    } else {
-      showStatus(t.st_no_contact);
-    }
-  });
-
-  // ═══════════════════════════════════════════════════
-  // 3. QR CODE on this page
+  // QR CODE
   // ═══════════════════════════════════════════════════
   (function renderQR(){
     const qrWrapper = document.getElementById("qrWrapper");
     const qrUrlEl = document.getElementById("qrUrl");
 
-    // Build the URL to this exact page (with embedded data if present)
     let url = window.location.href.split("#")[0];
-    // Ensure it works if the page was opened without an id
     if (!url.includes("emergency.html")) {
-      // Fallback: rebuild from base
       const path = window.location.pathname;
       const dir = path.substring(0, path.lastIndexOf("/"));
       url = window.location.origin + dir + "/emergency.html?id=" + encodeURIComponent(tag);
@@ -451,7 +468,6 @@ footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px
       return;
     }
 
-    // Generate QR
     new QRCode(qrWrapper, {
       text: url,
       width: 200,
@@ -506,6 +522,7 @@ footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px
     Object.assign(person, savedPeople[tag]);
     renderHeader();
     updatePublicRows();
+    updateCallButton();
     if (!document.getElementById("protected").hidden) renderProtected();
     showStatus(t.st_saved);
   });
@@ -513,6 +530,7 @@ footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px
   applyLang(lang);
   renderHeader();
   updatePublicRows();
+  updateCallButton();
 })();
 </script>
 

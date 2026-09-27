@@ -32,9 +32,10 @@ body.lang-ar .eyebrow{letter-spacing:0}
 .verified{margin-left:auto;color:var(--green);font-size:13px;font-weight:600;white-space:nowrap}
 body.lang-ar .verified{margin-left:0;margin-right:auto}
 .action-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
-.action{padding:18px 16px;border:1px solid var(--border-strong);border-radius:15px;background:#12231b;color:#fff;font-size:16px;font-weight:800;cursor:pointer;transition:all .15s;font-family:inherit;text-align:left;display:flex;align-items:center;gap:10px}
+.action{padding:18px 16px;border:1px solid var(--border-strong);border-radius:15px;background:#12231b;color:#fff;font-size:16px;font-weight:800;cursor:pointer;transition:all .15s;font-family:inherit;text-align:left;display:flex;align-items:center;gap:10px;text-decoration:none;line-height:1.3}
 body.lang-ar .action{text-align:right}
 .action:hover{background:#1a3025;border-color:#65f29a66}
+.action:active{transform:scale(.98)}
 .action.danger{background:#3a1b15;border-color:#744133}
 .action.danger:hover{background:#50251d;border-color:#c9593a}
 .info-card{margin:14px 0;border:1px solid var(--border);background:#0c1913;border-radius:20px;padding:24px}
@@ -44,6 +45,7 @@ body.lang-ar .action{text-align:right}
 .info-row span{color:var(--text-dimmer)}
 .info-row strong{text-align:right;font-weight:600}
 .lock-badge{display:inline-flex;align-items:center;gap:6px;background:#2a1f0c;color:#ffcf87;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;border:1px solid #6b4f1c;letter-spacing:.04em;text-transform:uppercase}
+body.lang-ar .lock-badge{letter-spacing:0}
 .locked{display:flex;gap:18px;align-items:center;border:1px solid var(--border);background:#0c1913;border-radius:20px;padding:24px;margin:14px 0;flex-wrap:wrap}
 .lock{font-size:34px;flex-shrink:0}
 .locked h2{margin:0 0 5px;font-size:20px}
@@ -56,10 +58,20 @@ body.lang-ar .action{text-align:right}
 .status{padding:15px 18px;border-radius:14px;background:#12231b;border:1px solid var(--border-strong);margin:14px 0;word-break:break-word;font-size:15px;display:none}
 .status.visible{display:block}
 .status a{color:var(--green);text-decoration:underline;font-weight:600}
+.status strong{color:var(--green)}
 label{display:block;margin:14px 0 6px;color:var(--text-dim);font-weight:600;font-size:14px}
 input[type="text"]{width:100%;padding:13px 14px;border-radius:12px;border:1px solid var(--border-strong);background:#07110d;color:#fff;font-size:16px;font-family:inherit;transition:all .15s}
 body.lang-ar input[type="text"]{text-align:right}
 input:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px var(--green-soft)}
+
+/* QR section */
+.qr-section{margin:14px 0;border:1px solid var(--border);background:#0c1913;border-radius:20px;padding:24px;text-align:center}
+.qr-section h2{font-size:20px;margin-bottom:8px}
+.qr-section .qr-sub{color:var(--text-dimmer);font-size:14px;margin-bottom:16px}
+.qr-wrapper{background:#fff;padding:16px;border-radius:16px;width:max-content;margin:0 auto 14px;box-shadow:0 12px 44px #000a;line-height:0}
+.qr-wrapper img,.qr-wrapper canvas{display:block}
+.qr-url{color:var(--green);font-size:11px;word-break:break-all;max-width:100%;font-family:'Courier New',monospace;line-height:1.5;margin-top:8px;display:block}
+
 .disclaimer{font-size:12px;text-align:center;margin:28px 0 10px;color:var(--text-faint)}
 footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px solid #183126;margin-top:40px;font-size:14px}
 @media(max-width:600px){.action-grid{grid-template-columns:1fr}.verified{display:none}.profile-card h1{font-size:22px}.topbar{padding:0 5%}.container{padding:0 5%}.locked{flex-direction:column;align-items:flex-start}}
@@ -90,27 +102,32 @@ footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px
   </section>
 
   <section class="action-grid">
-    <button class="action danger" id="locationBtn" data-i18n="btn_loc">📍 Share current location</button>
-    <button class="action" id="contactBtn" data-i18n="btn_contact">📞 Contact emergency person</button>
+    <button class="action danger" id="locationBtn" type="button" data-i18n="btn_loc">📍 Share current location</button>
+    <button class="action" id="contactBtn" type="button" data-i18n="btn_contact">📞 Call emergency contact</button>
   </section>
 
   <section class="info-card">
     <h2 data-i18n="info_title">Information available to a helper</h2>
-
     <div class="info-row" id="rowContact">
       <span data-i18n="info_contact">Emergency contact</span>
       <strong id="contactInfo">—</strong>
     </div>
-
     <div class="info-row">
       <span data-i18n="info_lang">Language</span>
       <strong data-i18n="info_lang_val">Arabic / English</strong>
     </div>
-
     <div class="info-row">
       <span data-i18n="info_status">Tag status</span>
       <strong data-i18n="info_status_val">Active</strong>
     </div>
+  </section>
+
+  <!-- QR section -->
+  <section class="qr-section">
+    <h2 data-i18n="qr_title">📱 QR Code for this profile</h2>
+    <p class="qr-sub" data-i18n="qr_sub">Show this QR to anyone so they can open this emergency profile on their phone.</p>
+    <div class="qr-wrapper" id="qrWrapper"></div>
+    <code id="qrUrl" class="qr-url"></code>
   </section>
 
   <section class="locked">
@@ -118,7 +135,7 @@ footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px
     <div>
       <h2 data-i18n="lock_title">Private information is locked</h2>
       <p data-i18n="lock_body">Medical and family details should never be exposed by a public QR scan.</p>
-      <button id="unlockBtn" class="btn secondary" style="margin-top:12px" data-i18n="lock_btn">Open protected demo</button>
+      <button id="unlockBtn" class="btn secondary" style="margin-top:12px" type="button" data-i18n="lock_btn">Open protected demo</button>
     </div>
   </section>
 
@@ -147,20 +164,20 @@ footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px
       <span data-i18n="prot_owner">Owner control</span>
       <strong data-i18n="prot_owner_val">Enabled</strong>
     </div>
-    <button id="editBtn" class="btn secondary" style="margin-top:16px" data-i18n="prot_edit">✏️ Edit my information</button>
+    <button id="editBtn" class="btn secondary" style="margin-top:16px" type="button" data-i18n="prot_edit">✏️ Edit my information</button>
   </section>
 
   <section id="editPanel" class="info-card" hidden>
     <h2 data-i18n="edit_title">Edit information</h2>
     <label for="editName" data-i18n="edit_name">Name</label>
     <input id="editName" type="text">
-    <label for="editContact" data-i18n="edit_contact">Emergency contact</label>
+    <label for="editContact" data-i18n="edit_contact">Emergency contact (phone or name)</label>
     <input id="editContact" type="text">
     <label for="editBlood" data-i18n="edit_blood">Blood type</label>
     <input id="editBlood" type="text">
     <label for="editMedical" data-i18n="edit_medical">Important information</label>
     <input id="editMedical" type="text">
-    <button id="saveBtn" class="btn secondary" style="margin-top:18px" data-i18n="edit_save">💾 Save information</button>
+    <button id="saveBtn" class="btn secondary" style="margin-top:18px" type="button" data-i18n="edit_save">💾 Save information</button>
   </section>
 
   <p class="disclaimer" data-i18n="disclaimer">Prototype only. Do not put real medical information into this demo.</p>
@@ -171,27 +188,42 @@ footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px
 
 </main>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
 (function(){
   const I18N = {
     en:{
       brand:"Smart Thobe ID",home:"Home",banner:"⚠️ EMERGENCY ID • DEMO",identity:"IDENTITY",verified:"✓ Verified tag",
-      btn_loc:"📍 Share current location",btn_contact:"📞 Contact emergency person",
+      btn_loc:"📍 Share current location",btn_contact:"📞 Call emergency contact",
       info_title:"Information available to a helper",
       info_contact:"Emergency contact",info_lang:"Language",info_lang_val:"Arabic / English",
       info_status:"Tag status",info_status_val:"Active",
+      qr_title:"📱 QR Code for this profile",
+      qr_sub:"Show this QR to anyone so they can open this emergency profile on their phone.",
       lock_title:"Private information is locked",lock_body:"Medical and family details should never be exposed by a public QR scan.",lock_btn:"Open protected demo",
       prot_title:"Protected area — DEMO",prot_body:"This proves the concept of access control. In a real deployment, authentication must happen on a secure server.",
       prot_blood:"Blood type",prot_medical:"Medical information",prot_contact:"Emergency contact",
       prot_owner:"Owner control",prot_owner_val:"Enabled",prot_edit:"✏️ Edit my information",
-      edit_title:"Edit information",edit_name:"Name",edit_contact:"Emergency contact",edit_blood:"Blood type",edit_medical:"Important information",edit_save:"💾 Save information",
+      edit_title:"Edit information",edit_name:"Name",edit_contact:"Emergency contact (phone or name)",edit_blood:"Blood type",edit_medical:"Important information",edit_save:"💾 Save information",
       disclaimer:"Prototype only. Do not put real medical information into this demo.",
       foot_brand:"SAIF Prototype • Smart Thobe ID",foot_note:"Demo only • No real medical information",
       lang_next:"العربية",
-      st_requesting:"Requesting location permission…",st_no_geo:"Location sharing is not supported on this browser.",
-      st_denied:"Location permission was not granted.",st_ready:"Location ready: ",st_open_map:"open map",
-      st_contact:"Demo contact action: ",st_pin_prompt:"Demo PIN: 2468",st_denied_pin:"Access denied.",
-      st_prot_opened:"Protected demo opened for ",st_prot_warn:". ⚠️ Demo only.",
+      st_requesting:"📍 Requesting your location…",
+      st_no_geo:"Location sharing is not supported on this browser.",
+      st_denied:"Location permission was denied. Please allow location access and try again.",
+      st_unavailable:"Location unavailable. Try again in a moment.",
+      st_timeout:"Location request timed out. Try again.",
+      st_ready:"✅ Location ready: ",
+      st_open_map:"Open in Google Maps",
+      st_copied:"✅ Location link copied. Share it with anyone.",
+      st_no_contact:"No phone number saved. Use the contact name below.",
+      st_calling:"📞 Opening dialer for ",
+      st_copied_contact:"✅ Contact copied: ",
+      st_locked:"🔒 This contact is locked. Tap \"Open protected demo\" first.",
+      st_pin_prompt:"Demo PIN: 2468",
+      st_denied_pin:"Access denied.",
+      st_prot_opened:"Protected demo opened for ",
+      st_prot_warn:". ⚠️ Demo only.",
       st_saved:"Information saved successfully! ✅",
       unknown:"Unknown Person",not_saved:"No emergency contact saved",not_provided:"Not provided"
     },
@@ -201,18 +233,32 @@ footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px
       info_title:"المعلومات المتاحة للمسعف",
       info_contact:"جهة الاتصال للطوارئ",info_lang:"اللغة",info_lang_val:"العربية / الإنجليزية",
       info_status:"حالة الرمز",info_status_val:"نشط",
+      qr_title:"📱 رمز QR لهذا الملف",
+      qr_sub:"اعرض رمز QR لأي شخص ليتمكن من فتح هذا الملف الطارئ على هاتفه.",
       lock_title:"المعلومات الخاصة مقفلة",lock_body:"لا ينبغي كشف التفاصيل الطبية والعائلية عبر مسح QR عام.",lock_btn:"افتح العرض المحمي",
       prot_title:"المنطقة المحمية — تجريبي",prot_body:"يوضح هذا مفهوم التحكم في الوصول. في النشر الحقيقي، يجب أن يتم التحقق من الهوية على خادم آمن.",
       prot_blood:"فصيلة الدم",prot_medical:"المعلومات الطبية",prot_contact:"جهة الاتصال للطوارئ",
       prot_owner:"تحكّم المالك",prot_owner_val:"مفعّل",prot_edit:"✏️ تعديل معلوماتي",
-      edit_title:"تعديل المعلومات",edit_name:"الاسم",edit_contact:"جهة الاتصال للطوارئ",edit_blood:"فصيلة الدم",edit_medical:"معلومات مهمة",edit_save:"💾 حفظ المعلومات",
+      edit_title:"تعديل المعلومات",edit_name:"الاسم",edit_contact:"جهة الاتصال للطوارئ (رقم أو اسم)",edit_blood:"فصيلة الدم",edit_medical:"معلومات مهمة",edit_save:"💾 حفظ المعلومات",
       disclaimer:"نموذج تجريبي فقط. لا تضع معلومات طبية حقيقية في هذا العرض.",
       foot_brand:"نموذج سيف • الهوية الذكية للثوب",foot_note:"تجريبي فقط • لا توجد معلومات طبية حقيقية",
       lang_next:"English",
-      st_requesting:"جارٍ طلب إذن الموقع…",st_no_geo:"مشاركة الموقع غير مدعومة في هذا المتصفح.",
-      st_denied:"لم يتم منح إذن الموقع.",st_ready:"الموقع جاهز: ",st_open_map:"افتح الخريطة",
-      st_contact:"إجراء الاتصال التجريبي: ",st_pin_prompt:"الرمز التجريبي: 2468",st_denied_pin:"تم رفض الوصول.",
-      st_prot_opened:"تم فتح العرض المحمي لـ ",st_prot_warn:". ⚠️ تجريبي فقط.",
+      st_requesting:"📍 جارٍ طلب موقعك…",
+      st_no_geo:"مشاركة الموقع غير مدعومة في هذا المتصفح.",
+      st_denied:"تم رفض إذن الموقع. الرجاء السماح بالوصول إلى الموقع والمحاولة مجدداً.",
+      st_unavailable:"الموقع غير متاح. حاول مرة أخرى بعد قليل.",
+      st_timeout:"انتهت مهلة طلب الموقع. حاول مجدداً.",
+      st_ready:"✅ الموقع جاهز: ",
+      st_open_map:"افتح في خرائط Google",
+      st_copied:"✅ تم نسخ رابط الموقع. شاركه مع أي شخص.",
+      st_no_contact:"لا يوجد رقم هاتف محفوظ. استخدم اسم جهة الاتصال أدناه.",
+      st_calling:"📞 جارٍ فتح الاتصال بـ ",
+      st_copied_contact:"✅ تم نسخ جهة الاتصال: ",
+      st_locked:"🔒 جهة الاتصال مقفلة. اضغط \"افتح العرض المحمي\" أولاً.",
+      st_pin_prompt:"الرمز التجريبي: 2468",
+      st_denied_pin:"تم رفض الوصول.",
+      st_prot_opened:"تم فتح العرض المحمي لـ ",
+      st_prot_warn:". ⚠️ تجريبي فقط.",
       st_saved:"تم حفظ المعلومات بنجاح! ✅",
       unknown:"شخص غير معروف",not_saved:"لا توجد جهة اتصال محفوظة",not_provided:"غير متوفر"
     }
@@ -231,7 +277,6 @@ footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px
       const k = el.getAttribute("data-i18n");
       if (I18N[l][k] !== undefined) el.textContent = I18N[l][k];
     });
-    // Re-render dynamic labels (only values, not the field names)
     updatePublicRows();
   }
 
@@ -241,8 +286,8 @@ footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px
 
   // ── Person data ──────────────────────────────────────
   const builtinPeople = {
-    "SAIF-001":{name:"Aziz",contact:"Family Contact",blood:"O+",medical:"No medical information added",locked:{blood:true,medical:true,contact:false}},
-    "SAIF-002":{name:"Test Person",contact:"Emergency Contact",blood:"A+",medical:"Demo medical information",locked:{blood:true,medical:true,contact:false}}
+    "SAIF-001":{name:"Aziz",contact:"+966500000001",blood:"O+",medical:"No medical information added",locked:{blood:true,medical:true,contact:false}},
+    "SAIF-002":{name:"Test Person",contact:"+966500000002",blood:"A+",medical:"Demo medical information",locked:{blood:true,medical:true,contact:false}}
   };
 
   const params = new URLSearchParams(location.search);
@@ -270,62 +315,164 @@ footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px
   const base = embeddedPerson || savedPeople[tag] || builtinPeople[tag];
   const person = base || { name:T.unknown, contact:T.not_saved, blood:T.not_provided, medical:T.not_provided, locked:{blood:true,medical:true,contact:false} };
 
-  // Ensure `locked` always exists
   if (!person.locked) person.locked = {blood:true, medical:true, contact:false};
 
+  // ── Render header + public rows ──────────────────────
   function renderHeader(){
     document.getElementById("personId").textContent = "ID: " + tag;
     document.getElementById("personName").textContent = person.name;
     document.getElementById("avatarLetter").textContent = person.name ? person.name.charAt(0).toUpperCase() : "?";
   }
 
-  // Show/hide contact row publicly based on lock
   function updatePublicRows(){
-    const contactRow = document.getElementById("rowContact");
+    const contactEl = document.getElementById("contactInfo");
     if (person.locked.contact) {
-      // Public view: hide the contact value, show a lock badge
-      document.getElementById("contactInfo").innerHTML =
-        `<span class="lock-badge">🔒 ${I18N[lang].prot_contact}</span>`;
+      contactEl.innerHTML = `<span class="lock-badge">🔒 ${I18N[lang].prot_contact}</span>`;
     } else {
-      document.getElementById("contactInfo").textContent = person.contact;
+      contactEl.textContent = person.contact;
     }
   }
 
   renderHeader();
   updatePublicRows();
 
-  // ── Actions ──────────────────────────────────────────
+  // ── Status helper ────────────────────────────────────
   const statusEl = document.getElementById("status");
   function showStatus(html, isHTML){
     statusEl.classList.add("visible");
     if (isHTML) statusEl.innerHTML = html; else statusEl.textContent = html;
   }
 
-  document.getElementById("locationBtn").onclick = () => {
+  // ═══════════════════════════════════════════════════
+  // 1. LOCATION SHARING — properly working
+  // ═══════════════════════════════════════════════════
+  document.getElementById("locationBtn").addEventListener("click", () => {
     const t = I18N[lang];
-    if (!navigator.geolocation) { showStatus(t.st_no_geo); return; }
-    showStatus(t.st_requesting);
-    navigator.geolocation.getCurrentPosition(
-      p => {
-        const lat = p.coords.latitude.toFixed(5);
-        const lon = p.coords.longitude.toFixed(5);
-        const url = `https://www.google.com/maps?q=${lat},${lon}`;
-        showStatus(`${t.st_ready}<a href="${url}" target="_blank" rel="noopener">${t.st_open_map}</a>`, true);
-      },
-      () => showStatus(t.st_denied)
-    );
-  };
 
-  document.getElementById("contactBtn").onclick = () => {
-    const t = I18N[lang];
-    if (person.locked.contact) {
-      showStatus(`🔒 ${t.prot_contact} — ${t.lock_btn}`, false);
-    } else {
-      showStatus(`${t.st_contact}<strong>${person.contact}</strong>`, true);
+    if (!navigator.geolocation) {
+      showStatus(t.st_no_geo);
+      return;
     }
-  };
 
-  document.getElementById("unlockBtn").onclick = () => {
+    showStatus(t.st_requesting);
+
+    navigator.geolocation.getCurrentPosition(
+      // success
+      (pos) => {
+        const lat = pos.coords.latitude.toFixed(6);
+        const lon = pos.coords.longitude.toFixed(6);
+        const accuracy = Math.round(pos.coords.accuracy || 0);
+        const mapsUrl = `https://www.google.com/maps?q=${lat},${lon}`;
+
+        // Show link
+        showStatus(
+          `${t.st_ready}<a href="${mapsUrl}" target="_blank" rel="noopener">${t.st_open_map}</a> (±${accuracy}m)`,
+          true
+        );
+
+        // Also try to copy the link automatically
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(mapsUrl).then(() => {
+            // Append a subtle "copied" note
+            statusEl.innerHTML += `<br><small style="color:var(--text-faint)">${t.st_copied}</small>`;
+          }).catch(()=>{});
+        }
+      },
+      // error
+      (err) => {
+        if (err.code === 1) showStatus(t.st_denied);
+        else if (err.code === 2) showStatus(t.st_unavailable);
+        else if (err.code === 3) showStatus(t.st_timeout);
+        else showStatus(t.st_denied);
+      },
+      { enableHighAccuracy: true, timeout: 12000, maximumAge: 0 }
+    );
+  });
+
+  // ═══════════════════════════════════════════════════
+  // 2. CONTACT BUTTON — dial or copy
+  // ═══════════════════════════════════════════════════
+  document.getElementById("contactBtn").addEventListener("click", () => {
+    const t = I18N[lang];
+
+    if (person.locked.contact) {
+      showStatus(t.st_locked);
+      return;
+    }
+
+    const raw = (person.contact || "").trim();
+    // Check if it looks like a phone number (digits, +, spaces, dashes, parens)
+    const looksLikePhone = /^[+\d][\d\s\-()]{4,}$/.test(raw);
+
+    if (looksLikePhone) {
+      const cleaned = raw.replace(/[^\d+]/g, "");
+      showStatus(`${t.st_calling}<strong>${raw}</strong>`, true);
+      // Small delay so user sees the message before dialer opens
+      setTimeout(() => {
+        window.location.href = "tel:" + cleaned;
+      }, 250);
+    } else if (raw && raw !== I18N[lang].not_saved) {
+      // Not a phone — copy the contact name to clipboard
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(raw).then(() => {
+          showStatus(`${t.st_copied_contact}<strong>${raw}</strong>`, true);
+        }).catch(() => {
+          showStatus(`${t.st_no_contact}<br><strong>${raw}</strong>`, true);
+        });
+      } else {
+        showStatus(`${t.st_no_contact}<br><strong>${raw}</strong>`, true);
+      }
+    } else {
+      showStatus(t.st_no_contact);
+    }
+  });
+
+  // ═══════════════════════════════════════════════════
+  // 3. QR CODE on this page
+  // ═══════════════════════════════════════════════════
+  (function renderQR(){
+    const qrWrapper = document.getElementById("qrWrapper");
+    const qrUrlEl = document.getElementById("qrUrl");
+
+    // Build the URL to this exact page (with embedded data if present)
+    let url = window.location.href.split("#")[0];
+    // Ensure it works if the page was opened without an id
+    if (!url.includes("emergency.html")) {
+      // Fallback: rebuild from base
+      const path = window.location.pathname;
+      const dir = path.substring(0, path.lastIndexOf("/"));
+      url = window.location.origin + dir + "/emergency.html?id=" + encodeURIComponent(tag);
+    }
+
+    qrUrlEl.textContent = url;
+
+    if (typeof QRCode === "undefined") {
+      qrWrapper.innerHTML = '<p style="color:#000;font-size:12px">QR library failed to load.</p>';
+      return;
+    }
+
+    // Generate QR
+    new QRCode(qrWrapper, {
+      text: url,
+      width: 200,
+      height: 200,
+      colorDark: "#000000",
+      colorLight: "#ffffff",
+      correctLevel: QRCode.CorrectLevel.L
+    });
+  })();
+
+  // ── Unlock / Edit / Save ─────────────────────────────
+  function renderProtected(){
+    document.getElementById("protBlood").textContent = person.blood;
+    document.getElementById("protMedical").textContent = person.medical;
+    document.getElementById("protContact").textContent = person.contact;
+    document.getElementById("protRowBlood").style.display = person.locked.blood ? "flex" : "none";
+    document.getElementById("protRowMedical").style.display = person.locked.medical ? "flex" : "none";
+    document.getElementById("protRowContact").style.display = person.locked.contact ? "flex" : "none";
+  }
+
+  document.getElementById("unlockBtn").addEventListener("click", () => {
     const t = I18N[lang];
     const pin = prompt(t.st_pin_prompt);
     if (pin === "2468") {
@@ -335,29 +482,18 @@ footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px
     } else if (pin !== null) {
       showStatus(t.st_denied_pin);
     }
-  };
+  });
 
-  function renderProtected(){
-    // Show only the fields that are locked. Fields not locked already appear publicly.
-    document.getElementById("protBlood").textContent = person.blood;
-    document.getElementById("protMedical").textContent = person.medical;
-    document.getElementById("protContact").textContent = person.contact;
-    // Hide rows not marked as locked (they were already shown publicly)
-    document.getElementById("protRowBlood").style.display = person.locked.blood ? "flex" : "none";
-    document.getElementById("protRowMedical").style.display = person.locked.medical ? "flex" : "none";
-    document.getElementById("protRowContact").style.display = person.locked.contact ? "flex" : "none";
-  }
-
-  document.getElementById("editBtn").onclick = () => {
+  document.getElementById("editBtn").addEventListener("click", () => {
     document.getElementById("editPanel").hidden = false;
     document.getElementById("editName").value = person.name;
     document.getElementById("editContact").value = person.contact;
     document.getElementById("editBlood").value = person.blood;
     document.getElementById("editMedical").value = person.medical;
     document.getElementById("editPanel").scrollIntoView({behavior:"smooth", block:"nearest"});
-  };
+  });
 
-  document.getElementById("saveBtn").onclick = () => {
+  document.getElementById("saveBtn").addEventListener("click", () => {
     const t = I18N[lang];
     savedPeople[tag] = {
       name: document.getElementById("editName").value.trim() || "Unknown",
@@ -372,7 +508,7 @@ footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px
     updatePublicRows();
     if (!document.getElementById("protected").hidden) renderProtected();
     showStatus(t.st_saved);
-  };
+  });
 
   applyLang(lang);
   renderHeader();

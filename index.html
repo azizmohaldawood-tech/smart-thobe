@@ -3,19 +3,74 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Smart Thobe ID — Home</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; }
+  <title>Smart Thobe ID — Emergency Identification</title>
+  <meta name="description" content="A smart emergency ID system for the traditional Saudi thobe. Scan to reveal life-saving information instantly.">
 
-    body {
-      background: #07110d;
-      color: #eef8f1;
-      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      line-height: 1.5;
-      padding: 0;
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #07110d;
+      --bg-soft: #0c1913;
+      --bg-softer: #0a1710;
+      --border: #1f392c;
+      --border-strong: #294438;
+      --green: #65f29a;
+      --green-soft: #65f29a22;
+      --text: #eef8f1;
+      --text-dim: #a9bbb0;
+      --text-dimmer: #91a69a;
+      --text-faint: #607568;
     }
 
-    /* ---------- TOPBAR ---------- */
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      line-height: 1.55;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      transition: direction 0.2s;
+    }
+
+    body.lang-ar {
+      font-family: 'Tajawal', 'Inter', system-ui, sans-serif;
+      direction: rtl;
+    }
+
+    body.lang-ar .hero h1 { letter-spacing: 0; line-height: 1.1; }
+    body.lang-ar .section h2 { letter-spacing: 0; }
+    body.lang-ar .card h3 { letter-spacing: 0; }
+    body.lang-ar .mock-tag { transform: rotate(-3deg); }
+    body.lang-ar .mock-tag:hover { transform: rotate(0deg) scale(1.02); }
+    body.lang-ar .card .number,
+    body.lang-ar .stat-label,
+    body.lang-ar .eyebrow,
+    body.lang-ar .pill,
+    body.lang-ar .tag-label,
+    body.lang-ar .tag-qr,
+    body.lang-ar .mock-tag small,
+    body.lang-ar .preview-banner { letter-spacing: 0; }
+    body.lang-ar .preview-verified { margin-left: 0; margin-right: auto; }
+    body.lang-ar .form-side input { text-align: right; }
+    body.lang-ar .warning-note { text-align: right; }
+
+    .bg-glow {
+      position: fixed;
+      top: -200px; left: 50%;
+      transform: translateX(-50%);
+      width: 900px; height: 900px;
+      background: radial-gradient(circle, #65f29a15 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
     .topbar {
       height: 72px;
       border-bottom: 1px solid #183126;
@@ -23,11 +78,12 @@
       align-items: center;
       justify-content: space-between;
       padding: 0 6%;
-      background: #08140fdd;
-      backdrop-filter: blur(12px);
+      background: #08140fcc;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
       position: sticky;
       top: 0;
-      z-index: 10;
+      z-index: 100;
     }
 
     .brand {
@@ -35,21 +91,32 @@
       letter-spacing: -0.02em;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
       font-size: 17px;
     }
 
     .brand-dot {
       display: inline-block;
-      width: 10px;
-      height: 10px;
+      width: 10px; height: 10px;
       border-radius: 50%;
-      background: #65f29a;
-      box-shadow: 0 0 18px #65f29a;
+      background: var(--green);
+      box-shadow: 0 0 18px var(--green);
+      animation: pulse 2.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 18px var(--green); }
+      50%      { box-shadow: 0 0 28px var(--green); }
+    }
+
+    .nav {
+      display: flex;
+      gap: 10px;
+      align-items: center;
     }
 
     .ghost {
-      border: 1px solid #294438;
+      border: 1px solid var(--border-strong);
       background: transparent;
       color: #d7e7dd;
       border-radius: 12px;
@@ -57,316 +124,515 @@
       font-weight: 500;
       font-size: 15px;
       text-decoration: none;
-      transition: 0.15s;
+      transition: all 0.15s ease;
+      cursor: pointer;
+      font-family: inherit;
     }
 
     .ghost:hover {
       background: #12231b;
       border-color: #65f29a55;
+      color: #fff;
     }
+
+    .lang-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background: #12231b;
+      border: 1px solid var(--border-strong);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 9px 14px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.15s;
+      white-space: nowrap;
+      min-width: 110px;
+    }
+
+    .lang-btn:hover {
+      background: #1a3025;
+      border-color: var(--green);
+      color: var(--green);
+      transform: translateY(-1px);
+    }
+
+    .lang-btn:active { transform: translateY(0); }
 
     .container {
-      width: min(1050px, 88%);
+      width: min(1150px, 90%);
       margin: auto;
+      position: relative;
+      z-index: 1;
     }
 
-    /* ---------- PILLS / EYEBROWS ---------- */
-    .pill, .eyebrow {
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--border-strong);
+      border-radius: 40px;
+      padding: 6px 14px;
+      background: #0c1913;
       font-size: 12px;
       letter-spacing: 0.15em;
-      color: #65f29a;
+      color: var(--green);
       font-weight: 800;
       text-transform: uppercase;
     }
 
-    .pill {
-      display: inline-block;
-      border: 1px solid #294438;
-      border-radius: 40px;
-      padding: 5px 14px;
-      background: #0c1913;
-      margin-bottom: 8px;
+    .pill::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 8px var(--green);
     }
 
-    /* ---------- HERO ---------- */
+    .eyebrow {
+      font-size: 12px;
+      letter-spacing: 0.15em;
+      color: var(--green);
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
     .hero {
-      min-height: 620px;
+      min-height: 660px;
       display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
-      gap: 40px;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 60px;
       align-items: center;
-      padding: 60px 0;
+      padding: 70px 0 50px;
     }
 
     .hero h1 {
-      font-size: clamp(54px, 8vw, 92px);
-      line-height: 0.9;
-      letter-spacing: -0.06em;
-      margin: 18px 0;
+      font-size: clamp(52px, 7.5vw, 96px);
+      line-height: 0.92;
+      letter-spacing: -0.055em;
+      margin: 22px 0 24px;
+      font-weight: 800;
     }
 
-    .hero h1 span { color: #65f29a; }
+    .hero h1 .accent { color: var(--green); }
 
     .sub {
-      color: #a9bbb0;
+      color: var(--text-dim);
       font-size: 19px;
       line-height: 1.55;
-      max-width: 620px;
+      max-width: 560px;
+      margin-bottom: 32px;
     }
 
     .hero-actions {
       display: flex;
       gap: 12px;
-      margin-top: 28px;
       flex-wrap: wrap;
+      margin-bottom: 40px;
     }
 
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      gap: 9px;
       border: 0;
       border-radius: 13px;
-      padding: 14px 22px;
+      padding: 15px 24px;
       font-weight: 800;
       font-size: 16px;
       cursor: pointer;
       font-family: inherit;
-      transition: 0.15s;
+      transition: all 0.18s ease;
       text-decoration: none;
       width: fit-content;
+      white-space: nowrap;
     }
 
     .primary {
-      background: #65f29a;
+      background: var(--green);
       color: #06110b;
     }
 
     .primary:hover {
       background: #85f7b0;
-      box-shadow: 0 0 25px #65f29a33;
+      transform: translateY(-1px);
+      box-shadow: 0 12px 32px #65f29a33;
     }
 
     .secondary {
       background: #12231b;
-      border: 1px solid #294438;
-      color: #eef8f1;
+      border: 1px solid var(--border-strong);
+      color: var(--text);
     }
 
     .secondary:hover {
       background: #1a3025;
       border-color: #65f29a55;
+      transform: translateY(-1px);
     }
 
-    /* mock tag */
+    .hero-stats {
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+      max-width: 560px;
+    }
+
+    .stat-item { display: flex; flex-direction: column; gap: 2px; }
+
+    .stat-value {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--text-faint);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
     .mock-tag {
-      width: 280px;
-      height: 350px;
+      width: 300px;
+      height: 380px;
       border: 1px solid #355546;
-      border-radius: 30px;
-      background: linear-gradient(145deg, #11251b, #08130e);
+      border-radius: 32px;
+      background: linear-gradient(145deg, #11251b 0%, #08130e 100%);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 16px;
-      box-shadow: 0 25px 80px #0008;
+      gap: 20px;
+      box-shadow: 0 35px 90px #000a, inset 0 0 60px #65f29a08;
       justify-self: center;
       transform: rotate(3deg);
-      padding: 20px;
+      padding: 24px;
+      position: relative;
+      transition: transform 0.4s ease;
     }
+
+    .mock-tag:hover { transform: rotate(0deg) scale(1.02); }
 
     .tag-ring {
-      width: 95px;
-      height: 95px;
-      border: 2px solid #65f29a;
+      width: 105px;
+      height: 105px;
+      border: 2px solid var(--green);
       border-radius: 50%;
-      box-shadow: 0 0 35px #65f29a44;
+      box-shadow: 0 0 45px #65f29a55, inset 0 0 30px #65f29a33;
+      animation: ringPulse 3s ease-in-out infinite;
     }
 
-    .tag-nfc {
+    @keyframes ringPulse {
+      0%, 100% { box-shadow: 0 0 45px #65f29a55, inset 0 0 30px #65f29a33; }
+      50%      { box-shadow: 0 0 65px #65f29a88, inset 0 0 40px #65f29a55; }
+    }
+
+    .tag-label {
       font-weight: 900;
-      letter-spacing: 0.15em;
-      font-size: 18px;
+      letter-spacing: 0.2em;
+      font-size: 19px;
     }
 
     .tag-qr {
       border: 1px solid #496457;
       border-radius: 8px;
-      padding: 8px 14px;
+      padding: 9px 16px;
       font-size: 12px;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.1em;
+      color: var(--text-dimmer);
     }
 
     .mock-tag small {
       color: #8da295;
-      letter-spacing: 0.15em;
+      letter-spacing: 0.18em;
       font-size: 11px;
+      font-weight: 600;
     }
 
-    /* ---------- SECTIONS ---------- */
-    .section { padding: 60px 0; }
+    .section {
+      padding: 90px 0;
+      position: relative;
+    }
+
+    .section-head {
+      max-width: 640px;
+      margin-bottom: 50px;
+    }
 
     .section h2 {
-      font-size: clamp(28px, 3.5vw, 42px);
-      letter-spacing: -0.03em;
-      margin-top: 8px;
-      margin-bottom: 18px;
+      font-size: clamp(30px, 4vw, 46px);
+      letter-spacing: -0.035em;
+      margin-top: 12px;
+      line-height: 1.15;
+      font-weight: 800;
     }
 
-    .section > p {
-      color: #a9bbb0;
+    .section .lead {
+      color: var(--text-dim);
       font-size: 17px;
-      max-width: 700px;
-      margin-bottom: 30px;
+      margin-top: 16px;
+      line-height: 1.6;
     }
 
     .cards {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
-      margin-top: 20px;
+      gap: 20px;
     }
 
-    .panel {
-      border: 1px solid #1f392c;
-      background: #0c1913;
-      border-radius: 20px;
-      padding: 28px 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      transition: 0.2s;
+    .card {
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, #0c1913 0%, #0a1710 100%);
+      border-radius: 22px;
+      padding: 32px 26px;
+      transition: all 0.25s ease;
+      position: relative;
+      overflow: hidden;
     }
 
-    .panel:hover {
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #65f29a55, transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .card:hover {
       border-color: #2d5240;
-      background: #0e1d15;
+      background: linear-gradient(180deg, #0e1d15 0%, #0a1710 100%);
+      transform: translateY(-3px);
     }
 
-    .panel .number {
-      color: #65f29a;
+    .card:hover::before { opacity: 1; }
+
+    .card .number {
+      color: var(--green);
       font-weight: 800;
-      font-size: 14px;
-      letter-spacing: 0.1em;
+      font-size: 13px;
+      letter-spacing: 0.15em;
+      display: block;
+      margin-bottom: 16px;
     }
 
-    .panel h3 {
-      font-size: 20px;
-      letter-spacing: -0.01em;
+    .card h3 {
+      font-size: 21px;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+      font-weight: 700;
     }
 
-    .panel p {
-      color: #92a89b;
+    .card p {
+      color: var(--text-dimmer);
       font-size: 15px;
-      line-height: 1.55;
+      line-height: 1.6;
     }
 
-    /* prototype banner */
-    .prototype {
-      border: 1px solid #294438;
+    .preview-card {
+      border: 1px solid var(--border-strong);
       background: linear-gradient(145deg, #0c1913, #0a1710);
-      border-radius: 24px;
-      padding: 48px 36px;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 14px;
-    }
-
-    .prototype .pill { margin-bottom: 0; }
-    .prototype h2 { margin: 0; }
-    .prototype p { color: #a9bbb0; max-width: 520px; margin: 0 auto; }
-    .prototype .btn { margin-top: 8px; }
-
-    /* ---------- REGISTRATION + QR SECTION ---------- */
-    .register-section {
-      border: 1px solid #294438;
-      background: linear-gradient(145deg, #0c1913, #0a1710);
-      border-radius: 24px;
-      padding: 44px 36px;
-    }
-
-    .register-section h2 {
-      text-align: center;
-      margin-top: 8px;
-    }
-
-    .register-section .lead {
-      color: #a9bbb0;
-      text-align: center;
+      border-radius: 22px;
+      padding: 32px;
       max-width: 560px;
-      margin: 0 auto 28px;
-      font-size: 16px;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .preview-banner {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      background: #25170e;
+      border-bottom: 1px solid #67401e;
+      color: #ffcf87;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      padding: 8px 16px;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .preview-body {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 32px 0 24px;
+    }
+
+    .preview-avatar {
+      width: 54px; height: 54px;
+      border-radius: 50%;
+      background: var(--green);
+      color: #07110d;
+      display: grid; place-items: center;
+      font-weight: 900;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .preview-body h3 { font-size: 20px; letter-spacing: -0.02em; }
+    .preview-body p  { font-size: 14px; color: var(--text-dimmer); }
+
+    .preview-verified {
+      margin-left: auto;
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .preview-rows {
+      border-top: 1px solid var(--border);
+      margin-top: 12px;
+    }
+
+    .preview-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 13px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 14.5px;
+    }
+
+    .preview-row:last-child { border-bottom: 0; }
+
+    .preview-row span { color: var(--text-dimmer); }
+    .preview-row strong { font-weight: 600; }
+
+    .register-wrap {
+      border: 1px solid var(--border-strong);
+      background: linear-gradient(145deg, #0c1913 0%, #0a1710 100%);
+      border-radius: 28px;
+      padding: 52px 44px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .register-wrap::before {
+      content: '';
+      position: absolute;
+      top: -200px; right: -200px;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, #65f29a15, transparent 60%);
+      pointer-events: none;
+    }
+
+    .register-wrap > * { position: relative; }
+
+    .register-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .register-header h2 { margin-top: 12px; }
+
+    .register-header .lead {
+      margin-left: auto;
+      margin-right: auto;
+      max-width: 560px;
     }
 
     .register-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 40px;
+      gap: 44px;
       align-items: start;
-      margin-top: 20px;
     }
 
-    .form-side {
-      display: flex;
-      flex-direction: column;
-    }
+    .form-side { display: flex; flex-direction: column; }
 
-    label {
+    .form-side label {
       display: block;
-      margin: 14px 0 6px;
-      color: #a9bbb0;
+      margin: 14px 0 7px;
+      color: var(--text-dim);
       font-weight: 600;
       font-size: 14px;
     }
 
-    input[type="text"] {
+    .form-side label:first-child { margin-top: 0; }
+
+    .form-side input {
       width: 100%;
-      padding: 13px 14px;
+      padding: 14px 16px;
       border-radius: 12px;
-      border: 1px solid #294438;
+      border: 1px solid var(--border-strong);
       background: #07110d;
-      color: white;
+      color: #fff;
       font-size: 16px;
       font-family: inherit;
-      transition: 0.15s;
+      transition: all 0.15s ease;
     }
 
-    input[type="text"]:focus {
+    .form-side input::placeholder { color: #4a5c52; }
+
+    .form-side input:focus {
       outline: none;
-      border-color: #65f29a;
-      box-shadow: 0 0 0 3px #65f29a22;
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px var(--green-soft);
     }
+
+    .form-side .btn { margin-top: 24px; width: 100%; }
+
+    .info-banner {
+      background: #0e1a25;
+      border: 1px solid #1e3a4d;
+      color: #9ec5e0;
+      font-size: 13px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      line-height: 1.5;
+      word-break: break-all;
+    }
+
+    .info-banner strong { color: var(--green); }
 
     .result-side {
-      border: 1px solid #1f392c;
+      border: 1px dashed #2d4a3a;
       background: #0a1710;
-      border-radius: 20px;
-      padding: 28px 24px;
+      border-radius: 22px;
+      padding: 32px 26px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 14px;
-      min-height: 380px;
+      gap: 16px;
+      min-height: 440px;
       text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .result-side.active {
+      border-style: solid;
+      border-color: #2d6b44;
+      background: linear-gradient(145deg, #0c1913, #0e2018);
     }
 
     .result-placeholder {
-      color: #607568;
+      color: var(--text-faint);
       font-size: 15px;
       line-height: 1.7;
       max-width: 280px;
     }
 
     .result-placeholder .big-icon {
-      font-size: 48px;
+      font-size: 56px;
       display: block;
-      margin-bottom: 12px;
-      opacity: 0.5;
+      margin-bottom: 16px;
+      opacity: 0.4;
     }
 
     .result-content {
@@ -379,39 +645,56 @@
 
     .result-content.visible { display: flex; }
 
+    .result-content .check {
+      font-size: 36px;
+      animation: pop 0.4s ease;
+    }
+
+    @keyframes pop {
+      0% { transform: scale(0.5); opacity: 0; }
+      60% { transform: scale(1.15); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
     .result-content h3 {
-      font-size: 20px;
-      color: #65f29a;
+      font-size: 21px;
+      color: var(--green);
       letter-spacing: -0.01em;
+      margin-bottom: 2px;
     }
 
     .tag-id-display {
       font-family: 'Courier New', monospace;
       font-size: 20px;
       font-weight: 800;
-      color: #65f29a;
+      color: var(--green);
       letter-spacing: 0.08em;
       background: #07110d;
-      border: 1px solid #294438;
-      padding: 10px 20px;
+      border: 1px solid var(--border-strong);
+      padding: 11px 22px;
       border-radius: 12px;
+      margin: 4px 0;
+      direction: ltr;
     }
 
     .qr-box {
-      background: white;
+      background: #fff;
       padding: 16px;
       border-radius: 16px;
       width: max-content;
-      margin: 4px auto;
-      box-shadow: 0 10px 40px #000a;
+      margin: 6px auto;
+      box-shadow: 0 12px 44px #000a;
+      line-height: 0;
     }
+
+    .qr-box img, .qr-box canvas { display: block; }
 
     .result-actions {
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
       justify-content: center;
-      margin-top: 6px;
+      margin-top: 8px;
     }
 
     .result-actions .btn {
@@ -419,12 +702,25 @@
       font-size: 14px;
     }
 
+    .warning-note {
+      background: #2a1f0c;
+      border: 1px solid #6b4f1c;
+      color: #ffcf87;
+      font-size: 12.5px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      margin-top: 16px;
+      line-height: 1.55;
+      text-align: left;
+      width: 100%;
+    }
+
     .status {
       padding: 14px 18px;
       border-radius: 12px;
       background: #12231b;
-      border: 1px solid #294438;
-      margin: 14px 0 0;
+      border: 1px solid var(--border-strong);
+      margin-top: 14px;
       word-break: break-word;
       font-size: 14px;
       display: none;
@@ -438,69 +734,50 @@
       color: #ffcf87;
     }
 
-    .warning-note {
-      background: #2a1f0c;
-      border: 1px solid #6b4f1c;
-      color: #ffcf87;
-      font-size: 12px;
-      padding: 10px 14px;
-      border-radius: 10px;
-      margin-top: 14px;
-      line-height: 1.5;
-      text-align: left;
-      width: 100%;
-    }
-
-    /* ---------- FOOTER ---------- */
     footer {
-      text-align: center;
-      color: #607568;
-      padding: 40px 0;
       border-top: 1px solid #183126;
-      margin-top: 40px;
+      padding: 48px 0 40px;
+      margin-top: 80px;
+      text-align: center;
+      color: var(--text-faint);
       font-size: 14px;
     }
 
-    footer strong { color: #a9bbb0; font-weight: 700; }
-    footer p { margin-top: 6px; }
+    footer strong { color: var(--text-dim); font-weight: 700; }
+    footer p { margin-top: 8px; }
 
-    /* ---------- RESPONSIVE ---------- */
-    @media (max-width: 900px) {
-      .register-grid {
-        grid-template-columns: 1fr;
-        gap: 30px;
-      }
+    @media (max-width: 1000px) {
+      .register-grid { grid-template-columns: 1fr; gap: 30px; }
     }
 
-    @media (max-width: 850px) {
+    @media (max-width: 900px) {
       .hero {
         grid-template-columns: 1fr;
         min-height: auto;
         padding: 40px 0;
-        gap: 50px;
+        gap: 60px;
       }
 
-      .mock-tag {
-        width: 220px;
-        height: 270px;
-        transform: rotate(2deg);
-      }
-
-      .tag-ring { width: 70px; height: 70px; }
-
+      .hero-stats { gap: 24px; }
+      .mock-tag { width: 240px; height: 300px; }
+      .tag-ring { width: 80px; height: 80px; }
       .cards { grid-template-columns: 1fr; }
-
-      .prototype,
-      .register-section { padding: 36px 20px; }
+      .register-wrap { padding: 40px 24px; }
+      .section { padding: 60px 0; }
     }
 
-    @media (max-width: 500px) {
+    @media (max-width: 600px) {
       .topbar { padding: 0 5%; }
       .container { width: 92%; }
       .hero h1 { font-size: clamp(42px, 12vw, 60px); }
       .sub { font-size: 16px; }
-      .btn { font-size: 15px; padding: 12px 18px; }
-      .section { padding: 40px 0; }
+      .btn { font-size: 15px; padding: 13px 18px; }
+      .hero-actions { flex-direction: column; }
+      .hero-actions .btn { width: 100%; }
+      .nav .ghost { font-size: 13px; padding: 8px 10px; }
+      .lang-btn { font-size: 13px; padding: 8px 10px; min-width: 90px; }
+      .hero-stats { flex-direction: column; gap: 16px; }
+      .preview-card { padding: 24px 20px; }
     }
 
     @media print {
@@ -513,6 +790,7 @@
         border: none;
         background: white;
         color: black;
+        box-shadow: none;
       }
       .result-actions, .warning-note { display: none !important; }
     }
@@ -520,312 +798,201 @@
 </head>
 <body>
 
-<!-- TOPBAR -->
+<div class="bg-glow"></div>
+
 <header class="topbar">
   <div class="brand">
-    <span class="brand-dot"></span> Smart Thobe ID
+    <span class="brand-dot"></span> <span data-i18n="brand">Smart Thobe ID</span>
   </div>
-  <nav style="display: flex; gap: 10px;">
-    <a class="ghost" href="#register">Register</a>
-    <a class="ghost" href="#how">How it works</a>
+  <nav class="nav">
+    <a class="ghost" href="#how" data-i18n="nav_how">How it works</a>
+    <a class="ghost" href="#preview" data-i18n="nav_preview">Preview</a>
+    <a class="ghost" href="#register" data-i18n="nav_register">Register</a>
+    <button class="lang-btn" id="langToggle" type="button">
+      <span>🌐</span> <span id="langLabel">العربية</span>
+    </button>
   </nav>
 </header>
 
 <main class="container">
 
-  <!-- HERO -->
   <section class="hero">
     <div>
-      <span class="pill">SAIF • SECURITY + INNOVATION</span>
+      <span class="pill" data-i18n="hero_pill">SAIF • SECURITY + INNOVATION</span>
       <h1>
-        One tap.<br>
-        Critical help.
+        <span data-i18n="hero_line1">One scan.</span><br>
+        <span class="accent" data-i18n="hero_line2">Critical help.</span>
       </h1>
-      <p class="sub">
+      <p class="sub" data-i18n="hero_sub">
         A smart emergency identification system designed for the traditional Saudi thobe.
-        Tap or scan to access life-saving information instantly.
+        Scan to reveal life-saving information — instantly, safely, and respectfully.
       </p>
 
       <div class="hero-actions">
-        <a class="btn primary" href="emergency.html?id=SAIF-001">
-          🚨 Run emergency demo
+        <a class="btn primary" href="#register" data-i18n="hero_btn1">
+          🏷️ Register your Smart Thobe
         </a>
-        <a class="btn secondary" href="#register">
-          🏷️ Register Smart Thobe
+        <a class="btn secondary" href="emergency.html?id=SAIF-001" data-i18n="hero_btn2">
+          🚨 Try the emergency demo
         </a>
+      </div>
+
+      <div class="hero-stats">
+        <div class="stat-item">
+          <span class="stat-value" data-i18n="stat1_value">Instant</span>
+          <span class="stat-label" data-i18n="stat1_label">Scan to open</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value" data-i18n="stat2_value">QR</span>
+          <span class="stat-label" data-i18n="stat2_label">One code, any phone</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value" data-i18n="stat3_value">Private</span>
+          <span class="stat-label" data-i18n="stat3_label">Layered access</span>
+        </div>
       </div>
     </div>
 
     <div class="mock-tag">
       <div class="tag-ring"></div>
-      <div class="tag-nfc">NFC</div>
-      <div class="tag-qr">QR • SCAN</div>
-      <small>SMART THOBE</small>
+      <div class="tag-label" data-i18n="tag_label">SCAN</div>
+      <div class="tag-qr" data-i18n="tag_qr">QR CODE</div>
+      <small data-i18n="tag_small">SMART THOBE</small>
     </div>
   </section>
 
-  <!-- HOW IT WORKS -->
   <section id="how" class="section">
-    <span class="eyebrow">HOW IT WORKS</span>
-    <h2>Simple when every second matters.</h2>
+    <div class="section-head">
+      <span class="eyebrow" data-i18n="how_eyebrow">HOW IT WORKS</span>
+      <h2 data-i18n="how_title">Simple when every second matters.</h2>
+      <p class="lead" data-i18n="how_lead">
+        Three steps that turn any thobe into a life-saving ID, without changing the way it looks or feels.
+      </p>
+    </div>
 
     <div class="cards">
-      <div class="panel">
+      <div class="card">
         <span class="number">01</span>
-        <h3>Tap or scan</h3>
-        <p>An emergency helper taps the NFC tag or scans the QR code on the thobe.</p>
+        <h3 data-i18n="how1_title">Scan the code</h3>
+        <p data-i18n="how1_body">
+          An emergency helper scans the QR code on the thobe with any modern phone — no app required.
+        </p>
       </div>
 
-      <div class="panel">
+      <div class="card">
         <span class="number">02</span>
-        <h3>See safe information</h3>
-        <p>The emergency profile shows only the information needed to help.</p>
+        <h3 data-i18n="how2_title">See safe information</h3>
+        <p data-i18n="how2_body">
+          The emergency profile shows only the identity and contact details needed to help,
+          keeping private data locked.
+        </p>
       </div>
 
-      <div class="panel">
+      <div class="card">
         <span class="number">03</span>
-        <h3>Contact family</h3>
-        <p>Emergency actions can help connect the person with their chosen contact.</p>
+        <h3 data-i18n="how3_title">Contact family</h3>
+        <p data-i18n="how3_body">
+          One tap to share live location or dial the emergency contact, so family can be reached in seconds.
+        </p>
       </div>
     </div>
   </section>
 
-  <!-- REGISTER + QR GENERATOR (combined) -->
-  <section id="register" class="section">
-    <div class="register-section">
-      <div style="text-align: center;">
-        <span class="pill">SMART THOBE SETUP</span>
-      </div>
-      <h2>Register & generate your QR code</h2>
-      <p class="lead">
-        Fill in your details. We'll create a unique Tag ID, save your emergency profile,
-        and generate a QR code that opens it on any phone.
+  <section id="preview" class="section">
+    <div class="section-head" style="text-align: center; margin-left: auto; margin-right: auto;">
+      <span class="eyebrow" data-i18n="prev_eyebrow">WHAT A HELPER SEES</span>
+      <h2 data-i18n="prev_title">Clean, fast, and privacy-first.</h2>
+      <p class="lead" style="margin-left: auto; margin-right: auto;" data-i18n="prev_lead">
+        This is the emergency profile a helper opens when they scan a Smart Thobe.
       </p>
+    </div>
+
+    <div class="preview-card">
+      <div class="preview-banner" data-i18n="prev_banner">⚠️ Emergency ID • Demo</div>
+
+      <div class="preview-body">
+        <div class="preview-avatar">A</div>
+        <div>
+          <h3 data-i18n="prev_name">Aziz</h3>
+          <p data-i18n="prev_id">ID: SAIF-001</p>
+        </div>
+        <span class="preview-verified" data-i18n="prev_verified">✓ Verified</span>
+      </div>
+
+      <div class="preview-rows">
+        <div class="preview-row">
+          <span data-i18n="prev_contact">Emergency contact</span>
+          <strong data-i18n="prev_contact_val">Family Contact</strong>
+        </div>
+        <div class="preview-row">
+          <span data-i18n="prev_lang">Language</span>
+          <strong data-i18n="prev_lang_val">Arabic / English</strong>
+        </div>
+        <div class="preview-row">
+          <span data-i18n="prev_status">Tag status</span>
+          <strong style="color: var(--green);" data-i18n="prev_status_val">Active</strong>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 24px;">
+        <a class="btn secondary" href="emergency.html?id=SAIF-001" data-i18n="prev_btn">
+          Open full demo →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section id="register" class="section">
+    <div class="register-wrap">
+      <div class="register-header">
+        <span class="pill" data-i18n="reg_pill">SMART THOBE SETUP</span>
+        <h2 data-i18n="reg_title">Register & generate your QR code</h2>
+        <p class="lead" data-i18n="reg_lead">
+          Fill in your details. We'll create a unique Tag ID, save your emergency profile,
+          and generate a QR code that opens it on any phone.
+        </p>
+      </div>
 
       <div class="register-grid">
 
-        <!-- LEFT: Form -->
         <div class="form-side">
-          <label for="regName">Name</label>
-          <input id="regName" type="text" placeholder="Example: Ahmed">
+          <div class="info-banner">
+            <span data-i18n="reg_base">🌐 QR codes will point to:</span>
+            <strong id="baseUrlDisplay">loading…</strong>
+          </div>
 
-          <label for="regContact">Emergency contact</label>
-          <input id="regContact" type="text" placeholder="Example: Family contact">
+          <label for="regName" data-i18n="reg_name">Name</label>
+          <input id="regName" type="text" data-i18n-ph="reg_name_ph" placeholder="Example: Ahmed">
 
-          <label for="regBlood">Blood type</label>
-          <input id="regBlood" type="text" placeholder="Example: O+">
+          <label for="regContact" data-i18n="reg_contact">Emergency contact</label>
+          <input id="regContact" type="text" data-i18n-ph="reg_contact_ph" placeholder="Example: +966 5X XXX XXXX">
 
-          <label for="regMedical">Important medical information</label>
-          <input id="regMedical" type="text" placeholder="Prototype example only">
+          <label for="regBlood" data-i18n="reg_blood">Blood type</label>
+          <input id="regBlood" type="text" data-i18n-ph="reg_blood_ph" placeholder="Example: O+">
 
-          <button id="generateBtn" class="btn primary" style="margin-top: 22px; width: 100%;">
+          <label for="regMedical" data-i18n="reg_medical">Important medical information</label>
+          <input id="regMedical" type="text" data-i18n-ph="reg_medical_ph" placeholder="Prototype example only">
+
+          <button id="generateBtn" class="btn primary" data-i18n="reg_btn">
             🏷️ Create Smart Thobe ID + QR
           </button>
 
           <div id="status" class="status"></div>
         </div>
 
-        <!-- RIGHT: QR result -->
         <div class="result-side" id="resultSide">
           <div class="result-placeholder" id="placeholder">
             <span class="big-icon">🔲</span>
-            Your QR code will appear here after you register.
+            <span data-i18n="reg_placeholder">Your QR code will appear here after you register.</span>
           </div>
 
           <div class="result-content" id="resultContent">
-            <h3>✅ Smart Thobe created!</h3>
+            <div class="check">✅</div>
+            <h3 data-i18n="reg_success">Smart Thobe created!</h3>
 
-            <p style="color: #a9bbb0; font-size: 13px; margin: 0;">Your Tag ID</p>
+            <p style="color: var(--text-dim); font-size: 13px;" data-i18n="reg_tagid">Your Tag ID</p>
             <div id="tagIdDisplay" class="tag-id-display">SAIF-000</div>
 
             <div id="qrcode" class="qr-box"></div>
 
-            <code id="targetUrl" style="color: #65f29a; font-size: 11px; word-break: break-all; max-width: 100%;"></code>
-
-            <div class="result-actions">
-              <a id="openProfileBtn" class="btn primary" href="#">
-                👤 Open profile
-              </a>
-              <button id="printQRBtn" class="btn secondary" type="button">
-                🖨️ Print
-              </button>
-              <button id="copyUrlBtn" class="btn secondary" type="button">
-                📋 Copy
-              </button>
-            </div>
-
-            <div class="warning-note">
-              ⚠️ This QR contains the profile data in the link (encoded, not encrypted).
-              For a real product, use a secure server. Do not enter real medical data.
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- SECURITY -->
-  <section class="section">
-    <span class="eyebrow">SECURITY BY DESIGN</span>
-    <h2>Privacy comes first.</h2>
-
-    <div class="cards">
-      <div class="panel">
-        <h3>🌐 Public</h3>
-        <p>Minimal identity and emergency actions are available to helpers.</p>
-      </div>
-
-      <div class="panel">
-        <h3>🔐 Protected</h3>
-        <p>Sensitive family and medical information stays behind access control.</p>
-      </div>
-
-      <div class="panel">
-        <h3>👤 Controlled</h3>
-        <p>The owner can edit their information and control what is shared.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <strong>SAIF Prototype • Smart Thobe ID</strong>
-    <p>Demo only • No real medical information</p>
-  </footer>
-
-</main>
-
-<!-- QR code library -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
-<script>
-(function () {
-  // ── Elements ─────────────────────────────────────────────
-  const generateBtn   = document.getElementById("generateBtn");
-  const statusEl      = document.getElementById("status");
-  const placeholder   = document.getElementById("placeholder");
-  const resultContent = document.getElementById("resultContent");
-  const tagIdDisplay  = document.getElementById("tagIdDisplay");
-  const qrBox         = document.getElementById("qrcode");
-  const targetUrlEl   = document.getElementById("targetUrl");
-  const openProfileBtn= document.getElementById("openProfileBtn");
-  const printBtn      = document.getElementById("printQRBtn");
-  const copyBtn       = document.getElementById("copyUrlBtn");
-
-  // ── Helpers ──────────────────────────────────────────────
-  function getBaseUrl() {
-    const path = window.location.pathname;
-    const dir  = path.substring(0, path.lastIndexOf("/"));
-    return window.location.origin + dir;
-  }
-
-  function encodePerson(person) {
-    const json = JSON.stringify(person);
-    const utf8 = unescape(encodeURIComponent(json));
-    return btoa(utf8)
-      .replace(/\+/g, "-")
-      .replace(/\//g, "_")
-      .replace(/=+$/, "");
-  }
-
-  function showStatus(msg, isError = false) {
-    statusEl.textContent = msg;
-    statusEl.classList.add("visible");
-    statusEl.classList.toggle("error", isError);
-  }
-
-  // ── Generate handler ─────────────────────────────────────
-  generateBtn.addEventListener("click", () => {
-    const name    = document.getElementById("regName").value.trim();
-    const contact = document.getElementById("regContact").value.trim();
-    const blood   = document.getElementById("regBlood").value.trim();
-    const medical = document.getElementById("regMedical").value.trim();
-
-    statusEl.classList.remove("visible", "error");
-
-    if (!name) {
-      showStatus("Please enter a name.", true);
-      return;
-    }
-
-    // Generate unique Tag ID
-    const tagId = "SAIF-" + Math.floor(100 + Math.random() * 900);
-
-    const person = {
-      name: name,
-      contact: contact || "Not provided",
-      blood: blood || "Not provided",
-      medical: medical || "Not provided"
-    };
-
-    // Save to localStorage too (so this device remembers it)
-    try {
-      const people = JSON.parse(localStorage.getItem("smartThobePeople") || "{}");
-      people[tagId] = person;
-      localStorage.setItem("smartThobePeople", JSON.stringify(people));
-    } catch (e) { /* ignore */ }
-
-    // Build URL with data embedded
-    const base = getBaseUrl();
-    const url  = base + "/emergency.html?id=" + encodeURIComponent(tagId)
-                     + "&d=" + encodePerson(person);
-
-    // Update UI
-    showStatus(`Smart Thobe created! ✅  Tag ID: ${tagId}`);
-    placeholder.style.display = "none";
-    resultContent.classList.add("visible");
-
-    tagIdDisplay.textContent = tagId;
-
-    // Generate QR code
-    qrBox.innerHTML = "";
-    new QRCode(qrBox, {
-      text: url,
-      width: 200,
-      height: 200,
-      colorDark: "#000000",
-      colorLight: "#ffffff",
-      correctLevel: QRCode.CorrectLevel.L
-    });
-
-    targetUrlEl.textContent = url;
-    openProfileBtn.href = url;
-
-    // Scroll result into view on mobile
-    if (window.innerWidth < 900) {
-      setTimeout(() => {
-        resultContent.scrollIntoView({ behavior: "smooth", block: "center" });
-      }, 150);
-    }
-  });
-
-  // ── Print ────────────────────────────────────────────────
-  printBtn.addEventListener("click", () => window.print());
-
-  // ── Copy URL ─────────────────────────────────────────────
-  copyBtn.addEventListener("click", async () => {
-    const url = targetUrlEl.textContent;
-    try {
-      await navigator.clipboard.writeText(url);
-    } catch (e) {
-      const temp = document.createElement("textarea");
-      temp.value = url;
-      document.body.appendChild(temp);
-      temp.select();
-      try { document.execCommand("copy"); } catch (err) {}
-      document.body.removeChild(temp);
-    }
-    copyBtn.textContent = "✅ Copied!";
-    setTimeout(() => { copyBtn.textContent = "📋 Copy"; }, 1800);
-  });
-
-  // Enter key on last field triggers generation
-  document.getElementById("regMedical").addEventListener("keydown", (e) => {
-    if (e.key === "Enter") { e.preventDefault(); generateBtn.click(); }
-  });
-})();
-</script>
-
-</body>
-</html>
+            <

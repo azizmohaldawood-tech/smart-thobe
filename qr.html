@@ -1,133 +1,152 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>QR Generator — Smart Thobe</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>QR Generator — Smart Thobe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#07110d;--border:#1f392c;--border-strong:#294438;--green:#65f29a;--green-soft:#65f29a22;--text:#eef8f1;--text-dim:#a9bbb0;--text-dimmer:#91a69a;--text-faint:#607568}
+body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;line-height:1.55;padding:0 0 40px}
+body.lang-ar{font-family:'Tajawal','Inter',sans-serif;direction:rtl}
+.topbar{height:72px;border-bottom:1px solid #183126;display:flex;align-items:center;justify-content:space-between;padding:0 6%;background:#08140fcc;backdrop-filter:blur(14px);position:sticky;top:0;z-index:10}
+.brand{font-weight:800;display:flex;align-items:center;gap:10px;font-size:17px}
+.brand-dot{width:10px;height:10px;border-radius:50%;background:var(--green);box-shadow:0 0 18px var(--green)}
+.nav{display:flex;gap:10px;align-items:center}
+.ghost{border:1px solid var(--border-strong);background:transparent;color:#d7e7dd;border-radius:12px;padding:9px 16px;font-weight:500;font-size:15px;text-decoration:none;transition:all .15s;cursor:pointer;font-family:inherit}
+.ghost:hover{background:#12231b;border-color:#65f29a55;color:#fff}
+.lang-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;background:#12231b;border:1px solid var(--border-strong);color:var(--text);border-radius:12px;padding:9px 14px;font-weight:700;font-size:14px;cursor:pointer;font-family:inherit;min-width:110px}
+.lang-btn:hover{background:#1a3025;border-color:var(--green);color:var(--green)}
+.container{width:min(760px,88%);margin:auto;padding-top:40px}
+.pill{display:inline-block;border:1px solid var(--border-strong);border-radius:40px;padding:5px 14px;background:#0c1913;font-size:12px;letter-spacing:.15em;color:var(--green);font-weight:800;text-transform:uppercase;margin-bottom:12px}
+body.lang-ar .pill{letter-spacing:0}
+h1{font-size:clamp(32px,5vw,48px);letter-spacing:-.04em;margin:10px 0 12px;line-height:1.05}
+body.lang-ar h1{letter-spacing:0}
+.sub{color:var(--text-dim);font-size:17px;margin-bottom:30px}
+.panel{border:1px solid var(--border);background:#0c1913;border-radius:20px;padding:28px;display:flex;flex-direction:column}
+label{display:block;margin:14px 0 6px;color:var(--text-dim);font-weight:600;font-size:14px}
+input[type="text"],input[type="url"]{width:100%;padding:13px 14px;border-radius:12px;border:1px solid var(--border-strong);background:#07110d;color:#fff;font-size:16px;font-family:inherit;transition:all .15s}
+body.lang-ar input[type="text"],body.lang-ar input[type="url"]{text-align:right}
+input:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px var(--green-soft)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:13px;padding:14px 22px;font-weight:800;font-size:15px;cursor:pointer;font-family:inherit;transition:all .15s;text-decoration:none;width:fit-content;margin-top:18px}
+.primary{background:var(--green);color:#06110b}
+.primary:hover{background:#85f7b0}
+.secondary{background:#12231b;border:1px solid var(--border-strong);color:var(--text)}
+.secondary:hover{background:#1a3025;border-color:#65f29a55}
+.qrbox{background:#fff;padding:20px;border-radius:18px;width:max-content;margin:20px auto;display:none;line-height:0}
+.qrbox.visible{display:block}
+.qrbox img,.qrbox canvas{display:block}
+.urlbox{background:#07110d;border:1px solid var(--border-strong);padding:12px 16px;border-radius:12px;font-family:'Courier New',monospace;font-size:13px;word-break:break-all;color:var(--green);display:none;margin-top:14px}
+.urlbox.visible{display:block}
+@media print{body *{visibility:hidden}.qrbox,.qrbox *{visibility:visible}.qrbox{position:absolute;top:0;left:0;box-shadow:none}}
+</style>
 </head>
-
 <body>
 
 <header class="topbar">
-  <div class="brand">
-    <span class="brand-dot"></span> Smart Thobe ID
-  </div>
-
-  <a class="ghost link" href="index.html">Home</a>
+  <div class="brand"><span class="brand-dot"></span> <span data-i18n="brand">Smart Thobe ID</span></div>
+  <nav class="nav">
+    <a class="ghost" href="index.html" data-i18n="home">Home</a>
+    <button class="lang-btn" id="langToggle" type="button"><span>🌐</span> <span id="langLabel">العربية</span></button>
+  </nav>
 </header>
 
-<main class="container narrow">
-
-  <span class="pill">TAG SETUP</span>
-
-  <h1>Create a person's QR code</h1>
-
-  <p class="sub">
-    Give each person a unique ID, then generate their QR code.
-  </p>
-
-  <section class="panel column">
-
-    <label for="baseUrl">Your Smart Thobe website</label>
-
-    <input
-      id="baseUrl"
-      type="url"
-      value="https://azizmohaldawood-tech.github.io/smart-thobe"
-    >
-
-    <label for="tagId">Person's Tag ID</label>
-
-    <input
-      id="tagId"
-      value="SAIF-001"
-      placeholder="Example: SAIF-003"
-    >
-
-    <button id="makeQR" class="btn primary">
-      Generate QR Code
-    </button>
-
-    <div id="qrcode" class="qrbox"></div>
-
-    <code id="targetUrl"></code>
-
-    <button id="printQR" class="btn secondary" hidden>
-      🖨️ Print QR Code
-    </button>
-
-  </section>
+<main class="container">
+  <span class="pill" data-i18n="pill">TAG SETUP</span>
+  <h1 data-i18n="title">Create a person's QR code</h1>
+  <p class="sub" data-i18n="sub">Give each person a unique ID, then generate their QR code.</p>
 
   <section class="panel">
+    <label for="baseUrl" data-i18n="lbl_base">Your Smart Thobe website</label>
+    <input id="baseUrl" type="url" value="https://azizmohaldawood-tech.github.io/smart-thobe">
 
-    <h2>How it works</h2>
+    <label for="tagId" data-i18n="lbl_tag">Person's Tag ID</label>
+    <input id="tagId" type="text" value="SAIF-001" placeholder="Example: SAIF-003">
 
-    <p>
-      Each person receives a unique Tag ID.
-      Their QR code opens their emergency profile.
-    </p>
+    <button id="makeQR" class="btn primary" data-i18n="btn_gen">🔲 Generate QR Code</button>
+    <button id="printQR" class="btn secondary" style="display:none" data-i18n="btn_print">🖨️ Print QR Code</button>
 
-    <p>
-      Example:
-    </p>
-
-    <p>
-      <strong>SAIF-001</strong> → Aziz
-    </p>
-
-    <p>
-      <strong>SAIF-002</strong> → Mohammed
-    </p>
-
-    <p>
-      <strong>SAIF-003</strong> → Person 3
-    </p>
-
+    <div id="qrcode" class="qrbox"></div>
+    <code id="targetUrl" class="urlbox"></code>
   </section>
-
 </main>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
 <script>
+(function(){
+  const I18N = {
+    en:{
+      brand:"Smart Thobe ID", home:"Home",
+      pill:"TAG SETUP", title:"Create a person's QR code",
+      sub:"Give each person a unique ID, then generate their QR code.",
+      lbl_base:"Your Smart Thobe website",
+      lbl_tag:"Person's Tag ID",
+      btn_gen:"🔲 Generate QR Code",
+      btn_print:"🖨️ Print QR Code",
+      lang_next:"العربية",
+      err_base:"Please enter your Smart Thobe website URL."
+    },
+    ar:{
+      brand:"الهوية الذكية للثوب", home:"الرئيسية",
+      pill:"إعداد الرمز", title:"إنشاء رمز QR لشخص",
+      sub:"أعطِ كل شخص رقماً فريداً، ثم أنشئ رمز QR الخاص به.",
+      lbl_base:"موقع الثوب الذكي",
+      lbl_tag:"رقم الشخص",
+      btn_gen:"🔲 إنشاء رمز QR",
+      btn_print:"🖨️ طباعة رمز QR",
+      lang_next:"English",
+      err_base:"الرجاء إدخال رابط موقع الثوب الذكي."
+    }
+  };
 
-const base = document.getElementById("baseUrl");
-const id = document.getElementById("tagId");
-const out = document.getElementById("targetUrl");
-const box = document.getElementById("qrcode");
-const printBtn = document.getElementById("printQR");
+  let lang = localStorage.getItem("smartThobeLang") || "en";
 
-document.getElementById("makeQR").onclick = () => {
+  function applyLang(l){
+    lang = l;
+    localStorage.setItem("smartThobeLang", l);
+    document.documentElement.lang = l;
+    document.documentElement.dir = l === "ar" ? "rtl" : "ltr";
+    document.body.classList.toggle("lang-ar", l === "ar");
+    document.getElementById("langLabel").textContent = I18N[l].lang_next;
+    document.querySelectorAll("[data-i18n]").forEach(el=>{
+      const k = el.getAttribute("data-i18n");
+      if (I18N[l][k] !== undefined) el.textContent = I18N[l][k];
+    });
+  }
 
-  const tagId =
-    (id.value || "SAIF-001").trim();
-
-  const cleanBase =
-    (base.value || "").replace(/\/+$/, "");
-
-  const url =
-    cleanBase +
-    "/emergency.html?id=" +
-    encodeURIComponent(tagId);
-
-  box.innerHTML = "";
-
-  new QRCode(box, {
-    text: url,
-    width: 240,
-    height: 240
+  document.getElementById("langToggle").addEventListener("click", () => {
+    applyLang(lang === "en" ? "ar" : "en");
   });
 
-  out.textContent = url;
+  const base = document.getElementById("baseUrl");
+  const id   = document.getElementById("tagId");
+  const out  = document.getElementById("targetUrl");
+  const box  = document.getElementById("qrcode");
+  const makeBtn = document.getElementById("makeQR");
+  const printBtn = document.getElementById("printQR");
 
-  printBtn.hidden = false;
-};
+  makeBtn.addEventListener("click", () => {
+    const tagId = (id.value || "SAIF-001").trim();
+    const cleanBase = (base.value || "").replace(/\/+$/, "");
+    if (!cleanBase) { alert(I18N[lang].err_base); return; }
 
-printBtn.onclick = () => {
-  window.print();
-};
+    const url = cleanBase + "/emergency.html?id=" + encodeURIComponent(tagId);
 
+    box.innerHTML = "";
+    new QRCode(box, { text: url, width: 240, height: 240, correctLevel: QRCode.CorrectLevel.H });
+    box.classList.add("visible");
+    out.textContent = url;
+    out.classList.add("visible");
+    printBtn.style.display = "inline-flex";
+  });
+
+  printBtn.addEventListener("click", () => window.print());
+
+  applyLang(lang);
+})();
 </script>
 
 </body>

@@ -261,6 +261,19 @@
       line-height: 1.5;
     }
 
+    .info-banner {
+      background: #0e1a25;
+      border: 1px solid #1e3a4d;
+      color: #9ec5e0;
+      font-size: 13px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+
+    .info-banner strong { color: #65f29a; }
+
     .disclaimer {
       font-size: 12px;
       text-align: center;
@@ -317,6 +330,11 @@
     Create your emergency profile and generate your unique Tag ID with a QR code.
   </p>
 
+  <!-- Info banner showing where QR will point -->
+  <div class="info-banner">
+    🌐 QR codes will point to: <strong id="baseUrlDisplay">loading…</strong>
+  </div>
+
   <section class="panel">
 
     <label for="name">Name</label>
@@ -355,7 +373,7 @@
     <code id="targetUrl" style="color: #65f29a; font-size: 12px; word-break: break-all; max-width: 100%;"></code>
 
     <div class="result-actions">
-      <a id="openProfileBtn" class="btn primary" href="#">
+      <a id="openProfileBtn" class="btn primary" href="#" target="_blank" rel="noopener">
         👤 Open my profile
       </a>
       <button id="printQR" class="btn secondary" type="button">
@@ -383,27 +401,57 @@
 
 <script>
   (function () {
-    const registerBtn = document.getElementById("registerBtn");
-    const resultDiv   = document.getElementById("result");
-    const resultCard  = document.getElementById("resultCard");
-    const tagIdDisplay = document.getElementById("tagIdDisplay");
-    const qrBox       = document.getElementById("qrcode");
-    const targetUrlEl = document.getElementById("targetUrl");
-    const openProfileBtn = document.getElementById("openProfileBtn");
-    const printBtn    = document.getElementById("printQR");
-    const copyBtn     = document.getElementById("copyUrlBtn");
+    // ─────────────────────────────────────────────────────────
+    // ⚙️ CONFIGURATION — your live GitHub Pages URL
+    // ─────────────────────────────────────────────────────────
+    const GITHUB_PAGES_URL = "https://azizmohaldawood-tech.github.io/thobe";
 
-    // Get base URL (folder where this page lives)
+    // Get the base URL:
+    // 1. If hosted on GitHub Pages (matches GITHUB_PAGES_URL), use it directly.
+    // 2. If hosted on any other http(s) origin, use that origin + path.
+    // 3. If opened as file://, fall back to the GitHub Pages URL.
     function getBaseUrl() {
-      const path = window.location.pathname;
-      const dir  = path.substring(0, path.lastIndexOf("/"));
-      return window.location.origin + dir;
+      const loc = window.location;
+
+      // file:// — can't be reached by a phone, so use GitHub Pages URL
+      if (loc.protocol === "file:") {
+        return GITHUB_PAGES_URL;
+      }
+
+      // If hosted on GitHub Pages, use the exact configured URL
+      if (loc.hostname.endsWith("github.io")) {
+        // Use the pathname directory (in case the repo is in a subfolder)
+        const path = loc.pathname;
+        const dir = path.substring(0, path.lastIndexOf("/"));
+        return loc.origin + dir;
+      }
+
+      // Any other http(s) host (e.g. localhost, custom domain) — use it
+      const path = loc.pathname;
+      const dir = path.substring(0, path.lastIndexOf("/"));
+      return loc.origin + dir;
     }
 
-    // Encode a person object into a URL-safe base64 string
+    // ─────────────────────────────────────────────────────────
+    // Elements
+    // ─────────────────────────────────────────────────────────
+    const registerBtn     = document.getElementById("registerBtn");
+    const resultDiv       = document.getElementById("result");
+    const resultCard      = document.getElementById("resultCard");
+    const tagIdDisplay    = document.getElementById("tagIdDisplay");
+    const qrBox           = document.getElementById("qrcode");
+    const targetUrlEl     = document.getElementById("targetUrl");
+    const openProfileBtn  = document.getElementById("openProfileBtn");
+    const printBtn        = document.getElementById("printQR");
+    const copyBtn         = document.getElementById("copyUrlBtn");
+    const baseUrlDisplay  = document.getElementById("baseUrlDisplay");
+
+    // Show the base URL to the user
+    baseUrlDisplay.textContent = getBaseUrl();
+
+    // Encode a person object into URL-safe base64
     function encodePerson(person) {
       const json = JSON.stringify(person);
-      // Handle unicode safely
       const utf8 = unescape(encodeURIComponent(json));
       return btoa(utf8)
         .replace(/\+/g, "-")
@@ -438,14 +486,14 @@
         medical: medical || "Not provided"
       };
 
-      // Also save to localStorage (so it works on THIS device even without the URL data)
+      // Save to localStorage (works on the device that created it)
       try {
         const people = JSON.parse(localStorage.getItem("smartThobePeople") || "{}");
         people[tagId] = person;
         localStorage.setItem("smartThobePeople", JSON.stringify(people));
       } catch (e) { /* ignore */ }
 
-      // Build the emergency profile URL with the DATA EMBEDDED
+      // Build the URL with embedded data
       const base = getBaseUrl();
       const url  = base + "/emergency.html?id=" + encodeURIComponent(tagId)
                        + "&d=" + encodePerson(person);
@@ -459,7 +507,7 @@
 
       tagIdDisplay.textContent = tagId;
 
-      // Generate QR
+      // Generate QR code
       qrBox.innerHTML = "";
       new QRCode(qrBox, {
         text: url,
@@ -479,8 +527,10 @@
       }, 100);
     });
 
+    // Print
     printBtn.addEventListener("click", () => window.print());
 
+    // Copy URL
     copyBtn.addEventListener("click", async () => {
       const url = targetUrlEl.textContent;
       try {

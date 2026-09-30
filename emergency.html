@@ -1,108 +1,654 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Emergency ID — Smart Thobe</title>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#07110d;--border:#1f392c;--border-strong:#294438;--green:#65f29a;--green-soft:#65f29a22;--text:#eef8f1;--text-dim:#a9bbb0;--text-dimmer:#91a69a;--text-faint:#607568}
-body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;line-height:1.55;padding:0 0 40px;-webkit-font-smoothing:antialiased}
-body.lang-ar{font-family:'Tajawal','Inter',sans-serif;direction:rtl}
-.topbar{height:72px;border-bottom:1px solid #183126;display:flex;align-items:center;justify-content:space-between;padding:0 6%;background:#08140fcc;backdrop-filter:blur(14px);position:sticky;top:0;z-index:10}
-.brand{font-weight:800;display:flex;align-items:center;gap:10px;font-size:17px}
-.brand-dot{width:10px;height:10px;border-radius:50%;background:var(--green);box-shadow:0 0 18px var(--green)}
-.nav{display:flex;gap:10px;align-items:center}
-.ghost{border:1px solid var(--border-strong);background:transparent;color:#d7e7dd;border-radius:12px;padding:9px 16px;font-weight:500;font-size:15px;text-decoration:none;transition:all .15s;cursor:pointer;font-family:inherit}
-.ghost:hover{background:#12231b;border-color:#65f29a55;color:#fff}
-.lang-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;background:#12231b;border:1px solid var(--border-strong);color:var(--text);border-radius:12px;padding:9px 14px;font-weight:700;font-size:14px;cursor:pointer;font-family:inherit;transition:all .15s;min-width:110px}
-.lang-btn:hover{background:#1a3025;border-color:var(--green);color:var(--green)}
-.container{max-width:760px;margin:0 auto;padding:0 5%}
-.emergency-banner{margin:28px 0 18px;padding:14px 18px;border-radius:14px;background:#25170e;border:1px solid #67401e;color:#ffcf87;font-weight:800;font-size:15px;letter-spacing:.04em}
-body.lang-ar .emergency-banner{letter-spacing:0}
-.profile-card{display:flex;align-items:center;gap:17px;border:1px solid var(--border);background:#0c1913;border-radius:20px;padding:24px;flex-wrap:wrap}
-.avatar{width:58px;height:58px;border-radius:50%;background:var(--green);color:#07110d;display:grid;place-items:center;font-weight:900;font-size:24px;flex-shrink:0}
-.profile-card h1{margin:3px 0;font-size:26px}
-.profile-card p{color:#8ea497;margin:0;font-size:15px}
-.eyebrow{font-size:12px;letter-spacing:.15em;color:var(--green);font-weight:800;text-transform:uppercase}
-body.lang-ar .eyebrow{letter-spacing:0}
-.verified{margin-left:auto;color:var(--green);font-size:13px;font-weight:600;white-space:nowrap}
-body.lang-ar .verified{margin-left:0;margin-right:auto}
-.action-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
-.action{padding:18px 16px;border:1px solid var(--border-strong);border-radius:15px;background:#12231b;color:#fff;font-size:16px;font-weight:800;cursor:pointer;transition:all .15s;font-family:inherit;text-align:left;display:flex;align-items:center;gap:10px;text-decoration:none;line-height:1.3}
-body.lang-ar .action{text-align:right}
-.action:hover{background:#1a3025;border-color:#65f29a66}
-.action:active{transform:scale(.98)}
-.action.danger{background:#3a1b15;border-color:#744133}
-.action.danger:hover{background:#50251d;border-color:#c9593a}
-.action.call{background:#0e2a1a;border-color:#2d6b44}
-.action.call:hover{background:#143a24;border-color:#65f29a}
-.action.call.disabled{opacity:.55;cursor:not-allowed;pointer-events:none}
 
-/* share panel */
-.share-panel{margin:16px 0;border:1px solid var(--border-strong);background:linear-gradient(145deg,#0c1913,#0a1710);border-radius:20px;padding:24px;display:none}
-.share-panel.visible{display:block}
-.share-panel h3{font-size:18px;margin-bottom:8px}
-.share-panel .lead{color:var(--text-dimmer);font-size:14px;margin-bottom:16px;line-height:1.5}
-.share-loc{background:#07110d;border:1px solid var(--border-strong);padding:12px 14px;border-radius:12px;font-family:'Courier New',monospace;font-size:12.5px;word-break:break-all;color:var(--green);margin-bottom:16px;line-height:1.5}
-.share-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.share-btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:14px 16px;border-radius:12px;font-weight:800;font-size:15px;text-decoration:none;cursor:pointer;border:1px solid var(--border-strong);font-family:inherit;transition:all .15s;text-align:center;color:var(--text)}
-.share-btn:hover{transform:translateY(-1px)}
-.share-sms{background:#1a3a24;border-color:#2d6b44;color:#a8f0c0}
-.share-sms:hover{background:#1f4a2c;border-color:var(--green)}
-.share-wa{background:#0f2e1a;border-color:#1e5c34;color:#8ff0a8}
-.share-wa:hover{background:#144225;border-color:#65f29a}
-.share-copy{background:#12231b;color:var(--text)}
-.share-copy:hover{background:#1a3025;border-color:var(--green);color:var(--green)}
-.share-maps{background:#0e1a25;border-color:#1e3a4d;color:#9ec5e0}
-.share-maps:hover{background:#122a38;border-color:#65f29a}
+:root{
+  --bg:#030712;
+  --border:#142b48;
+  --border-strong:#1b3b62;
+  --blue:#3b9cff;
+  --blue-soft:#3b9cff22;
+  --text:#f3f7ff;
+  --text-dim:#a9b8ca;
+  --text-dimmer:#8092a8;
+  --text-faint:#53657a;
+}
 
-.info-card{margin:14px 0;border:1px solid var(--border);background:#0c1913;border-radius:20px;padding:24px}
-.info-card h2{font-size:20px;margin-bottom:16px}
-.info-row{display:flex;justify-content:space-between;gap:20px;padding:14px 0;border-bottom:1px solid #1b3025;font-size:15px}
-.info-row:last-child{border-bottom:0}
-.info-row span{color:var(--text-dimmer)}
-.info-row strong{text-align:right;font-weight:600}
-.lock-badge{display:inline-flex;align-items:center;gap:6px;background:#2a1f0c;color:#ffcf87;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;border:1px solid #6b4f1c;letter-spacing:.04em;text-transform:uppercase}
-body.lang-ar .lock-badge{letter-spacing:0}
-.locked{display:flex;gap:18px;align-items:center;border:1px solid var(--border);background:#0c1913;border-radius:20px;padding:24px;margin:14px 0;flex-wrap:wrap}
-.lock{font-size:34px;flex-shrink:0}
-.locked h2{margin:0 0 5px;font-size:20px}
-.locked p{color:var(--text-dimmer);font-size:15px}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:13px;padding:13px 22px;font-weight:800;font-size:15px;cursor:pointer;font-family:inherit;transition:all .15s;text-decoration:none;width:fit-content}
-.primary{background:var(--green);color:#06110b}
-.primary:hover{background:#85f7b0;box-shadow:0 0 25px #65f29a33}
-.secondary{background:#12231b;border:1px solid var(--border-strong);color:var(--text)}
-.secondary:hover{background:#1a3025;border-color:#65f29a55}
-.status{padding:15px 18px;border-radius:14px;background:#12231b;border:1px solid var(--border-strong);margin:14px 0;word-break:break-word;font-size:15px;display:none}
-.status.visible{display:block}
-.status a{color:var(--green);text-decoration:underline;font-weight:600}
-.status strong{color:var(--green)}
-label{display:block;margin:14px 0 6px;color:var(--text-dim);font-weight:600;font-size:14px}
-input[type="text"],input[type="tel"]{width:100%;padding:13px 14px;border-radius:12px;border:1px solid var(--border-strong);background:#07110d;color:#fff;font-size:16px;font-family:inherit;transition:all .15s}
-body.lang-ar input[type="text"],body.lang-ar input[type="tel"]{text-align:right}
-input:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px var(--green-soft)}
-.qr-section{margin:14px 0;border:1px solid var(--border);background:#0c1913;border-radius:20px;padding:24px;text-align:center}
-.qr-section h2{font-size:20px;margin-bottom:8px}
-.qr-section .qr-sub{color:var(--text-dimmer);font-size:14px;margin-bottom:16px}
-.qr-wrapper{background:#fff;padding:16px;border-radius:16px;width:max-content;margin:0 auto 14px;box-shadow:0 12px 44px #000a;line-height:0}
-.qr-wrapper img,.qr-wrapper canvas{display:block}
-.qr-url{color:var(--green);font-size:11px;word-break:break-all;max-width:100%;font-family:'Courier New',monospace;line-height:1.5;margin-top:8px;display:block}
-.disclaimer{font-size:12px;text-align:center;margin:28px 0 10px;color:var(--text-faint)}
-footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px solid #183126;margin-top:40px;font-size:14px}
-@media(max-width:600px){.action-grid{grid-template-columns:1fr}.share-actions{grid-template-columns:1fr}.verified{display:none}.profile-card h1{font-size:22px}.topbar{padding:0 5%}.container{padding:0 5%}.locked{flex-direction:column;align-items:flex-start}}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Inter',system-ui,sans-serif;
+  line-height:1.55;
+  padding:0 0 40px;
+  -webkit-font-smoothing:antialiased
+}
+
+body.lang-ar{
+  font-family:'Tajawal','Inter',sans-serif;
+  direction:rtl
+}
+
+.topbar{
+  height:72px;
+  border-bottom:1px solid #10243d;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 6%;
+  background:#030712ee;
+  backdrop-filter:blur(14px);
+  position:sticky;
+  top:0;
+  z-index:10
+}
+
+.brand{
+  font-weight:800;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:17px
+}
+
+.brand-dot{
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  background:var(--blue);
+  box-shadow:0 0 18px var(--blue)
+}
+
+.nav{
+  display:flex;
+  gap:10px;
+  align-items:center
+}
+
+.ghost{
+  border:1px solid var(--border-strong);
+  background:transparent;
+  color:#d7e5f5;
+  border-radius:12px;
+  padding:9px 16px;
+  font-weight:500;
+  font-size:15px;
+  text-decoration:none;
+  transition:all .15s;
+  cursor:pointer;
+  font-family:inherit
+}
+
+.ghost:hover{
+  background:#0d2038;
+  border-color:#3b9cff88;
+  color:#fff
+}
+
+.lang-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  background:#0d2038;
+  border:1px solid var(--border-strong);
+  color:var(--text);
+  border-radius:12px;
+  padding:9px 14px;
+  font-weight:700;
+  font-size:14px;
+  cursor:pointer;
+  font-family:inherit;
+  transition:all .15s;
+  min-width:110px
+}
+
+.lang-btn:hover{
+  background:#102846;
+  border-color:var(--blue);
+  color:var(--blue)
+}
+
+.container{
+  max-width:760px;
+  margin:0 auto;
+  padding:0 5%
+}
+
+.emergency-banner{
+  margin:28px 0 18px;
+  padding:14px 18px;
+  border-radius:14px;
+  background:#25170e;
+  border:1px solid #67401e;
+  color:#ffcf87;
+  font-weight:800;
+  font-size:15px;
+  letter-spacing:.04em
+}
+
+body.lang-ar .emergency-banner{
+  letter-spacing:0
+}
+
+.profile-card{
+  display:flex;
+  align-items:center;
+  gap:17px;
+  border:1px solid var(--border);
+  background:#071426;
+  border-radius:20px;
+  padding:24px;
+  flex-wrap:wrap
+}
+
+.avatar{
+  width:58px;
+  height:58px;
+  border-radius:50%;
+  background:var(--blue);
+  color:#030712;
+  display:grid;
+  place-items:center;
+  font-weight:900;
+  font-size:24px;
+  flex-shrink:0
+}
+
+.profile-card h1{
+  margin:3px 0;
+  font-size:26px
+}
+
+.profile-card p{
+  color:var(--text-dimmer);
+  margin:0;
+  font-size:15px
+}
+
+.eyebrow{
+  font-size:12px;
+  letter-spacing:.15em;
+  color:var(--blue);
+  font-weight:800;
+  text-transform:uppercase
+}
+
+body.lang-ar .eyebrow{
+  letter-spacing:0
+}
+
+.verified{
+  margin-left:auto;
+  color:var(--blue);
+  font-size:13px;
+  font-weight:600;
+  white-space:nowrap
+}
+
+body.lang-ar .verified{
+  margin-left:0;
+  margin-right:auto
+}
+
+.action-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin:14px 0
+}
+
+.action{
+  padding:18px 16px;
+  border:1px solid var(--border-strong);
+  border-radius:15px;
+  background:#0d2038;
+  color:#fff;
+  font-size:16px;
+  font-weight:800;
+  cursor:pointer;
+  transition:all .15s;
+  font-family:inherit;
+  text-align:left;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  text-decoration:none;
+  line-height:1.3
+}
+
+body.lang-ar .action{
+  text-align:right
+}
+
+.action:hover{
+  background:#102846;
+  border-color:#3b9cff88
+}
+
+.action:active{
+  transform:scale(.98)
+}
+
+.action.danger{
+  background:#25170e;
+  border-color:#67401e
+}
+
+.action.danger:hover{
+  background:#352012;
+  border-color:#ffcf87
+}
+
+.action.call{
+  background:#0d2038;
+  border-color:#1b3b62
+}
+
+.action.call:hover{
+  background:#102846;
+  border-color:var(--blue)
+}
+
+.action.call.disabled{
+  opacity:.55;
+  cursor:not-allowed;
+  pointer-events:none
+}
+
+/* Share panel */
+
+.share-panel{
+  margin:16px 0;
+  border:1px solid var(--border-strong);
+  background:linear-gradient(145deg,#071426,#050e1b);
+  border-radius:20px;
+  padding:24px;
+  display:none
+}
+
+.share-panel.visible{
+  display:block
+}
+
+.share-panel h3{
+  font-size:18px;
+  margin-bottom:8px
+}
+
+.share-panel .lead{
+  color:var(--text-dimmer);
+  font-size:14px;
+  margin-bottom:16px;
+  line-height:1.5
+}
+
+.share-loc{
+  background:#030914;
+  border:1px solid var(--border-strong);
+  padding:12px 14px;
+  border-radius:12px;
+  font-family:'Courier New',monospace;
+  font-size:12.5px;
+  word-break:break-all;
+  color:var(--blue);
+  margin-bottom:16px;
+  line-height:1.5
+}
+
+.share-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px
+}
+
+.share-btn{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  padding:14px 16px;
+  border-radius:12px;
+  font-weight:800;
+  font-size:15px;
+  text-decoration:none;
+  cursor:pointer;
+  border:1px solid var(--border-strong);
+  font-family:inherit;
+  transition:all .15s;
+  text-align:center;
+  color:var(--text)
+}
+
+.share-btn:hover{
+  transform:translateY(-1px)
+}
+
+.share-sms{
+  background:#0d2038;
+  border-color:#1b3b62;
+  color:#9ec5e0
+}
+
+.share-sms:hover{
+  background:#102846;
+  border-color:var(--blue);
+  color:#c8e4ff
+}
+
+.share-wa{
+  background:#0d2038;
+  border-color:#1b3b62;
+  color:#9ec5e0
+}
+
+.share-wa:hover{
+  background:#102846;
+  border-color:var(--blue);
+  color:#c8e4ff
+}
+
+.share-copy{
+  background:#0d2038;
+  color:var(--text)
+}
+
+.share-copy:hover{
+  background:#102846;
+  border-color:var(--blue);
+  color:var(--blue)
+}
+
+.share-maps{
+  background:#0e1a25;
+  border-color:#1e3a4d;
+  color:#9ec5e0
+}
+
+.share-maps:hover{
+  background:#122a38;
+  border-color:var(--blue);
+  color:#c8e4ff
+}
+
+.info-card{
+  margin:14px 0;
+  border:1px solid var(--border);
+  background:#071426;
+  border-radius:20px;
+  padding:24px
+}
+
+.info-card h2{
+  font-size:20px;
+  margin-bottom:16px
+}
+
+.info-row{
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  padding:14px 0;
+  border-bottom:1px solid #142b48;
+  font-size:15px
+}
+
+.info-row:last-child{
+  border-bottom:0
+}
+
+.info-row span{
+  color:var(--text-dimmer)
+}
+
+.info-row strong{
+  text-align:right;
+  font-weight:600
+}
+
+.lock-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  background:#2a1f0c;
+  color:#ffcf87;
+  font-size:11px;
+  font-weight:700;
+  padding:3px 10px;
+  border-radius:20px;
+  border:1px solid #6b4f1c;
+  letter-spacing:.04em;
+  text-transform:uppercase
+}
+
+body.lang-ar .lock-badge{
+  letter-spacing:0
+}
+
+.locked{
+  display:flex;
+  gap:18px;
+  align-items:center;
+  border:1px solid var(--border);
+  background:#071426;
+  border-radius:20px;
+  padding:24px;
+  margin:14px 0;
+  flex-wrap:wrap
+}
+
+.lock{
+  font-size:34px;
+  flex-shrink:0
+}
+
+.locked h2{
+  margin:0 0 5px;
+  font-size:20px
+}
+
+.locked p{
+  color:var(--text-dimmer);
+  font-size:15px
+}
+
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  border:0;
+  border-radius:13px;
+  padding:13px 22px;
+  font-weight:800;
+  font-size:15px;
+  cursor:pointer;
+  font-family:inherit;
+  transition:all .15s;
+  text-decoration:none;
+  width:fit-content
+}
+
+.primary{
+  background:var(--blue);
+  color:#020812
+}
+
+.primary:hover{
+  background:#69b7ff;
+  box-shadow:0 0 25px #3b9cff44
+}
+
+.secondary{
+  background:#0d2038;
+  border:1px solid var(--border-strong);
+  color:var(--text)
+}
+
+.secondary:hover{
+  background:#102846;
+  border-color:var(--blue);
+  color:#fff
+}
+
+.status{
+  padding:15px 18px;
+  border-radius:14px;
+  background:#0d2038;
+  border:1px solid var(--border-strong);
+  margin:14px 0;
+  word-break:break-word;
+  font-size:15px;
+  display:none
+}
+
+.status.visible{
+  display:block
+}
+
+.status a{
+  color:var(--blue);
+  text-decoration:underline;
+  font-weight:600
+}
+
+.status strong{
+  color:var(--blue)
+}
+
+label{
+  display:block;
+  margin:14px 0 6px;
+  color:var(--text-dim);
+  font-weight:600;
+  font-size:14px
+}
+
+input[type="text"],
+input[type="tel"]{
+  width:100%;
+  padding:13px 14px;
+  border-radius:12px;
+  border:1px solid var(--border-strong);
+  background:#030914;
+  color:#fff;
+  font-size:16px;
+  font-family:inherit;
+  transition:all .15s
+}
+
+body.lang-ar input[type="text"],
+body.lang-ar input[type="tel"]{
+  text-align:right
+}
+
+input:focus{
+  outline:none;
+  border-color:var(--blue);
+  box-shadow:0 0 0 3px var(--blue-soft)
+}
+
+.qr-section{
+  margin:14px 0;
+  border:1px solid var(--border);
+  background:#071426;
+  border-radius:20px;
+  padding:24px;
+  text-align:center
+}
+
+.qr-section h2{
+  font-size:20px;
+  margin-bottom:8px
+}
+
+.qr-section .qr-sub{
+  color:var(--text-dimmer);
+  font-size:14px;
+  margin-bottom:16px
+}
+
+.qr-wrapper{
+  background:#fff;
+  padding:16px;
+  border-radius:16px;
+  width:max-content;
+  margin:0 auto 14px;
+  box-shadow:0 12px 44px #000a;
+  line-height:0
+}
+
+.qr-wrapper img,
+.qr-wrapper canvas{
+  display:block
+}
+
+.qr-url{
+  color:var(--blue);
+  font-size:11px;
+  word-break:break-all;
+  max-width:100%;
+  font-family:'Courier New',monospace;
+  line-height:1.5;
+  margin-top:8px;
+  display:block
+}
+
+.disclaimer{
+  font-size:12px;
+  text-align:center;
+  margin:28px 0 10px;
+  color:var(--text-faint)
+}
+
+footer{
+  text-align:center;
+  color:var(--text-faint);
+  padding:28px 0 0;
+  border-top:1px solid #10243d;
+  margin-top:40px;
+  font-size:14px
+}
+
+@media(max-width:600px){
+  .action-grid{grid-template-columns:1fr}
+  .share-actions{grid-template-columns:1fr}
+  .verified{display:none}
+  .profile-card h1{font-size:22px}
+  .topbar{padding:0 5%}
+  .container{padding:0 5%}
+  .locked{
+    flex-direction:column;
+    align-items:flex-start
+  }
+}
 </style>
 </head>
+
 <body>
 
 <header class="topbar">
-  <div class="brand"><span class="brand-dot"></span> <span data-i18n="brand">Smart Thobe ID</span></div>
+  <div class="brand">
+    <span class="brand-dot"></span>
+    <span data-i18n="brand">Smart Thobe ID</span>
+  </div>
+
   <nav class="nav">
     <a class="ghost" href="index.html" data-i18n="home">Home</a>
-    <button class="lang-btn" id="langToggle" type="button"><span>🌐</span> <span id="langLabel">العربية</span></button>
+    <button class="lang-btn" id="langToggle" type="button">
+      <span>🌐</span>
+      <span id="langLabel">العربية</span>
+    </button>
   </nav>
 </header>
 
@@ -112,11 +658,13 @@ footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px
 
   <section class="profile-card">
     <div class="avatar" id="avatarLetter">?</div>
+
     <div>
       <span class="eyebrow" data-i18n="identity">IDENTITY</span>
       <h1 id="personName">Loading…</h1>
       <p id="personId">ID: —</p>
     </div>
+
     <span class="verified" data-i18n="verified">✓ Verified tag</span>
   </section>
 
@@ -125,7 +673,6 @@ footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px
     <a class="action call" id="callBtn" href="tel:" data-i18n="btn_contact">📞 Call emergency contact</a>
   </section>
 
-  <!-- Share panel (hidden until location is ready) -->
   <section class="share-panel" id="sharePanel">
     <h3 data-i18n="share_title">✅ Location ready — send it to the emergency contact</h3>
     <p class="lead" data-i18n="share_lead">Pick how to send the location. The emergency contact will receive a link to your current position.</p>
@@ -142,14 +689,17 @@ footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px
 
   <section class="info-card">
     <h2 data-i18n="info_title">Information available to a helper</h2>
+
     <div class="info-row" id="rowContact">
       <span data-i18n="info_contact">Emergency contact</span>
       <strong id="contactInfo">—</strong>
     </div>
+
     <div class="info-row">
       <span data-i18n="info_lang">Language</span>
       <strong data-i18n="info_lang_val">Arabic / English</strong>
     </div>
+
     <div class="info-row">
       <span data-i18n="info_status">Tag status</span>
       <strong data-i18n="info_status_val">Active</strong>
@@ -158,17 +708,28 @@ footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px
 
   <section class="qr-section">
     <h2 data-i18n="qr_title">📱 QR Code for this profile</h2>
-    <p class="qr-sub" data-i18n="qr_sub">Show this QR to anyone so they can open this emergency profile on their phone.</p>
+
+    <p class="qr-sub" data-i18n="qr_sub">
+      Show this QR to anyone so they can open this emergency profile on their phone.
+    </p>
+
     <div class="qr-wrapper" id="qrWrapper"></div>
     <code id="qrUrl" class="qr-url"></code>
   </section>
 
   <section class="locked">
     <div class="lock">🔒</div>
+
     <div>
       <h2 data-i18n="lock_title">Private information is locked</h2>
-      <p data-i18n="lock_body">Medical and family details should never be exposed by a public QR scan.</p>
-      <button id="unlockBtn" class="btn secondary" style="margin-top:12px" type="button" data-i18n="lock_btn">Open protected demo</button>
+
+      <p data-i18n="lock_body">
+        Medical and family details should never be exposed by a public QR scan.
+      </p>
+
+      <button id="unlockBtn" class="btn secondary" style="margin-top:12px" type="button" data-i18n="lock_btn">
+        Open protected demo
+      </button>
     </div>
   </section>
 
@@ -176,7 +737,10 @@ footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px
 
   <section id="protected" class="info-card" hidden>
     <h2 data-i18n="prot_title">Protected area — DEMO</h2>
-    <p style="color:var(--text-dimmer);margin-bottom:16px" data-i18n="prot_body">This proves the concept of access control. In a real deployment, authentication must happen on a secure server.</p>
+
+    <p style="color:var(--text-dimmer);margin-bottom:16px" data-i18n="prot_body">
+      This proves the concept of access control. In a real deployment, authentication must happen on a secure server.
+    </p>
 
     <div class="info-row" id="protRowBlood">
       <span data-i18n="prot_blood">Blood type</span>
@@ -197,23 +761,36 @@ footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px
       <span data-i18n="prot_owner">Owner control</span>
       <strong data-i18n="prot_owner_val">Enabled</strong>
     </div>
-    <button id="editBtn" class="btn secondary" style="margin-top:16px" type="button" data-i18n="prot_edit">✏️ Edit my information</button>
+
+    <button id="editBtn" class="btn secondary" style="margin-top:16px" type="button" data-i18n="prot_edit">
+      ✏️ Edit my information
+    </button>
   </section>
 
   <section id="editPanel" class="info-card" hidden>
     <h2 data-i18n="edit_title">Edit information</h2>
+
     <label for="editName" data-i18n="edit_name">Name</label>
     <input id="editName" type="text">
+
     <label for="editContact" data-i18n="edit_contact">Emergency contact (phone number)</label>
     <input id="editContact" type="tel" placeholder="+966 5X XXX XXXX">
+
     <label for="editBlood" data-i18n="edit_blood">Blood type</label>
     <input id="editBlood" type="text">
+
     <label for="editMedical" data-i18n="edit_medical">Important information</label>
     <input id="editMedical" type="text">
-    <button id="saveBtn" class="btn secondary" style="margin-top:18px" type="button" data-i18n="edit_save">💾 Save information</button>
+
+    <button id="saveBtn" class="btn secondary" style="margin-top:18px" type="button" data-i18n="edit_save">
+      💾 Save information
+    </button>
   </section>
 
-  <p class="disclaimer" data-i18n="disclaimer">Prototype only. Do not put real medical information into this demo.</p>
+  <p class="disclaimer" data-i18n="disclaimer">
+    Prototype only. Do not put real medical information into this demo.
+  </p>
+
   <footer>
     <strong data-i18n="foot_brand">SAIF Prototype • Smart Thobe ID</strong>
     <p style="margin-top:6px" data-i18n="foot_note">Demo only • No real medical information</p>
@@ -222,6 +799,7 @@ footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px
 </main>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
 <script>
 (function(){
   const I18N = {
@@ -264,6 +842,7 @@ footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px
       share_sms:"💬 Send via SMS",share_wa:"🟢 Send via WhatsApp",share_copy:"📋 Copy link",share_maps:"🗺️ Open in Maps",
       sms_body_prefix:"EMERGENCY: I need help. My current location: "
     },
+
     ar:{
       brand:"الهوية الذكية للثوب",home:"الرئيسية",banner:"⚠️ هوية طارئة • تجريبي",identity:"الهوية",verified:"✓ رمز موثّق",
       btn_loc:"📍 شارك الموقع الحالي",btn_contact:"📞 اتصل بجهة الطوارئ",
@@ -314,13 +893,17 @@ footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px
     document.documentElement.lang = l;
     document.documentElement.dir = l === "ar" ? "rtl" : "ltr";
     document.body.classList.toggle("lang-ar", l === "ar");
+
     document.getElementById("langLabel").textContent = I18N[l].lang_next;
+
     document.querySelectorAll("[data-i18n]").forEach(el=>{
       const k = el.getAttribute("data-i18n");
       if (I18N[l][k] !== undefined) el.textContent = I18N[l][k];
     });
+
     updatePublicRows();
     updateCallButton();
+
     if (currentLocationUrl) updateShareLinks();
   }
 
@@ -328,87 +911,147 @@ footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px
     applyLang(lang === "en" ? "ar" : "en");
   });
 
-  // ── Person data ──────────────────────────────────────
   const builtinPeople = {
-    "SAIF-001":{name:"Aziz",contact:"+966500000001",blood:"O+",medical:"No medical information added",locked:{blood:true,medical:true,contact:false}},
-    "SAIF-002":{name:"Test Person",contact:"+966500000002",blood:"A+",medical:"Demo medical information",locked:{blood:true,medical:true,contact:false}}
+    "SAIF-001":{
+      name:"Aziz",
+      contact:"+966500000001",
+      blood:"O+",
+      medical:"No medical information added",
+      locked:{blood:true,medical:true,contact:false}
+    },
+
+    "SAIF-002":{
+      name:"Test Person",
+      contact:"+966500000002",
+      blood:"A+",
+      medical:"Demo medical information",
+      locked:{blood:true,medical:true,contact:false}
+    }
   };
 
   const params = new URLSearchParams(location.search);
+
   let rawTag = params.get("id") || "SAIF-001";
   let tag = rawTag.replace(/^id=/,"").trim();
+
   if (!tag) tag = "SAIF-001";
 
   function decodePerson(str){
     try{
       let b64 = str.replace(/-/g,"+").replace(/_/g,"/");
+
       while (b64.length % 4) b64 += "=";
+
       const utf8 = atob(b64);
       const json = decodeURIComponent(escape(utf8));
+
       return JSON.parse(json);
-    }catch(e){ return null; }
+    }catch(e){
+      return null;
+    }
   }
 
   const embeddedRaw = params.get("d");
   const embeddedPerson = embeddedRaw ? decodePerson(embeddedRaw) : null;
 
   let savedPeople = {};
-  try{ savedPeople = JSON.parse(localStorage.getItem("smartThobePeople") || "{}"); }catch(e){}
+
+  try{
+    savedPeople = JSON.parse(
+      localStorage.getItem("smartThobePeople") || "{}"
+    );
+  }catch(e){}
 
   const T = I18N[lang];
-  const base = embeddedPerson || savedPeople[tag] || builtinPeople[tag];
-  const person = base || { name:T.unknown, contact:T.not_saved, blood:T.not_provided, medical:T.not_provided, locked:{blood:true,medical:true,contact:false} };
 
-  if (!person.locked) person.locked = {blood:true, medical:true, contact:false};
+  const base =
+    embeddedPerson ||
+    savedPeople[tag] ||
+    builtinPeople[tag];
 
-  // ── Render header ────────────────────────────────────
+  const person = base || {
+    name:T.unknown,
+    contact:T.not_saved,
+    blood:T.not_provided,
+    medical:T.not_provided,
+    locked:{
+      blood:true,
+      medical:true,
+      contact:false
+    }
+  };
+
+  if (!person.locked){
+    person.locked = {
+      blood:true,
+      medical:true,
+      contact:false
+    };
+  }
+
   function renderHeader(){
     document.getElementById("personId").textContent = "ID: " + tag;
     document.getElementById("personName").textContent = person.name;
-    document.getElementById("avatarLetter").textContent = person.name ? person.name.charAt(0).toUpperCase() : "?";
+
+    document.getElementById("avatarLetter").textContent =
+      person.name
+        ? person.name.charAt(0).toUpperCase()
+        : "?";
   }
 
   function cleanPhone(raw){
     if (!raw) return "";
-    let s = String(raw).trim().replace(/[^\d+]/g, "");
-    s = s.replace(/(?!^)\+/g, "");
+
+    let s = String(raw)
+      .trim()
+      .replace(/[^\d+]/g,"");
+
+    s = s.replace(/(?!^)\+/g,"");
+
     return s;
   }
 
   function isPhoneNumber(raw){
     const cleaned = cleanPhone(raw);
-    const digits = cleaned.replace(/\D/g, "");
+    const digits = cleaned.replace(/\D/g,"");
+
     return digits.length >= 6;
   }
 
   function updatePublicRows(){
-    const contactEl = document.getElementById("contactInfo");
-    if (person.locked.contact) {
-      contactEl.innerHTML = `<span class="lock-badge">🔒 ${I18N[lang].prot_contact}</span>`;
-    } else {
+    const contactEl =
+      document.getElementById("contactInfo");
+
+    if (person.locked.contact){
+      contactEl.innerHTML =
+        `<span class="lock-badge">🔒 ${I18N[lang].prot_contact}</span>`;
+    }else{
       contactEl.textContent = person.contact;
     }
   }
 
   function updateCallButton(){
-    const btn = document.getElementById("callBtn");
+    const btn =
+      document.getElementById("callBtn");
+
     const t = I18N[lang];
 
-    if (person.locked.contact) {
+    if (person.locked.contact){
       btn.classList.add("disabled");
-      btn.setAttribute("href", "javascript:void(0)");
+      btn.setAttribute("href","javascript:void(0)");
       btn.textContent = t.btn_contact;
       return;
     }
 
-    if (isPhoneNumber(person.contact)) {
+    if (isPhoneNumber(person.contact)){
       const cleaned = cleanPhone(person.contact);
+
       btn.classList.remove("disabled");
-      btn.setAttribute("href", "tel:" + cleaned);
+      btn.setAttribute("href","tel:" + cleaned);
       btn.textContent = t.btn_contact;
-    } else {
+    }else{
       btn.classList.add("disabled");
-      btn.setAttribute("href", "javascript:void(0)");
+      btn.setAttribute("href","javascript:void(0)");
       btn.textContent = t.btn_no_phone;
     }
   }
@@ -417,242 +1060,392 @@ footer{text-align:center;color:var(--text-faint);padding:28px 0 0;border-top:1px
   updatePublicRows();
   updateCallButton();
 
-  // ── Status helper ────────────────────────────────────
-  const statusEl = document.getElementById("status");
-  function showStatus(html, isHTML){
+  const statusEl =
+    document.getElementById("status");
+
+  function showStatus(html,isHTML){
     statusEl.classList.add("visible");
-    if (isHTML) statusEl.innerHTML = html; else statusEl.textContent = html;
+
+    if (isHTML){
+      statusEl.innerHTML = html;
+    }else{
+      statusEl.textContent = html;
+    }
   }
 
-  // ── Call button click handler ────────────────────────
-  document.getElementById("callBtn").addEventListener("click", (e) => {
-    const t = I18N[lang];
+  document.getElementById("callBtn")
+    .addEventListener("click",(e)=>{
+      const t = I18N[lang];
 
-    if (person.locked.contact) {
-      e.preventDefault();
-      showStatus(t.st_locked);
-      return;
-    }
-    if (!isPhoneNumber(person.contact)) {
-      e.preventDefault();
-      showStatus(t.st_no_phone);
-      return;
-    }
-    showStatus(`${t.st_calling}<strong>${person.contact}</strong>`, true);
-  });
+      if (person.locked.contact){
+        e.preventDefault();
+        showStatus(t.st_locked);
+        return;
+      }
 
-  // ═══════════════════════════════════════════════════
-  // LOCATION SHARING + SEND TO CONTACT
-  // ═══════════════════════════════════════════════════
-  const sharePanel = document.getElementById("sharePanel");
-  const shareLocEl = document.getElementById("shareLoc");
-  const shareSms = document.getElementById("shareSms");
-  const shareWa = document.getElementById("shareWa");
-  const shareCopy = document.getElementById("shareCopy");
-  const shareMaps = document.getElementById("shareMaps");
+      if (!isPhoneNumber(person.contact)){
+        e.preventDefault();
+        showStatus(t.st_no_phone);
+        return;
+      }
+
+      showStatus(
+        `${t.st_calling}<strong>${person.contact}</strong>`,
+        true
+      );
+    });
+
+  const sharePanel =
+    document.getElementById("sharePanel");
+
+  const shareLocEl =
+    document.getElementById("shareLoc");
+
+  const shareSms =
+    document.getElementById("shareSms");
+
+  const shareWa =
+    document.getElementById("shareWa");
+
+  const shareCopy =
+    document.getElementById("shareCopy");
+
+  const shareMaps =
+    document.getElementById("shareMaps");
 
   function updateShareLinks(){
     if (!currentLocationUrl) return;
 
     const t = I18N[lang];
-    const phone = isPhoneNumber(person.contact) ? cleanPhone(person.contact) : "";
 
-    shareLocEl.textContent = currentLocationUrl;
+    const phone =
+      isPhoneNumber(person.contact)
+        ? cleanPhone(person.contact)
+        : "";
 
-    // SMS link
-    if (phone) {
-      const body = t.sms_body_prefix + currentLocationUrl;
-      shareSms.href = `sms:${phone}?body=${encodeURIComponent(body)}`;
+    shareLocEl.textContent =
+      currentLocationUrl;
+
+    if (phone){
+      const body =
+        t.sms_body_prefix +
+        currentLocationUrl;
+
+      shareSms.href =
+        `sms:${phone}?body=${encodeURIComponent(body)}`;
+
       shareSms.classList.remove("disabled");
       shareSms.style.pointerEvents = "";
       shareSms.style.opacity = "";
-    } else {
+    }else{
       shareSms.href = "javascript:void(0)";
       shareSms.style.pointerEvents = "none";
       shareSms.style.opacity = "0.5";
     }
 
-    // WhatsApp link
-    if (phone) {
-      const text = t.sms_body_prefix + currentLocationUrl;
-      shareWa.href = `https://wa.me/${phone.replace(/^\+/,"")}?text=${encodeURIComponent(text)}`;
+    if (phone){
+      const text =
+        t.sms_body_prefix +
+        currentLocationUrl;
+
+      shareWa.href =
+        `https://wa.me/${phone.replace(/^\+/,"")}?text=${encodeURIComponent(text)}`;
+
       shareWa.style.pointerEvents = "";
       shareWa.style.opacity = "";
-    } else {
+    }else{
       shareWa.href = "javascript:void(0)";
       shareWa.style.pointerEvents = "none";
       shareWa.style.opacity = "0.5";
     }
 
-    // Maps link
-    shareMaps.href = currentLocationUrl;
+    shareMaps.href =
+      currentLocationUrl;
   }
 
-  document.getElementById("locationBtn").addEventListener("click", () => {
+  document.getElementById("locationBtn")
+    .addEventListener("click",()=>{
+      const t = I18N[lang];
+
+      if (!navigator.geolocation){
+        showStatus(t.st_no_geo);
+        return;
+      }
+
+      showStatus(t.st_requesting);
+
+      navigator.geolocation.getCurrentPosition(
+        (pos)=>{
+          const lat =
+            pos.coords.latitude.toFixed(6);
+
+          const lon =
+            pos.coords.longitude.toFixed(6);
+
+          const accuracy =
+            Math.round(pos.coords.accuracy || 0);
+
+          currentLocationUrl =
+            `https://www.google.com/maps?q=${lat},${lon}`;
+
+          sharePanel.classList.add("visible");
+
+          updateShareLinks();
+
+          showStatus(
+            `${t.st_ready} (±${accuracy}m)`,
+            false
+          );
+
+          setTimeout(()=>{
+            sharePanel.scrollIntoView({
+              behavior:"smooth",
+              block:"center"
+            });
+          },200);
+        },
+
+        (err)=>{
+          if (err.code === 1)
+            showStatus(t.st_denied);
+          else if (err.code === 2)
+            showStatus(t.st_unavailable);
+          else if (err.code === 3)
+            showStatus(t.st_timeout);
+          else
+            showStatus(t.st_denied);
+        },
+
+        {
+          enableHighAccuracy:true,
+          timeout:12000,
+          maximumAge:0
+        }
+      );
+    });
+
+  shareSms.addEventListener("click",(e)=>{
     const t = I18N[lang];
 
-    if (!navigator.geolocation) {
-      showStatus(t.st_no_geo);
+    if (!isPhoneNumber(person.contact)){
+      e.preventDefault();
+      showStatus(t.st_no_contact_for_send);
       return;
     }
 
-    showStatus(t.st_requesting);
-
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const lat = pos.coords.latitude.toFixed(6);
-        const lon = pos.coords.longitude.toFixed(6);
-        const accuracy = Math.round(pos.coords.accuracy || 0);
-        currentLocationUrl = `https://www.google.com/maps?q=${lat},${lon}`;
-
-        // Show share panel
-        sharePanel.classList.add("visible");
-        updateShareLinks();
-
-        // Status message
-        showStatus(`${t.st_ready} (±${accuracy}m)`, false);
-
-        // Auto-scroll to share panel
-        setTimeout(() => {
-          sharePanel.scrollIntoView({behavior:"smooth", block:"center"});
-        }, 200);
-      },
-      (err) => {
-        if (err.code === 1) showStatus(t.st_denied);
-        else if (err.code === 2) showStatus(t.st_unavailable);
-        else if (err.code === 3) showStatus(t.st_timeout);
-        else showStatus(t.st_denied);
-      },
-      { enableHighAccuracy: true, timeout: 12000, maximumAge: 0 }
+    showStatus(
+      `${t.st_sms_opening}<strong>${person.contact}</strong>`,
+      true
     );
   });
 
-  // SMS click — just show message; the anchor handles the send
-  shareSms.addEventListener("click", (e) => {
+  shareWa.addEventListener("click",(e)=>{
     const t = I18N[lang];
-    if (!isPhoneNumber(person.contact)) {
+
+    if (!isPhoneNumber(person.contact)){
       e.preventDefault();
       showStatus(t.st_no_contact_for_send);
       return;
     }
-    showStatus(`${t.st_sms_opening}<strong>${person.contact}</strong>`, true);
+
+    showStatus(
+      `${t.st_wa_opening}<strong>${person.contact}</strong>`,
+      true
+    );
   });
 
-  // WhatsApp click — just show message
-  shareWa.addEventListener("click", (e) => {
+  shareCopy.addEventListener("click",async()=>{
     const t = I18N[lang];
-    if (!isPhoneNumber(person.contact)) {
-      e.preventDefault();
-      showStatus(t.st_no_contact_for_send);
-      return;
-    }
-    showStatus(`${t.st_wa_opening}<strong>${person.contact}</strong>`, true);
-  });
 
-  // Copy link
-  shareCopy.addEventListener("click", async () => {
-    const t = I18N[lang];
-    try {
-      await navigator.clipboard.writeText(currentLocationUrl);
+    try{
+      await navigator.clipboard.writeText(
+        currentLocationUrl
+      );
+
       showStatus(t.st_copied);
-    } catch(e){
-      const tmp = document.createElement("textarea");
+    }catch(e){
+      const tmp =
+        document.createElement("textarea");
+
       tmp.value = currentLocationUrl;
+
       document.body.appendChild(tmp);
+
       tmp.select();
-      try { document.execCommand("copy"); } catch(err){}
+
+      try{
+        document.execCommand("copy");
+      }catch(err){}
+
       document.body.removeChild(tmp);
+
       showStatus(t.st_copied);
     }
   });
 
-  // ═══════════════════════════════════════════════════
-  // QR CODE
-  // ═══════════════════════════════════════════════════
   (function renderQR(){
-    const qrWrapper = document.getElementById("qrWrapper");
-    const qrUrlEl = document.getElementById("qrUrl");
+    const qrWrapper =
+      document.getElementById("qrWrapper");
 
-    let url = window.location.href.split("#")[0];
-    if (!url.includes("emergency.html")) {
-      const path = window.location.pathname;
-      const dir = path.substring(0, path.lastIndexOf("/"));
-      url = window.location.origin + dir + "/emergency.html?id=" + encodeURIComponent(tag);
+    const qrUrlEl =
+      document.getElementById("qrUrl");
+
+    let url =
+      window.location.href.split("#")[0];
+
+    if (!url.includes("emergency.html")){
+      const path =
+        window.location.pathname;
+
+      const dir =
+        path.substring(0,path.lastIndexOf("/"));
+
+      url =
+        window.location.origin +
+        dir +
+        "/emergency.html?id=" +
+        encodeURIComponent(tag);
     }
 
     qrUrlEl.textContent = url;
 
-    if (typeof QRCode === "undefined") {
-      qrWrapper.innerHTML = '<p style="color:#000;font-size:12px">QR library failed to load.</p>';
+    if (typeof QRCode === "undefined"){
+      qrWrapper.innerHTML =
+        '<p style="color:#000;font-size:12px">QR library failed to load.</p>';
+
       return;
     }
 
-    new QRCode(qrWrapper, {
-      text: url,
-      width: 200,
-      height: 200,
-      colorDark: "#000000",
-      colorLight: "#ffffff",
-      correctLevel: QRCode.CorrectLevel.L
+    new QRCode(qrWrapper,{
+      text:url,
+      width:200,
+      height:200,
+      colorDark:"#000000",
+      colorLight:"#ffffff",
+      correctLevel:QRCode.CorrectLevel.L
     });
   })();
 
-  // ── Unlock / Edit / Save ─────────────────────────────
   function renderProtected(){
-    document.getElementById("protBlood").textContent = person.blood;
-    document.getElementById("protMedical").textContent = person.medical;
-    document.getElementById("protContact").textContent = person.contact;
-    document.getElementById("protRowBlood").style.display = person.locked.blood ? "flex" : "none";
-    document.getElementById("protRowMedical").style.display = person.locked.medical ? "flex" : "none";
-    document.getElementById("protRowContact").style.display = person.locked.contact ? "flex" : "none";
+    document.getElementById("protBlood").textContent =
+      person.blood;
+
+    document.getElementById("protMedical").textContent =
+      person.medical;
+
+    document.getElementById("protContact").textContent =
+      person.contact;
+
+    document.getElementById("protRowBlood").style.display =
+      person.locked.blood ? "flex" : "none";
+
+    document.getElementById("protRowMedical").style.display =
+      person.locked.medical ? "flex" : "none";
+
+    document.getElementById("protRowContact").style.display =
+      person.locked.contact ? "flex" : "none";
   }
 
-  document.getElementById("unlockBtn").addEventListener("click", () => {
-    const t = I18N[lang];
-    const pin = prompt(t.st_pin_prompt);
-    if (pin === "2468") {
-      document.getElementById("protected").hidden = false;
-      showStatus(`${t.st_prot_opened}${person.name}${t.st_prot_warn}`);
-      renderProtected();
-    } else if (pin !== null) {
-      showStatus(t.st_denied_pin);
-    }
-  });
+  document.getElementById("unlockBtn")
+    .addEventListener("click",()=>{
+      const t = I18N[lang];
 
-  document.getElementById("editBtn").addEventListener("click", () => {
-    document.getElementById("editPanel").hidden = false;
-    document.getElementById("editName").value = person.name;
-    document.getElementById("editContact").value = person.contact;
-    document.getElementById("editBlood").value = person.blood;
-    document.getElementById("editMedical").value = person.medical;
-    document.getElementById("editPanel").scrollIntoView({behavior:"smooth", block:"nearest"});
-  });
+      const pin =
+        prompt(t.st_pin_prompt);
 
-  document.getElementById("saveBtn").addEventListener("click", () => {
-    const t = I18N[lang];
-    savedPeople[tag] = {
-      name: document.getElementById("editName").value.trim() || "Unknown",
-      contact: document.getElementById("editContact").value.trim() || "Not provided",
-      blood: document.getElementById("editBlood").value.trim() || "Not provided",
-      medical: document.getElementById("editMedical").value.trim() || "Not provided",
-      locked: person.locked
-    };
-    localStorage.setItem("smartThobePeople", JSON.stringify(savedPeople));
-    Object.assign(person, savedPeople[tag]);
-    renderHeader();
-    updatePublicRows();
-    updateCallButton();
-    if (currentLocationUrl) updateShareLinks();
-    if (!document.getElementById("protected").hidden) renderProtected();
-    showStatus(t.st_saved);
-  });
+      if (pin === "2468"){
+        document.getElementById("protected").hidden =
+          false;
+
+        showStatus(
+          `${t.st_prot_opened}${person.name}${t.st_prot_warn}`
+        );
+
+        renderProtected();
+      }else if(pin !== null){
+        showStatus(t.st_denied_pin);
+      }
+    });
+
+  document.getElementById("editBtn")
+    .addEventListener("click",()=>{
+      document.getElementById("editPanel").hidden =
+        false;
+
+      document.getElementById("editName").value =
+        person.name;
+
+      document.getElementById("editContact").value =
+        person.contact;
+
+      document.getElementById("editBlood").value =
+        person.blood;
+
+      document.getElementById("editMedical").value =
+        person.medical;
+
+      document.getElementById("editPanel")
+        .scrollIntoView({
+          behavior:"smooth",
+          block:"nearest"
+        });
+    });
+
+  document.getElementById("saveBtn")
+    .addEventListener("click",()=>{
+      const t = I18N[lang];
+
+      savedPeople[tag] = {
+        name:
+          document.getElementById("editName")
+            .value.trim() || "Unknown",
+
+        contact:
+          document.getElementById("editContact")
+            .value.trim() || "Not provided",
+
+        blood:
+          document.getElementById("editBlood")
+            .value.trim() || "Not provided",
+
+        medical:
+          document.getElementById("editMedical")
+            .value.trim() || "Not provided",
+
+        locked:person.locked
+      };
+
+      localStorage.setItem(
+        "smartThobePeople",
+        JSON.stringify(savedPeople)
+      );
+
+      Object.assign(
+        person,
+        savedPeople[tag]
+      );
+
+      renderHeader();
+      updatePublicRows();
+      updateCallButton();
+
+      if (currentLocationUrl)
+        updateShareLinks();
+
+      if (!document.getElementById("protected").hidden)
+        renderProtected();
+
+      showStatus(t.st_saved);
+    });
 
   applyLang(lang);
   renderHeader();
   updatePublicRows();
   updateCallButton();
+
 })();
 </script>
 
 </body>
 </html>
+```

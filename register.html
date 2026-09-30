@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="style.css">
 <script src="app.js" defer></script>
 </head>
+
 <body>
 
 <header class="topbar">
@@ -24,234 +25,369 @@
   </nav>
 </header>
 
+
 <main class="container narrow">
 
   <div style="padding-top:40px">
-    <span class="pill" data-i18n="reg.pill">SMART THOBE SETUP</span>
 
-    <h1 style="font-size:clamp(32px,5vw,48px);letter-spacing:-.04em;margin:10px 0 12px;line-height:1.05"
-        data-i18n="reg.title">
+    <span class="pill" data-i18n="reg.pill">
+      SMART THOBE SETUP
+    </span>
+
+    <h1
+      style="font-size:clamp(32px,5vw,48px);letter-spacing:-.04em;margin:10px 0 12px;line-height:1.05"
+      data-i18n="reg.title">
       Register your Smart Thobe
     </h1>
 
-    <p class="sub">
-      Create your emergency profile and add your official ID securely.
+    <p class="sub" data-i18n="reg.sub">
+      Create your emergency profile and generate your unique Tag ID with a QR code.
     </p>
+
   </div>
 
+
   <div class="info-banner">
-    <span data-i18n="reg.baseBanner">🌐 QR codes will point to:</span>
+
+    <span data-i18n="reg.baseBanner">
+      🌐 QR codes will point to:
+    </span>
+
     <strong id="baseUrlDisplay">…</strong>
+
   </div>
+
 
   <section class="panel column">
 
-    <label for="name" data-i18n="reg.name">Name</label>
-    <input id="name"
-           type="text"
-           autocomplete="name"
-           data-i18n-ph="reg.namePh">
 
-    <label for="officialId">
-      National ID / Official ID 🔒
+    <!-- NAME -->
+
+    <label for="name" data-i18n="reg.name">
+      Name
     </label>
 
-    <input id="officialId"
-           type="text"
-           inputmode="numeric"
-           autocomplete="off"
-           maxlength="30"
-           placeholder="e.g. 1234567890">
+    <input
+      id="name"
+      type="text"
+      data-i18n-ph="reg.namePh"
+    >
 
-    <p style="color:#8092a8;font-size:12px;margin:5px 0 8px;line-height:1.5">
-      🔒 This information is intended to be protected and should not be publicly displayed.
-    </p>
 
-    <label for="contact" data-i18n="reg.contact">Emergency contact</label>
-    <input id="contact"
-           type="text"
-           data-i18n-ph="reg.contactPh">
+    <!-- NATIONAL ID -->
 
-    <label for="phone" data-i18n="reg.phone">Phone number (optional)</label>
-    <input id="phone"
-           type="tel"
-           data-i18n-ph="reg.phonePh">
+    <label for="officialId">
+      National ID / Official ID
+    </label>
 
-    <label for="blood" data-i18n="reg.blood">Blood type</label>
-    <input id="blood"
-           type="text"
-           data-i18n-ph="reg.bloodPh">
+    <input
+      id="officialId"
+      type="text"
+      inputmode="numeric"
+      placeholder="Enter your ID number"
+      autocomplete="off"
+    >
 
-    <label for="medical" data-i18n="reg.medical">Important medical information</label>
-    <input id="medical"
-           type="text"
-           data-i18n-ph="reg.medicalPh">
 
-    <button id="registerBtn"
-            class="btn primary"
-            style="margin-top:22px"
-            data-i18n="reg.create">
+    <!-- EMERGENCY CONTACT -->
+
+    <label for="contact" data-i18n="reg.contact">
+      Emergency contact
+    </label>
+
+    <input
+      id="contact"
+      type="text"
+      data-i18n-ph="reg.contactPh"
+    >
+
+
+    <!-- PHONE -->
+
+    <label for="phone" data-i18n="reg.phone">
+      Phone number (optional)
+    </label>
+
+    <input
+      id="phone"
+      type="tel"
+      data-i18n-ph="reg.phonePh"
+    >
+
+
+    <!-- BLOOD TYPE -->
+
+    <label for="blood" data-i18n="reg.blood">
+      Blood type
+    </label>
+
+    <input
+      id="blood"
+      type="text"
+      data-i18n-ph="reg.bloodPh"
+    >
+
+
+    <!-- MEDICAL INFORMATION -->
+
+    <label for="medical" data-i18n="reg.medical">
+      Important medical information
+    </label>
+
+    <input
+      id="medical"
+      type="text"
+      data-i18n-ph="reg.medicalPh"
+    >
+
+
+    <!-- CREATE -->
+
+    <button
+      id="registerBtn"
+      class="btn primary"
+      style="margin-top:22px"
+      data-i18n="reg.create">
       🏷️ Create Smart Thobe ID
     </button>
+
 
     <div id="result" class="status"></div>
 
   </section>
 
-  <section id="resultCard"
-           class="result-side"
-           style="margin-top:24px;display:none">
+
+  <!-- RESULT -->
+
+  <section
+    id="resultCard"
+    class="result-side"
+    style="margin-top:24px;display:none"
+  >
 
     <h3 data-i18n="reg.created">
       ✅ Smart Thobe created!
     </h3>
 
-    <p style="color:#a9b8ca;font-size:14px"
-       data-i18n="reg.tagLbl">
+
+    <p
+      style="color:#a9b8ca;font-size:14px"
+      data-i18n="reg.tagLbl">
       Your unique Tag ID
     </p>
+
 
     <div id="tagIdDisplay" class="tag-id-display">
       SAIF-000
     </div>
 
-    <p style="color:#a9b8ca;font-size:14px;margin-top:8px"
-       data-i18n="reg.scanLbl">
+
+    <p
+      style="color:#a9b8ca;font-size:14px;margin-top:8px"
+      data-i18n="reg.scanLbl">
       Scan this QR code to open your emergency profile
     </p>
 
+
     <div id="qrcode" class="qr-box"></div>
 
-    <code id="targetUrl"
-          style="color:#3b9cff;font-size:11px;word-break:break-all;max-width:100%">
+
+    <code
+      id="targetUrl"
+      style="color:#3b9cff;font-size:11px;word-break:break-all;max-width:100%">
     </code>
+
 
     <div class="result-actions">
 
-      <a id="openProfileBtn"
-         class="btn primary"
-         href="#"
-         target="_blank"
-         rel="noopener"
-         data-i18n="reg.open">
+      <a
+        id="openProfileBtn"
+        class="btn primary"
+        href="#"
+        target="_blank"
+        rel="noopener"
+        data-i18n="reg.open">
         👤 Open my profile
       </a>
 
-      <button id="printBtn"
-              class="btn secondary"
-              type="button"
-              data-i18n="reg.print">
+
+      <button
+        id="printBtn"
+        class="btn secondary"
+        type="button"
+        data-i18n="reg.print">
         🖨️ Print QR Code
       </button>
 
-      <button id="copyBtn"
-              class="btn secondary"
-              type="button"
-              data-i18n="reg.copy">
+
+      <button
+        id="copyBtn"
+        class="btn secondary"
+        type="button"
+        data-i18n="reg.copy">
         📋 Copy link
       </button>
 
     </div>
 
+
     <div class="warning-note">
+
       ⚠️ <strong>Important:</strong>
-      this prototype currently places profile data inside the QR link.
-      For a real deployment, sensitive information such as National ID
-      must be stored securely on a server and never exposed in the public QR URL.
+      this QR contains the profile data inside the link
+      (encoded, not encrypted).
+      For a real deployment, use a secure server.
+      Do not enter real medical or national ID information.
+
     </div>
 
   </section>
 
+
   <p class="disclaimer">
-    Prototype only. Do not put real national ID or medical information into this demo.
+    Prototype only. Do not put real medical information into this demo.
   </p>
 
 </main>
 
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
 <script src="qr-utils.js"></script>
 
+
 <script>
+
 (function () {
 
-  const resultDiv    = document.getElementById("result");
-  const resultCard   = document.getElementById("resultCard");
-  const tagIdDisplay = document.getElementById("tagIdDisplay");
-  const qrBox        = document.getElementById("qrcode");
-  const targetUrlEl  = document.getElementById("targetUrl");
-  const openBtn      = document.getElementById("openProfileBtn");
-  const printBtn     = document.getElementById("printBtn");
-  const copyBtn      = document.getElementById("copyBtn");
+  const resultDiv =
+    document.getElementById("result");
 
-  const name_el      = document.getElementById("name");
-  const officialId_el = document.getElementById("officialId");
-  const contact_el   = document.getElementById("contact");
-  const phone_el     = document.getElementById("phone");
-  const blood_el     = document.getElementById("blood");
-  const medical_el   = document.getElementById("medical");
+  const resultCard =
+    document.getElementById("resultCard");
+
+  const tagIdDisplay =
+    document.getElementById("tagIdDisplay");
+
+  const qrBox =
+    document.getElementById("qrcode");
+
+  const targetUrlEl =
+    document.getElementById("targetUrl");
+
+  const openBtn =
+    document.getElementById("openProfileBtn");
+
+  const printBtn =
+    document.getElementById("printBtn");
+
+  const copyBtn =
+    document.getElementById("copyBtn");
+
+
+  /* FORM FIELDS */
+
+  const name_el =
+    document.getElementById("name");
+
+  const officialId_el =
+    document.getElementById("officialId");
+
+  const contact_el =
+    document.getElementById("contact");
+
+  const phone_el =
+    document.getElementById("phone");
+
+  const blood_el =
+    document.getElementById("blood");
+
+  const medical_el =
+    document.getElementById("medical");
+
+
+  /* BASE URL */
 
   document.getElementById("baseUrlDisplay").textContent =
     ST.getBaseUrl();
 
 
+  /* CREATE PROFILE */
+
   document.getElementById("registerBtn").onclick = () => {
 
-    const name       = name_el.value.trim();
-    const officialId = officialId_el.value.trim();
-    const contact    = contact_el.value.trim();
-    const phone      = phone_el.value.trim();
-    const blood      = blood_el.value.trim();
-    const medical    = medical_el.value.trim();
+    const name =
+      name_el.value.trim();
 
-    resultDiv.classList.remove("visible","error","success");
+    const officialId =
+      officialId_el.value.trim();
+
+    const contact =
+      contact_el.value.trim();
+
+    const phone =
+      phone_el.value.trim();
+
+    const blood =
+      blood_el.value.trim();
+
+    const medical =
+      medical_el.value.trim();
+
+
+    resultDiv.classList.remove(
+      "visible",
+      "error",
+      "success"
+    );
+
     resultCard.style.display = "none";
 
 
+    /* NAME REQUIRED */
+
     if (!name) {
 
-      resultDiv.classList.add("visible","error");
+      resultDiv.classList.add(
+        "visible",
+        "error"
+      );
 
-      resultDiv.textContent = window.stT
-        ? stT("common.needName", document.documentElement.lang)
-        : "Please enter a name.";
+      resultDiv.textContent =
+        window.stT
+          ? stT(
+              "common.needName",
+              document.documentElement.lang
+            )
+          : "Please enter a name.";
 
       return;
     }
 
+
+    /* NATIONAL ID REQUIRED */
 
     if (!officialId) {
 
-      resultDiv.classList.add("visible","error");
+      resultDiv.classList.add(
+        "visible",
+        "error"
+      );
+
       resultDiv.textContent =
-        "Please enter the National ID / Official ID.";
+        "Please enter a National ID / Official ID.";
 
       return;
     }
 
 
-    /*
-      Prototype protection:
-      Do not allow spaces or unusual characters in the ID.
-      This is only validation — it is NOT encryption.
-    */
+    /* GENERATE SMART THOBE TAG ID */
 
-    if (!/^[0-9A-Za-z-]+$/.test(officialId)) {
-
-      resultDiv.classList.add("visible","error");
-      resultDiv.textContent =
-        "ID can only contain letters, numbers, and hyphens.";
-
-      return;
-    }
+    const tagId =
+      ST.makeTagId();
 
 
-    /*
-      The Smart Thobe Tag ID is still generated automatically.
-      The person's real/official ID is stored separately.
-    */
-
-    const tagId = ST.makeTagId();
-
+    /* CREATE PERSON */
 
     const person = {
 
@@ -259,47 +395,78 @@
 
       officialId,
 
-      contact: contact || "Not provided",
+      contact:
+        contact || "Not provided",
 
       phone,
 
-      blood: blood || "Not provided",
+      blood:
+        blood || "Not provided",
 
-      medical: medical || "Not provided"
+      medical:
+        medical || "Not provided"
 
     };
 
 
-    ST.savePerson(tagId, person);
+    /* SAVE PROFILE */
+
+    ST.savePerson(
+      tagId,
+      person
+    );
 
 
-    const url = ST.buildProfileUrl(tagId, person);
+    /* CREATE QR LINK */
+
+    const url =
+      ST.buildProfileUrl(
+        tagId,
+        person
+      );
 
 
-    resultDiv.classList.add("visible","success");
+    /* SHOW SUCCESS */
+
+    resultDiv.classList.add(
+      "visible",
+      "success"
+    );
 
     resultDiv.innerHTML =
-      `Smart Thobe ID: <strong>${tagId}</strong>`;
+      `Tag ID: <strong>${tagId}</strong>`;
 
 
-    tagIdDisplay.textContent = tagId;
+    tagIdDisplay.textContent =
+      tagId;
 
 
-    ST.renderQR(qrBox, url, 220);
+    /* QR CODE */
+
+    ST.renderQR(
+      qrBox,
+      url,
+      220
+    );
 
 
-    targetUrlEl.textContent = url;
+    targetUrlEl.textContent =
+      url;
 
-    openBtn.href = url;
 
-    resultCard.style.display = "flex";
+    openBtn.href =
+      url;
+
+
+    resultCard.style.display =
+      "flex";
 
 
     setTimeout(() => {
 
       resultCard.scrollIntoView({
-        behavior:"smooth",
-        block:"center"
+        behavior: "smooth",
+        block: "center"
       });
 
     }, 100);
@@ -307,52 +474,79 @@
   };
 
 
-  printBtn.onclick = () => window.print();
+  /* PRINT */
 
+  printBtn.onclick = () => {
+
+    window.print();
+
+  };
+
+
+  /* COPY LINK */
 
   copyBtn.onclick = async () => {
 
-    const url = targetUrlEl.textContent;
+    const url =
+      targetUrlEl.textContent;
+
 
     try {
 
-      await navigator.clipboard.writeText(url);
+      await navigator.clipboard.writeText(
+        url
+      );
 
     }
 
     catch {
 
-      const t = document.createElement("textarea");
+      const t =
+        document.createElement("textarea");
 
-      t.value = url;
+      t.value =
+        url;
 
       document.body.appendChild(t);
 
       t.select();
 
       try {
+
         document.execCommand("copy");
+
       } catch {}
 
       document.body.removeChild(t);
 
     }
 
-    const lang = document.documentElement.lang;
+
+    const lang =
+      document.documentElement.lang;
+
 
     copyBtn.textContent =
-      stT("reg.copied", lang);
+      stT(
+        "reg.copied",
+        lang
+      );
+
 
     setTimeout(() => {
 
       copyBtn.textContent =
-        stT("reg.copy", lang);
+        stT(
+          "reg.copy",
+          lang
+        );
 
     }, 1800);
 
   };
 
 })();
+
 </script>
 
 </body>

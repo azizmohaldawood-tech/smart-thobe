@@ -1,504 +1,358 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Register — Smart Thobe</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; }
-
-    body {
-      background: #07110d;
-      color: #eef8f1;
-      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      line-height: 1.5;
-      padding: 0 0 40px 0;
-    }
-
-    .topbar {
-      height: 72px;
-      border-bottom: 1px solid #183126;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 6%;
-      background: #08140fdd;
-      backdrop-filter: blur(12px);
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
-
-    .brand {
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 17px;
-    }
-
-    .brand-dot {
-      display: inline-block;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: #65f29a;
-      box-shadow: 0 0 18px #65f29a;
-    }
-
-    .ghost {
-      border: 1px solid #294438;
-      background: transparent;
-      color: #d7e7dd;
-      border-radius: 12px;
-      padding: 9px 16px;
-      font-weight: 500;
-      font-size: 15px;
-      text-decoration: none;
-      transition: 0.15s;
-    }
-
-    .ghost:hover {
-      background: #12231b;
-      border-color: #65f29a55;
-    }
-
-    .container {
-      width: min(760px, 88%);
-      margin: auto;
-      padding-top: 40px;
-    }
-
-    .narrow { max-width: 760px; }
-
-    .pill, .eyebrow {
-      font-size: 12px;
-      letter-spacing: 0.15em;
-      color: #65f29a;
-      font-weight: 800;
-      text-transform: uppercase;
-    }
-
-    .pill {
-      display: inline-block;
-      border: 1px solid #294438;
-      border-radius: 40px;
-      padding: 5px 14px;
-      background: #0c1913;
-      margin-bottom: 12px;
-    }
-
-    h1 {
-      font-size: clamp(32px, 5vw, 48px);
-      letter-spacing: -0.04em;
-      margin: 10px 0 12px;
-      line-height: 1.05;
-    }
-
-    .sub {
-      color: #a9bbb0;
-      font-size: 17px;
-      margin-bottom: 30px;
-    }
-
-    .panel {
-      border: 1px solid #1f392c;
-      background: #0c1913;
-      border-radius: 20px;
-      padding: 28px;
-      display: flex;
-      flex-direction: column;
-    }
-
-    label {
-      display: block;
-      margin: 14px 0 6px;
-      color: #a9bbb0;
-      font-weight: 600;
-      font-size: 14px;
-    }
-
-    input[type="text"] {
-      width: 100%;
-      padding: 13px 14px;
-      border-radius: 12px;
-      border: 1px solid #294438;
-      background: #07110d;
-      color: white;
-      font-size: 16px;
-      font-family: inherit;
-      transition: 0.15s;
-    }
-
-    input[type="text"]:focus {
-      outline: none;
-      border-color: #65f29a;
-      box-shadow: 0 0 0 3px #65f29a22;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      border: 0;
-      border-radius: 13px;
-      padding: 14px 22px;
-      font-weight: 800;
-      font-size: 15px;
-      cursor: pointer;
-      font-family: inherit;
-      transition: 0.15s;
-      text-decoration: none;
-      width: fit-content;
-    }
-
-    .primary {
-      background: #65f29a;
-      color: #06110b;
-    }
-
-    .primary:hover {
-      background: #85f7b0;
-      box-shadow: 0 0 25px #65f29a33;
-    }
-
-    .secondary {
-      background: #12231b;
-      border: 1px solid #294438;
-      color: #eef8f1;
-    }
-
-    .secondary:hover {
-      background: #1a3025;
-      border-color: #65f29a55;
-    }
-
-    .status {
-      padding: 16px 18px;
-      border-radius: 14px;
-      background: #12231b;
-      border: 1px solid #294438;
-      margin: 16px 0;
-      word-break: break-word;
-      font-size: 15px;
-    }
-
-    .status.error {
-      background: #3a1b15;
-      border-color: #744133;
-      color: #ffcf87;
-    }
-
-    .status.success {
-      background: #0e2018;
-      border-color: #2d6b44;
-    }
-
-    .result-card {
-      margin-top: 24px;
-      border: 1px solid #2d6b44;
-      background: linear-gradient(145deg, #0c1913, #0e2018);
-      border-radius: 22px;
-      padding: 30px 26px;
-      text-align: center;
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      gap: 14px;
-    }
-
-    .result-card.visible {
-      display: flex;
-    }
-
-    .result-card h2 {
-      font-size: 22px;
-      margin: 0;
-      letter-spacing: -0.01em;
-    }
-
-    .tag-id-display {
-      font-family: 'Courier New', monospace;
-      font-size: 22px;
-      font-weight: 800;
-      color: #65f29a;
-      letter-spacing: 0.08em;
-      background: #07110d;
-      border: 1px solid #294438;
-      padding: 12px 22px;
-      border-radius: 12px;
-      margin: 4px 0;
-    }
-
-    .qr-box {
-      background: white;
-      padding: 18px;
-      border-radius: 18px;
-      width: max-content;
-      margin: 8px auto;
-      box-shadow: 0 10px 40px #000a;
-    }
-
-    .result-actions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin-top: 6px;
-    }
-
-    .warning-note {
-      background: #2a1f0c;
-      border: 1px solid #6b4f1c;
-      color: #ffcf87;
-      font-size: 13px;
-      padding: 12px 16px;
-      border-radius: 12px;
-      margin-top: 16px;
-      text-align: left;
-      line-height: 1.5;
-    }
-
-    .disclaimer {
-      font-size: 12px;
-      text-align: center;
-      margin: 28px 0 10px;
-      color: #607568;
-    }
-
-    @media print {
-      body * { visibility: hidden; }
-      .result-card, .result-card * { visibility: visible; }
-      .result-card {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        border: none;
-        background: white;
-        color: black;
-        box-shadow: none;
-      }
-      .result-card h2,
-      .result-card .tag-id-display {
-        color: black !important;
-        border-color: #ccc !important;
-        background: #f5f5f5 !important;
-      }
-      .result-actions, .warning-note { display: none !important; }
-    }
-
-    @media (max-width: 600px) {
-      .topbar { padding: 0 5%; }
-      .container { width: 92%; }
-      .panel { padding: 22px 18px; }
-      .result-card { padding: 24px 18px; }
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Register — Smart Thobe</title>
+<meta name="theme-color" content="#3b9cff">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="style.css">
+<script src="app.js" defer></script>
 </head>
 <body>
 
 <header class="topbar">
   <div class="brand">
-    <span class="brand-dot"></span> Smart Thobe ID
+    <span class="brand-dot"></span>
+    <span data-i18n="brand">Smart Thobe ID</span>
   </div>
-  <a class="ghost" href="index.html">Home</a>
+
+  <nav class="topnav">
+    <a class="ghost" href="index.html" data-i18n="nav.home">Home</a>
+    <button id="langBtn" class="ghost" type="button">عربي</button>
+  </nav>
 </header>
 
 <main class="container narrow">
 
-  <span class="pill">SMART THOBE SETUP</span>
+  <div style="padding-top:40px">
+    <span class="pill" data-i18n="reg.pill">SMART THOBE SETUP</span>
 
-  <h1>Register your Smart Thobe</h1>
+    <h1 style="font-size:clamp(32px,5vw,48px);letter-spacing:-.04em;margin:10px 0 12px;line-height:1.05"
+        data-i18n="reg.title">
+      Register your Smart Thobe
+    </h1>
 
-  <p class="sub">
-    Create your emergency profile and generate your unique Tag ID with a QR code.
-  </p>
+    <p class="sub">
+      Create your emergency profile and add your official ID securely.
+    </p>
+  </div>
 
-  <section class="panel">
+  <div class="info-banner">
+    <span data-i18n="reg.baseBanner">🌐 QR codes will point to:</span>
+    <strong id="baseUrlDisplay">…</strong>
+  </div>
 
-    <label for="name">Name</label>
-    <input id="name" type="text" placeholder="Example: Ahmed">
+  <section class="panel column">
 
-    <label for="contact">Emergency contact</label>
-    <input id="contact" type="text" placeholder="Example: Family contact">
+    <label for="name" data-i18n="reg.name">Name</label>
+    <input id="name"
+           type="text"
+           autocomplete="name"
+           data-i18n-ph="reg.namePh">
 
-    <label for="blood">Blood type</label>
-    <input id="blood" type="text" placeholder="Example: O+">
+    <label for="officialId">
+      National ID / Official ID 🔒
+    </label>
 
-    <label for="medical">Important medical information</label>
-    <input id="medical" type="text" placeholder="Prototype example only">
+    <input id="officialId"
+           type="text"
+           inputmode="numeric"
+           autocomplete="off"
+           maxlength="30"
+           placeholder="e.g. 1234567890">
 
-    <button id="registerBtn" class="btn primary" style="margin-top: 22px;">
+    <p style="color:#8092a8;font-size:12px;margin:5px 0 8px;line-height:1.5">
+      🔒 This information is intended to be protected and should not be publicly displayed.
+    </p>
+
+    <label for="contact" data-i18n="reg.contact">Emergency contact</label>
+    <input id="contact"
+           type="text"
+           data-i18n-ph="reg.contactPh">
+
+    <label for="phone" data-i18n="reg.phone">Phone number (optional)</label>
+    <input id="phone"
+           type="tel"
+           data-i18n-ph="reg.phonePh">
+
+    <label for="blood" data-i18n="reg.blood">Blood type</label>
+    <input id="blood"
+           type="text"
+           data-i18n-ph="reg.bloodPh">
+
+    <label for="medical" data-i18n="reg.medical">Important medical information</label>
+    <input id="medical"
+           type="text"
+           data-i18n-ph="reg.medicalPh">
+
+    <button id="registerBtn"
+            class="btn primary"
+            style="margin-top:22px"
+            data-i18n="reg.create">
       🏷️ Create Smart Thobe ID
     </button>
 
-    <div id="result" class="status" hidden></div>
+    <div id="result" class="status"></div>
 
   </section>
 
-  <section id="resultCard" class="result-card">
-    <h2>✅ Smart Thobe created!</h2>
+  <section id="resultCard"
+           class="result-side"
+           style="margin-top:24px;display:none">
 
-    <p style="color: #a9bbb0; font-size: 14px;">Your unique Tag ID</p>
+    <h3 data-i18n="reg.created">
+      ✅ Smart Thobe created!
+    </h3>
 
-    <div id="tagIdDisplay" class="tag-id-display">SAIF-000</div>
+    <p style="color:#a9b8ca;font-size:14px"
+       data-i18n="reg.tagLbl">
+      Your unique Tag ID
+    </p>
 
-    <p style="color: #a9bbb0; font-size: 14px; margin-top: 8px;">
+    <div id="tagIdDisplay" class="tag-id-display">
+      SAIF-000
+    </div>
+
+    <p style="color:#a9b8ca;font-size:14px;margin-top:8px"
+       data-i18n="reg.scanLbl">
       Scan this QR code to open your emergency profile
     </p>
 
     <div id="qrcode" class="qr-box"></div>
 
-    <code id="targetUrl" style="color: #65f29a; font-size: 12px; word-break: break-all; max-width: 100%;"></code>
+    <code id="targetUrl"
+          style="color:#3b9cff;font-size:11px;word-break:break-all;max-width:100%">
+    </code>
 
     <div class="result-actions">
-      <a id="openProfileBtn" class="btn primary" href="#">
+
+      <a id="openProfileBtn"
+         class="btn primary"
+         href="#"
+         target="_blank"
+         rel="noopener"
+         data-i18n="reg.open">
         👤 Open my profile
       </a>
-      <button id="printQR" class="btn secondary" type="button">
+
+      <button id="printBtn"
+              class="btn secondary"
+              type="button"
+              data-i18n="reg.print">
         🖨️ Print QR Code
       </button>
-      <button id="copyUrlBtn" class="btn secondary" type="button">
+
+      <button id="copyBtn"
+              class="btn secondary"
+              type="button"
+              data-i18n="reg.copy">
         📋 Copy link
       </button>
+
     </div>
 
     <div class="warning-note">
-      ⚠️ <strong>Important:</strong> This QR code contains the profile data inside the link itself
-      (encoded, not encrypted). Anyone with the link can read the information.
-      For a real deployment, use a secure server with proper authentication.
+      ⚠️ <strong>Important:</strong>
+      this prototype currently places profile data inside the QR link.
+      For a real deployment, sensitive information such as National ID
+      must be stored securely on a server and never exposed in the public QR URL.
     </div>
+
   </section>
 
   <p class="disclaimer">
-    Prototype only. Do not put real medical information into this demo.
+    Prototype only. Do not put real national ID or medical information into this demo.
   </p>
 
 </main>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="qr-utils.js"></script>
 
 <script>
-  (function () {
-    const registerBtn = document.getElementById("registerBtn");
-    const resultDiv   = document.getElementById("result");
-    const resultCard  = document.getElementById("resultCard");
-    const tagIdDisplay = document.getElementById("tagIdDisplay");
-    const qrBox       = document.getElementById("qrcode");
-    const targetUrlEl = document.getElementById("targetUrl");
-    const openProfileBtn = document.getElementById("openProfileBtn");
-    const printBtn    = document.getElementById("printQR");
-    const copyBtn     = document.getElementById("copyUrlBtn");
+(function () {
 
-    // Get base URL (folder where this page lives)
-    function getBaseUrl() {
-      const path = window.location.pathname;
-      const dir  = path.substring(0, path.lastIndexOf("/"));
-      return window.location.origin + dir;
+  const resultDiv    = document.getElementById("result");
+  const resultCard   = document.getElementById("resultCard");
+  const tagIdDisplay = document.getElementById("tagIdDisplay");
+  const qrBox        = document.getElementById("qrcode");
+  const targetUrlEl  = document.getElementById("targetUrl");
+  const openBtn      = document.getElementById("openProfileBtn");
+  const printBtn     = document.getElementById("printBtn");
+  const copyBtn      = document.getElementById("copyBtn");
+
+  const name_el      = document.getElementById("name");
+  const officialId_el = document.getElementById("officialId");
+  const contact_el   = document.getElementById("contact");
+  const phone_el     = document.getElementById("phone");
+  const blood_el     = document.getElementById("blood");
+  const medical_el   = document.getElementById("medical");
+
+  document.getElementById("baseUrlDisplay").textContent =
+    ST.getBaseUrl();
+
+
+  document.getElementById("registerBtn").onclick = () => {
+
+    const name       = name_el.value.trim();
+    const officialId = officialId_el.value.trim();
+    const contact    = contact_el.value.trim();
+    const phone      = phone_el.value.trim();
+    const blood      = blood_el.value.trim();
+    const medical    = medical_el.value.trim();
+
+    resultDiv.classList.remove("visible","error","success");
+    resultCard.style.display = "none";
+
+
+    if (!name) {
+
+      resultDiv.classList.add("visible","error");
+
+      resultDiv.textContent = window.stT
+        ? stT("common.needName", document.documentElement.lang)
+        : "Please enter a name.";
+
+      return;
     }
 
-    // Encode a person object into a URL-safe base64 string
-    function encodePerson(person) {
-      const json = JSON.stringify(person);
-      // Handle unicode safely
-      const utf8 = unescape(encodeURIComponent(json));
-      return btoa(utf8)
-        .replace(/\+/g, "-")
-        .replace(/\//g, "_")
-        .replace(/=+$/, "");
+
+    if (!officialId) {
+
+      resultDiv.classList.add("visible","error");
+      resultDiv.textContent =
+        "Please enter the National ID / Official ID.";
+
+      return;
     }
 
-    registerBtn.addEventListener("click", () => {
-      const name    = document.getElementById("name").value.trim();
-      const contact = document.getElementById("contact").value.trim();
-      const blood   = document.getElementById("blood").value.trim();
-      const medical = document.getElementById("medical").value.trim();
 
-      resultDiv.hidden = true;
-      resultDiv.classList.remove("error", "success");
-      resultCard.classList.remove("visible");
+    /*
+      Prototype protection:
+      Do not allow spaces or unusual characters in the ID.
+      This is only validation — it is NOT encryption.
+    */
 
-      if (!name) {
-        resultDiv.hidden = false;
-        resultDiv.classList.add("error");
-        resultDiv.textContent = "Please enter a name.";
-        return;
-      }
+    if (!/^[0-9A-Za-z-]+$/.test(officialId)) {
 
-      // Generate a unique Tag ID
-      const tagId = "SAIF-" + Math.floor(100 + Math.random() * 900);
+      resultDiv.classList.add("visible","error");
+      resultDiv.textContent =
+        "ID can only contain letters, numbers, and hyphens.";
 
-      const person = {
-        name: name,
-        contact: contact || "Not provided",
-        blood: blood || "Not provided",
-        medical: medical || "Not provided"
-      };
+      return;
+    }
 
-      // Also save to localStorage (so it works on THIS device even without the URL data)
-      try {
-        const people = JSON.parse(localStorage.getItem("smartThobePeople") || "{}");
-        people[tagId] = person;
-        localStorage.setItem("smartThobePeople", JSON.stringify(people));
-      } catch (e) { /* ignore */ }
 
-      // Build the emergency profile URL with the DATA EMBEDDED
-      const base = getBaseUrl();
-      const url  = base + "/emergency.html?id=" + encodeURIComponent(tagId)
-                       + "&d=" + encodePerson(person);
+    /*
+      The Smart Thobe Tag ID is still generated automatically.
+      The person's real/official ID is stored separately.
+    */
 
-      // Show success
-      resultDiv.hidden = false;
-      resultDiv.classList.add("success");
-      resultDiv.innerHTML =
-        `<strong>Smart Thobe created! ✅</strong><br>` +
-        `Tag ID: <strong>${tagId}</strong>`;
+    const tagId = ST.makeTagId();
 
-      tagIdDisplay.textContent = tagId;
 
-      // Generate QR
-      qrBox.innerHTML = "";
-      new QRCode(qrBox, {
-        text: url,
-        width: 220,
-        height: 220,
-        colorDark: "#000000",
-        colorLight: "#ffffff",
-        correctLevel: QRCode.CorrectLevel.L
+    const person = {
+
+      name,
+
+      officialId,
+
+      contact: contact || "Not provided",
+
+      phone,
+
+      blood: blood || "Not provided",
+
+      medical: medical || "Not provided"
+
+    };
+
+
+    ST.savePerson(tagId, person);
+
+
+    const url = ST.buildProfileUrl(tagId, person);
+
+
+    resultDiv.classList.add("visible","success");
+
+    resultDiv.innerHTML =
+      `Smart Thobe ID: <strong>${tagId}</strong>`;
+
+
+    tagIdDisplay.textContent = tagId;
+
+
+    ST.renderQR(qrBox, url, 220);
+
+
+    targetUrlEl.textContent = url;
+
+    openBtn.href = url;
+
+    resultCard.style.display = "flex";
+
+
+    setTimeout(() => {
+
+      resultCard.scrollIntoView({
+        behavior:"smooth",
+        block:"center"
       });
 
-      targetUrlEl.textContent = url;
-      openProfileBtn.href = url;
-      resultCard.classList.add("visible");
+    }, 100);
 
-      setTimeout(() => {
-        resultCard.scrollIntoView({ behavior: "smooth", block: "center" });
-      }, 100);
-    });
+  };
 
-    printBtn.addEventListener("click", () => window.print());
 
-    copyBtn.addEventListener("click", async () => {
-      const url = targetUrlEl.textContent;
+  printBtn.onclick = () => window.print();
+
+
+  copyBtn.onclick = async () => {
+
+    const url = targetUrlEl.textContent;
+
+    try {
+
+      await navigator.clipboard.writeText(url);
+
+    }
+
+    catch {
+
+      const t = document.createElement("textarea");
+
+      t.value = url;
+
+      document.body.appendChild(t);
+
+      t.select();
+
       try {
-        await navigator.clipboard.writeText(url);
-        copyBtn.textContent = "✅ Copied!";
-        setTimeout(() => { copyBtn.textContent = "📋 Copy link"; }, 1800);
-      } catch (e) {
-        const temp = document.createElement("textarea");
-        temp.value = url;
-        document.body.appendChild(temp);
-        temp.select();
-        try { document.execCommand("copy"); } catch (err) {}
-        document.body.removeChild(temp);
-        copyBtn.textContent = "✅ Copied!";
-        setTimeout(() => { copyBtn.textContent = "📋 Copy link"; }, 1800);
-      }
-    });
-  })();
+        document.execCommand("copy");
+      } catch {}
+
+      document.body.removeChild(t);
+
+    }
+
+    const lang = document.documentElement.lang;
+
+    copyBtn.textContent =
+      stT("reg.copied", lang);
+
+    setTimeout(() => {
+
+      copyBtn.textContent =
+        stT("reg.copy", lang);
+
+    }, 1800);
+
+  };
+
+})();
 </script>
 
 </body>

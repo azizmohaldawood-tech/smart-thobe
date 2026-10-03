@@ -4,7 +4,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Smart Thobe ID — Emergency Identification</title>
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
@@ -21,7 +20,7 @@
   --text:#f3f7ff;
   --text-dim:#a9b8ca;
   --text-dimmer:#8092a8;
-  --text-faint:#53657a;
+  --text-faint:#53657a
 }
 
 html{scroll-behavior:smooth}
@@ -32,13 +31,22 @@ body{
   font-family:'Inter',system-ui,sans-serif;
   line-height:1.55;
   overflow-x:hidden;
-  -webkit-font-smoothing:antialiased;
+  -webkit-font-smoothing:antialiased
 }
 
 body.lang-ar{
   font-family:'Tajawal','Inter',sans-serif;
-  direction:rtl;
+  direction:rtl
 }
+
+body.lang-ar .hero h1,
+body.lang-ar .section h2,
+body.lang-ar .card h3{letter-spacing:0}
+
+body.lang-ar .mock-tag{transform:rotate(-3deg)}
+body.lang-ar .mock-tag:hover{transform:rotate(0) scale(1.02)}
+body.lang-ar .preview-verified{margin-left:0;margin-right:auto}
+body.lang-ar .form-side input{text-align:right}
 
 .bg-glow{
   position:fixed;
@@ -49,7 +57,7 @@ body.lang-ar{
   height:900px;
   background:radial-gradient(circle,#3b9cff18 0%,transparent 60%);
   pointer-events:none;
-  z-index:0;
+  z-index:0
 }
 
 .topbar{
@@ -63,15 +71,16 @@ body.lang-ar{
   backdrop-filter:blur(14px);
   position:sticky;
   top:0;
-  z-index:100;
+  z-index:100
 }
 
 .brand{
   font-weight:800;
+  letter-spacing:-.02em;
   display:flex;
   align-items:center;
   gap:10px;
-  font-size:17px;
+  font-size:17px
 }
 
 .brand-dot{
@@ -80,39 +89,71 @@ body.lang-ar{
   border-radius:50%;
   background:var(--blue);
   box-shadow:0 0 18px var(--blue);
+  animation:pulse 2.5s ease-in-out infinite
+}
+
+@keyframes pulse{
+  0%,100%{box-shadow:0 0 18px var(--blue)}
+  50%{box-shadow:0 0 28px var(--blue)}
 }
 
 .nav{
   display:flex;
   gap:10px;
-  align-items:center;
+  align-items:center
 }
 
-.ghost,
-.lang-btn{
+.ghost{
   border:1px solid var(--border-strong);
   background:transparent;
   color:#d7e5f5;
   border-radius:12px;
-  padding:9px 15px;
-  font-weight:600;
-  font-size:14px;
+  padding:9px 16px;
+  font-weight:500;
+  font-size:15px;
   text-decoration:none;
+  transition:all .15s;
   cursor:pointer;
-  font-family:inherit;
+  font-family:inherit
 }
 
-.ghost:hover,
-.lang-btn:hover{
+.ghost:hover{
   background:#0d2038;
+  border-color:#3b9cff55;
+  color:#fff
+}
+
+.lang-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  background:#0d2038;
+  border:1px solid var(--border-strong);
+  color:var(--text);
+  border-radius:12px;
+  padding:9px 14px;
+  font-weight:700;
+  font-size:14px;
+  cursor:pointer;
+  font-family:inherit;
+  transition:all .15s;
+  white-space:nowrap;
+  min-width:110px
+}
+
+.lang-btn:hover{
+  background:#102846;
   border-color:var(--blue);
+  color:var(--blue);
+  transform:translateY(-1px)
 }
 
 .container{
   width:min(1150px,90%);
   margin:auto;
   position:relative;
-  z-index:1;
+  z-index:1
 }
 
 .pill{
@@ -127,7 +168,7 @@ body.lang-ar{
   letter-spacing:.15em;
   color:var(--blue);
   font-weight:800;
-  text-transform:uppercase;
+  text-transform:uppercase
 }
 
 .pill::before{
@@ -136,15 +177,29 @@ body.lang-ar{
   height:6px;
   border-radius:50%;
   background:var(--blue);
+  box-shadow:0 0 8px var(--blue)
 }
 
+.eyebrow{
+  font-size:12px;
+  letter-spacing:.15em;
+  color:var(--blue);
+  font-weight:800;
+  text-transform:uppercase
+}
+
+body.lang-ar .pill,
+body.lang-ar .eyebrow,
+body.lang-ar .stat-label,
+body.lang-ar .card .number{letter-spacing:0}
+
 .hero{
-  min-height:600px;
+  min-height:660px;
   display:grid;
   grid-template-columns:1.15fr .85fr;
   gap:60px;
   align-items:center;
-  padding:70px 0 50px;
+  padding:70px 0 50px
 }
 
 .hero h1{
@@ -152,24 +207,24 @@ body.lang-ar{
   line-height:.92;
   letter-spacing:-.055em;
   margin:22px 0 24px;
-  font-weight:800;
+  font-weight:800
 }
 
-.accent{color:var(--blue)}
+.hero h1 .accent{color:var(--blue)}
 
 .sub{
   color:var(--text-dim);
   font-size:19px;
   line-height:1.55;
   max-width:560px;
-  margin-bottom:32px;
+  margin-bottom:32px
 }
 
 .hero-actions{
   display:flex;
   gap:12px;
   flex-wrap:wrap;
-  margin-bottom:40px;
+  margin-bottom:40px
 }
 
 .btn{
@@ -179,34 +234,38 @@ body.lang-ar{
   gap:9px;
   border:0;
   border-radius:13px;
-  padding:14px 22px;
+  padding:15px 24px;
   font-weight:800;
-  font-size:15px;
+  font-size:16px;
   cursor:pointer;
   font-family:inherit;
-  transition:.18s;
+  transition:all .18s;
   text-decoration:none;
+  width:fit-content;
+  white-space:nowrap
 }
 
 .primary{
   background:var(--blue);
-  color:#020812;
+  color:#020812
 }
 
 .primary:hover{
   background:#69b7ff;
   transform:translateY(-1px);
+  box-shadow:0 12px 32px #3b9cff33
 }
 
 .secondary{
   background:#0d2038;
   border:1px solid var(--border-strong);
-  color:var(--text);
+  color:var(--text)
 }
 
 .secondary:hover{
   background:#102846;
-  border-color:var(--blue);
+  border-color:#3b9cff55;
+  transform:translateY(-1px)
 }
 
 .hero-stats{
@@ -215,17 +274,19 @@ body.lang-ar{
   flex-wrap:wrap;
   padding-top:32px;
   border-top:1px solid var(--border);
-  max-width:560px;
+  max-width:560px
 }
 
 .stat-item{
   display:flex;
   flex-direction:column;
+  gap:2px
 }
 
 .stat-value{
   font-size:22px;
   font-weight:800;
+  color:var(--text)
 }
 
 .stat-label{
@@ -233,6 +294,7 @@ body.lang-ar{
   color:var(--text-faint);
   letter-spacing:.1em;
   text-transform:uppercase;
+  font-weight:600
 }
 
 .mock-tag{
@@ -249,7 +311,11 @@ body.lang-ar{
   box-shadow:0 35px 90px #000a,inset 0 0 60px #3b9cff08;
   justify-self:center;
   transform:rotate(3deg);
+  padding:24px;
+  transition:transform .4s
 }
+
+.mock-tag:hover{transform:rotate(0) scale(1.02)}
 
 .tag-ring{
   width:105px;
@@ -257,12 +323,18 @@ body.lang-ar{
   border:2px solid var(--blue);
   border-radius:50%;
   box-shadow:0 0 45px #3b9cff55,inset 0 0 30px #3b9cff33;
+  animation:ringPulse 3s ease-in-out infinite
+}
+
+@keyframes ringPulse{
+  0%,100%{box-shadow:0 0 45px #3b9cff55,inset 0 0 30px #3b9cff33}
+  50%{box-shadow:0 0 65px #3b9cff88,inset 0 0 40px #3b9cff55}
 }
 
 .tag-label{
   font-weight:900;
   letter-spacing:.2em;
-  font-size:19px;
+  font-size:19px
 }
 
 .tag-qr{
@@ -271,23 +343,28 @@ body.lang-ar{
   padding:9px 16px;
   font-size:12px;
   letter-spacing:.1em;
-  color:var(--text-dimmer);
+  color:var(--text-dimmer)
 }
 
+.mock-tag small{
+  color:#71879e;
+  letter-spacing:.18em;
+  font-size:11px;
+  font-weight:600
+}
+
+body.lang-ar .tag-label,
+body.lang-ar .tag-qr,
+body.lang-ar .mock-tag small{letter-spacing:0}
+
 .section{
-  padding:80px 0;
+  padding:90px 0;
+  position:relative
 }
 
 .section-head{
-  max-width:650px;
-  margin-bottom:42px;
-}
-
-.eyebrow{
-  font-size:12px;
-  letter-spacing:.15em;
-  color:var(--blue);
-  font-weight:800;
+  max-width:640px;
+  margin-bottom:50px
 }
 
 .section h2{
@@ -295,68 +372,184 @@ body.lang-ar{
   letter-spacing:-.035em;
   margin-top:12px;
   line-height:1.15;
+  font-weight:800
 }
 
-.lead{
+.section .lead{
   color:var(--text-dim);
   font-size:17px;
   margin-top:16px;
-  line-height:1.6;
+  line-height:1.6
 }
 
 .cards{
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:20px;
+  gap:20px
 }
 
 .card{
   border:1px solid var(--border);
   background:linear-gradient(180deg,#09182b,#050e1b);
   border-radius:22px;
-  padding:30px 26px;
+  padding:32px 26px;
+  transition:all .25s;
+  position:relative;
+  overflow:hidden
+}
+
+.card:hover{
+  border-color:#24517f;
+  background:linear-gradient(180deg,#0c1e34,#050e1b);
+  transform:translateY(-3px)
+}
+
+.card .number{
+  color:var(--blue);
+  font-weight:800;
+  font-size:13px;
+  letter-spacing:.15em;
+  display:block;
+  margin-bottom:16px
 }
 
 .card h3{
   font-size:21px;
-  margin:12px 0;
+  margin-bottom:12px;
+  font-weight:700
 }
 
 .card p{
   color:var(--text-dimmer);
   font-size:15px;
+  line-height:1.6
 }
+
+.preview-card{
+  border:1px solid var(--border-strong);
+  background:linear-gradient(145deg,#09182b,#050e1b);
+  border-radius:22px;
+  padding:32px;
+  max-width:560px;
+  margin:0 auto;
+  position:relative;
+  overflow:hidden
+}
+
+.preview-banner{
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  background:#25170e;
+  border-bottom:1px solid #67401e;
+  color:#ffcf87;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.08em;
+  padding:8px 16px;
+  text-align:center;
+  text-transform:uppercase
+}
+
+body.lang-ar .preview-banner{letter-spacing:0}
+
+.preview-body{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  margin:32px 0 24px
+}
+
+.preview-avatar{
+  width:54px;
+  height:54px;
+  border-radius:50%;
+  background:var(--blue);
+  color:#030712;
+  display:grid;
+  place-items:center;
+  font-weight:900;
+  font-size:22px;
+  flex-shrink:0
+}
+
+.preview-body h3{font-size:20px}
+
+.preview-body p{
+  font-size:14px;
+  color:var(--text-dimmer)
+}
+
+.preview-verified{
+  margin-left:auto;
+  color:var(--blue);
+  font-size:12px;
+  font-weight:700;
+  white-space:nowrap
+}
+
+.preview-rows{
+  border-top:1px solid var(--border);
+  margin-top:12px
+}
+
+.preview-row{
+  display:flex;
+  justify-content:space-between;
+  padding:13px 0;
+  border-bottom:1px solid var(--border);
+  font-size:14.5px
+}
+
+.preview-row:last-child{border-bottom:0}
+
+.preview-row span{color:var(--text-dimmer)}
+.preview-row strong{font-weight:600}
 
 .register-wrap{
   border:1px solid var(--border-strong);
   background:linear-gradient(145deg,#09182b,#050e1b);
   border-radius:28px;
-  padding:45px;
+  padding:52px 44px;
+  position:relative;
+  overflow:hidden
 }
 
 .register-header{
   text-align:center;
-  margin-bottom:40px;
+  margin-bottom:40px
+}
+
+.register-header h2{margin-top:12px}
+
+.register-header .lead{
+  margin-left:auto;
+  margin-right:auto;
+  max-width:560px
 }
 
 .register-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:40px;
-  align-items:start;
+  gap:44px;
+  align-items:start
+}
+
+.form-side{
+  display:flex;
+  flex-direction:column
 }
 
 .form-side label{
   display:block;
-  margin:15px 0 7px;
+  margin:14px 0 7px;
   color:var(--text-dim);
   font-weight:600;
-  font-size:14px;
+  font-size:14px
 }
 
-.form-side label:first-child{
-  margin-top:0;
-}
+.form-side label:first-child{margin-top:0}
 
 .form-side input{
   width:100%;
@@ -367,12 +560,20 @@ body.lang-ar{
   color:#fff;
   font-size:16px;
   font-family:inherit;
+  transition:all .15s
 }
+
+.form-side input::placeholder{color:#53657a}
 
 .form-side input:focus{
   outline:none;
   border-color:var(--blue);
-  box-shadow:0 0 0 3px var(--blue-soft);
+  box-shadow:0 0 0 3px var(--blue-soft)
+}
+
+.form-side .btn{
+  margin-top:24px;
+  width:100%
 }
 
 .info-banner{
@@ -383,261 +584,377 @@ body.lang-ar{
   padding:12px 16px;
   border-radius:12px;
   margin-bottom:20px;
-  word-break:break-all;
+  line-height:1.5;
+  word-break:break-all
 }
 
-.info-banner strong{
-  color:var(--blue);
-}
+.info-banner strong{color:var(--blue)}
 
 .privacy-box{
   border:1px solid var(--border-strong);
   background:#071426;
   border-radius:16px;
   padding:20px;
-  margin-top:24px;
+  margin-top:22px
 }
 
 .privacy-box h4{
+  font-size:15px;
   margin-bottom:6px;
+  color:var(--text)
 }
 
-.hint{
+.privacy-box .hint{
   font-size:12.5px;
   color:var(--text-faint);
-  margin-bottom:12px;
+  margin-bottom:14px;
+  line-height:1.5
 }
 
 .privacy-option{
   display:flex;
   align-items:flex-start;
   gap:12px;
-  padding:13px 0;
+  padding:12px 0;
   border-bottom:1px solid var(--border);
-  cursor:pointer;
+  cursor:pointer
 }
 
-.privacy-option:last-child{
-  border-bottom:0;
-}
+.privacy-option:last-child{border-bottom:0}
 
-.privacy-option input{
+.privacy-option input[type="checkbox"]{
   appearance:none;
-  width:21px;
-  height:21px;
+  -webkit-appearance:none;
+  width:20px;
+  height:20px;
   border:2px solid var(--border-strong);
   border-radius:6px;
   background:#030914;
   cursor:pointer;
   flex-shrink:0;
+  margin-top:1px;
   position:relative;
+  transition:all .15s
 }
 
-.privacy-option input:checked{
+.privacy-option input[type="checkbox"]:checked{
   background:var(--blue);
-  border-color:var(--blue);
+  border-color:var(--blue)
 }
 
-.privacy-option input:checked::after{
+.privacy-option input[type="checkbox"]:checked::after{
   content:"✓";
   position:absolute;
-  top:-4px;
+  top:-3px;
   left:2px;
   color:#030712;
   font-weight:900;
-  font-size:16px;
+  font-size:15px
 }
 
-.p-text{
-  flex:1;
-}
+.privacy-option .p-text{flex:1}
 
-.p-title{
-  display:block;
-  font-size:14px;
+.privacy-option .p-title{
+  font-size:14.5px;
   font-weight:700;
+  display:block;
+  margin-bottom:2px
 }
 
-.p-desc{
-  display:block;
+.privacy-option .p-desc{
+  font-size:12.5px;
   color:var(--text-faint);
-  font-size:12px;
-  margin-top:2px;
+  line-height:1.4
 }
+
+body.lang-ar .privacy-option{flex-direction:row-reverse}
+body.lang-ar .privacy-option .p-text{text-align:right}
 
 .result-side{
   border:1px dashed #24486d;
   background:#071426;
   border-radius:22px;
   padding:32px 26px;
-  min-height:500px;
   display:flex;
+  flex-direction:column;
   align-items:center;
   justify-content:center;
+  gap:16px;
+  min-height:440px;
   text-align:center;
+  transition:all .3s
 }
 
-.placeholder{
+.result-side.active{
+  border-style:solid;
+  border-color:#27649d;
+  background:linear-gradient(145deg,#09182b,#071120)
+}
+
+.result-placeholder{
   color:var(--text-faint);
+  font-size:15px;
+  line-height:1.7;
+  max-width:280px
 }
 
-.placeholder-icon{
-  font-size:60px;
+.result-placeholder .big-icon{
+  font-size:56px;
   display:block;
-  margin-bottom:15px;
-  opacity:.4;
+  margin-bottom:16px;
+  opacity:.4
 }
 
 .result-content{
   display:none;
   flex-direction:column;
   align-items:center;
-  width:100%;
+  gap:14px;
+  width:100%
 }
 
-.result-content.visible{
-  display:flex;
-}
+.result-content.visible{display:flex}
 
-.check{
+.result-content .check{
   font-size:36px;
+  animation:pop .4s
 }
 
-.tag-id{
-  font-family:monospace;
+@keyframes pop{
+  0%{transform:scale(.5);opacity:0}
+  60%{transform:scale(1.15)}
+  100%{transform:scale(1);opacity:1}
+}
+
+.result-content h3{
   font-size:21px;
-  font-weight:900;
   color:var(--blue);
+  margin-bottom:2px
+}
+
+.tag-id-display{
+  font-family:'Courier New',monospace;
+  font-size:20px;
+  font-weight:800;
+  color:var(--blue);
+  letter-spacing:.08em;
   background:#030914;
   border:1px solid var(--border-strong);
-  padding:10px 20px;
+  padding:11px 22px;
   border-radius:12px;
-  margin:10px 0;
-  direction:ltr;
+  margin:4px 0;
+  direction:ltr
 }
 
 .qr-box{
   background:#fff;
-  padding:15px;
-  border-radius:15px;
+  padding:16px;
+  border-radius:16px;
   width:max-content;
-  margin:10px auto;
-  line-height:0;
+  margin:6px auto;
+  box-shadow:0 12px 44px #000a;
+  line-height:0
 }
 
-.qr-box canvas,
-.qr-box img{
-  display:block;
-}
-
-.target-url{
-  color:var(--blue);
-  font-size:10px;
-  word-break:break-all;
-  max-width:100%;
-  line-height:1.5;
-  margin:8px 0;
-}
+.qr-box img,.qr-box canvas{display:block}
 
 .result-actions{
   display:flex;
   gap:8px;
   flex-wrap:wrap;
   justify-content:center;
+  margin-top:8px
 }
 
-.warning{
-  width:100%;
-  margin-top:18px;
-  padding:13px;
-  border-radius:12px;
+.result-actions .btn{
+  padding:11px 16px;
+  font-size:14px
+}
+
+.warning-note{
   background:#2a1f0c;
   border:1px solid #6b4f1c;
   color:#ffcf87;
-  font-size:12px;
+  font-size:12.5px;
+  padding:12px 14px;
+  border-radius:12px;
+  margin-top:16px;
+  line-height:1.55;
   text-align:left;
+  width:100%
 }
 
+body.lang-ar .warning-note{text-align:right}
+
 .status{
-  display:none;
-  margin-top:14px;
-  padding:14px 17px;
+  padding:14px 18px;
   border-radius:12px;
   background:#0d2038;
   border:1px solid var(--border-strong);
+  margin-top:14px;
+  word-break:break-word;
   font-size:14px;
+  display:none
 }
 
-.status.visible{
-  display:block;
-}
+.status.visible{display:block}
 
 .status.error{
-  background:#351713;
-  border-color:#733c31;
-  color:#ffb6a8;
+  background:#3a1b15;
+  border-color:#744133;
+  color:#ffcf87
 }
 
 footer{
   border-top:1px solid #10243d;
-  padding:45px 0;
-  margin-top:50px;
+  padding:48px 0 40px;
+  margin-top:80px;
   text-align:center;
   color:var(--text-faint);
+  font-size:14px
+}
+
+footer strong{
+  color:var(--text-dim);
+  font-weight:700
+}
+
+footer p{margin-top:8px}
+
+@media(max-width:1000px){
+  .register-grid{
+    grid-template-columns:1fr;
+    gap:30px
+  }
 }
 
 @media(max-width:900px){
   .hero{
     grid-template-columns:1fr;
+    min-height:auto;
+    padding:40px 0;
+    gap:60px
   }
 
-  .mock-tag{
-    width:250px;
-    height:320px;
-  }
-
-  .cards{
-    grid-template-columns:1fr;
-  }
-
-  .register-grid{
-    grid-template-columns:1fr;
-  }
+  .hero-stats{gap:24px}
+  .mock-tag{width:240px;height:300px}
+  .tag-ring{width:80px;height:80px}
+  .cards{grid-template-columns:1fr}
+  .register-wrap{padding:40px 24px}
+  .section{padding:60px 0}
 }
 
 @media(max-width:600px){
-  .topbar{
-    padding:0 4%;
+  .topbar{padding:0 5%}
+  .container{width:92%}
+  .hero h1{font-size:clamp(42px,12vw,60px)}
+  .sub{font-size:16px}
+  .btn{font-size:15px;padding:13px 18px}
+  .hero-actions{flex-direction:column}
+  .hero-actions .btn{width:100%}
+  .nav .ghost{font-size:13px;padding:8px 10px}
+  .lang-btn{font-size:13px;padding:8px 10px;min-width:90px}
+  .hero-stats{flex-direction:column;gap:16px}
+  .preview-card{padding:24px 20px}
+}
+
+/* ---- phone polish ---- */
+html{-webkit-text-size-adjust:100%}
+body{-webkit-tap-highlight-color:transparent}
+.pin-hint{font-size:13px;color:var(--text-dimmer);margin-top:8px;line-height:1.5}
+#qrcode img,#qrcode canvas{max-width:100%;height:auto !important}
+#targetUrl{display:block;max-height:84px;overflow:auto;word-break:break-all}
+
+@media(max-width:600px){
+  .topbar{height:60px}
+  .nav .ghost{display:none}
+  .brand{font-size:15px}
+  .container{width:calc(100% - 32px)}
+  .hero{padding:28px 0 8px;gap:0}
+  .hero h1{font-size:clamp(38px,11vw,50px);margin:16px 0 16px}
+  .mock-tag{display:none}
+  .sub{font-size:16px;margin-bottom:24px}
+  .hero-actions{margin-bottom:28px}
+  .hero-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding-top:20px}
+  .stat-value{font-size:17px}
+  .stat-label{font-size:10.5px;letter-spacing:.04em}
+  .section{padding:44px 0}
+  .register-wrap{padding:22px 16px;border-radius:20px}
+  .privacy-box{padding:16px;border-radius:14px}
+  .form-side input[type=text],.form-side input[type=password]{padding:14px;min-height:50px}
+  .btn{min-height:50px}
+  .result-side{padding:22px 16px;min-height:0}
+  .result-side .btn{flex:1 1 140px}
+  footer{padding:24px 16px}
+}
+
+@media print{
+  @page{size:auto;margin:12mm}
+
+  html,body{
+    background:#fff !important;
+    color:#000 !important
   }
 
-  .nav .ghost{
-    display:none;
+  body *{visibility:hidden !important}
+
+  #printArea,#printArea *{visibility:visible !important}
+
+  #printArea{
+    position:absolute !important;
+    left:0 !important;
+    top:0 !important;
+    right:0 !important;
+    width:100% !important;
+    padding:20px !important;
+    margin:0 !important;
+    background:#fff !important;
+    color:#000 !important;
+    box-shadow:none !important;
+    border:none !important;
+    text-align:center !important;
+    display:block !important;
+    page-break-inside:avoid;
+    page-break-after:avoid
   }
 
-  .container{
-    width:92%;
+  #printArea .tag-id-display{
+    color:#000 !important;
+    background:#f2f2f2 !important;
+    border:1px solid #999 !important;
+    font-size:18px !important;
+    padding:8px 18px !important;
+    margin:10px auto !important
   }
 
-  .hero h1{
-    font-size:50px;
+  #printArea .qr-box{
+    background:#fff !important;
+    box-shadow:none !important;
+    padding:10px !important;
+    margin:10px auto !important
   }
 
-  .sub{
-    font-size:16px;
+  #printArea h3{
+    color:#000 !important;
+    font-size:20px !important;
+    margin-bottom:6px !important
   }
 
-  .register-wrap{
-    padding:28px 20px;
+  #printArea .result-actions,
+  #printArea .warning-note,
+  #printArea code{
+    display:none !important
   }
 
-  .hero-actions{
-    flex-direction:column;
-  }
-
-  .hero-actions .btn{
-    width:100%;
+  #printArea .print-brand{
+    display:block !important;
+    font-size:12px !important;
+    color:#666 !important;
+    margin-top:12px !important
   }
 }
+
+.print-brand{display:none}
 </style>
 </head>
 
@@ -646,491 +963,404 @@ footer{
 <div class="bg-glow"></div>
 
 <header class="topbar">
-
   <div class="brand">
     <span class="brand-dot"></span>
     <span data-i18n="brand">Smart Thobe ID</span>
   </div>
 
   <nav class="nav">
-    <a class="ghost" href="#how" data-i18n="how_nav">How it works</a>
-    <a class="ghost" href="#register" data-i18n="register_nav">Register</a>
-
+    <a class="ghost" href="#how" data-i18n="nav_how">How it works</a>
+    <a class="ghost" href="#preview" data-i18n="nav_preview">Preview</a>
+    <a class="ghost" href="#register" data-i18n="nav_register">Register</a>
     <button class="lang-btn" id="langToggle" type="button">
-      🌐 <span id="langLabel">العربية</span>
+      <span>🌐</span>
+      <span id="langLabel">العربية</span>
     </button>
   </nav>
-
 </header>
 
 <main class="container">
 
 <section class="hero">
-
   <div>
-
-    <span class="pill" data-i18n="pill">
-      SAIF • SECURITY + INNOVATION
-    </span>
+    <span class="pill" data-i18n="hero_pill">SAIF • SECURITY + INNOVATION</span>
 
     <h1>
-      <span data-i18n="hero1">One scan.</span><br>
-      <span class="accent" data-i18n="hero2">Critical help.</span>
+      <span data-i18n="hero_line1">One scan.</span><br>
+      <span class="accent" data-i18n="hero_line2">Critical help.</span>
     </h1>
 
-    <p class="sub" data-i18n="heroSub">
-      A smart emergency identification system designed for the traditional Saudi thobe.
+    <p class="sub" data-i18n="hero_sub">
+      A smart emergency identification system designed for the traditional Saudi thobe. Scan to reveal life-saving information — instantly, safely, and respectfully.
     </p>
 
     <div class="hero-actions">
-
-      <a class="btn primary" href="#register" data-i18n="registerBtn">
+      <a class="btn primary" href="#register" data-i18n="hero_btn1">
         🏷️ Register your Smart Thobe
       </a>
 
-      <a class="btn secondary" href="emergency.html?id=SAIF-001">
-        🚨 Demo
+      <a class="btn secondary" href="emergency.html?id=SAIF-001" data-i18n="hero_btn2">
+        🚨 Try the emergency demo
       </a>
-
     </div>
 
     <div class="hero-stats">
-
       <div class="stat-item">
-        <span class="stat-value">QR</span>
-        <span class="stat-label" data-i18n="stat1">ANY PHONE</span>
+        <span class="stat-value" data-i18n="stat1_value">Instant</span>
+        <span class="stat-label" data-i18n="stat1_label">Scan to open</span>
       </div>
 
       <div class="stat-item">
-        <span class="stat-value">PIN</span>
-        <span class="stat-label" data-i18n="stat2">PRIVATE DATA</span>
+        <span class="stat-value" data-i18n="stat2_value">QR</span>
+        <span class="stat-label" data-i18n="stat2_label">One code, any phone</span>
       </div>
 
       <div class="stat-item">
-        <span class="stat-value">SAIF</span>
-        <span class="stat-label" data-i18n="stat3">EMERGENCY ID</span>
+        <span class="stat-value" data-i18n="stat3_value">Private</span>
+        <span class="stat-label" data-i18n="stat3_label">Layered access</span>
       </div>
-
     </div>
-
   </div>
 
   <div class="mock-tag">
-
     <div class="tag-ring"></div>
-
-    <div class="tag-label">SCAN</div>
-
-    <div class="tag-qr">QR CODE</div>
-
-    <small>SMART THOBE</small>
-
+    <div class="tag-label" data-i18n="tag_label">SCAN</div>
+    <div class="tag-qr" data-i18n="tag_qr">QR CODE</div>
+    <small data-i18n="tag_small">SMART THOBE</small>
   </div>
-
 </section>
 
 <section id="how" class="section">
-
   <div class="section-head">
-
-    <span class="eyebrow" data-i18n="howEyebrow">
-      HOW IT WORKS
-    </span>
-
-    <h2 data-i18n="howTitle">
-      Simple when every second matters.
-    </h2>
-
-    <p class="lead" data-i18n="howLead">
-      Register your information, choose what is public, then generate your QR.
+    <span class="eyebrow" data-i18n="how_eyebrow">HOW IT WORKS</span>
+    <h2 data-i18n="how_title">Simple when every second matters.</h2>
+    <p class="lead" data-i18n="how_lead">
+      Three steps that turn any thobe into a life-saving ID, without changing the way it looks or feels.
     </p>
-
   </div>
 
   <div class="cards">
-
     <div class="card">
-      <span class="eyebrow">01</span>
-      <h3 data-i18n="card1Title">Register</h3>
-      <p data-i18n="card1Body">
-        Enter your identity and emergency information.
+      <span class="number">01</span>
+      <h3 data-i18n="how1_title">Scan the code</h3>
+      <p data-i18n="how1_body">
+        An emergency helper scans the QR code on the thobe with any modern phone — no app required.
       </p>
     </div>
 
     <div class="card">
-      <span class="eyebrow">02</span>
-      <h3 data-i18n="card2Title">Choose privacy</h3>
-      <p data-i18n="card2Body">
-        Decide which information is public and which information requires your PIN.
+      <span class="number">02</span>
+      <h3 data-i18n="how2_title">See safe information</h3>
+      <p data-i18n="how2_body">
+        The emergency profile shows only the identity and contact details needed to help, keeping private data locked.
       </p>
     </div>
 
     <div class="card">
-      <span class="eyebrow">03</span>
-      <h3 data-i18n="card3Title">Generate QR</h3>
-      <p data-i18n="card3Body">
-        Scan the QR from another phone to open the emergency profile.
+      <span class="number">03</span>
+      <h3 data-i18n="how3_title">Contact family</h3>
+      <p data-i18n="how3_body">
+        One tap to share live location or dial the emergency contact, so family can be reached in seconds.
       </p>
     </div>
+  </div>
+</section>
 
+<section id="preview" class="section">
+  <div class="section-head" style="text-align:center;margin-left:auto;margin-right:auto">
+    <span class="eyebrow" data-i18n="prev_eyebrow">WHAT A HELPER SEES</span>
+    <h2 data-i18n="prev_title">Clean, fast, and privacy-first.</h2>
+    <p class="lead" style="margin-left:auto;margin-right:auto" data-i18n="prev_lead">
+      This is the emergency profile a helper opens when they scan a Smart Thobe.
+    </p>
   </div>
 
+  <div class="preview-card">
+    <div class="preview-banner" data-i18n="prev_banner">
+      ⚠️ Emergency ID • Demo
+    </div>
+
+    <div class="preview-body">
+      <div class="preview-avatar">A</div>
+
+      <div>
+        <h3 data-i18n="prev_name">Aziz</h3>
+        <p data-i18n="prev_id">ID: SAIF-001</p>
+      </div>
+
+      <span class="preview-verified" data-i18n="prev_verified">
+        ✓ Verified
+      </span>
+    </div>
+
+    <div class="preview-rows">
+      <div class="preview-row">
+        <span data-i18n="prev_contact">Emergency contact</span>
+        <strong data-i18n="prev_contact_val">Family Contact</strong>
+      </div>
+
+      <div class="preview-row">
+        <span data-i18n="prev_lang">Language</span>
+        <strong data-i18n="prev_lang_val">Arabic / English</strong>
+      </div>
+
+      <div class="preview-row">
+        <span data-i18n="prev_status">Tag status</span>
+        <strong style="color:var(--blue)" data-i18n="prev_status_val">Active</strong>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:24px">
+      <a class="btn secondary" href="emergency.html?id=SAIF-001" data-i18n="prev_btn">
+        Open full demo →
+      </a>
+    </div>
+  </div>
 </section>
 
 <section id="register" class="section">
+  <div class="register-wrap">
 
-<div class="register-wrap">
+    <div class="register-header">
+      <span class="pill" data-i18n="reg_pill">SMART THOBE SETUP</span>
 
-  <div class="register-header">
+      <h2 data-i18n="reg_title">
+        Register & generate your QR code
+      </h2>
 
-    <span class="pill" data-i18n="setup">
-      SMART THOBE SETUP
-    </span>
-
-    <h2 data-i18n="registerTitle">
-      Register & generate your QR
-    </h2>
-
-    <p class="lead" data-i18n="registerLead">
-      Enter your information and decide exactly what a helper can see.
-    </p>
-
-  </div>
-
-  <div class="register-grid">
-
-    <div class="form-side">
-
-      <div class="info-banner">
-        🌐 <span data-i18n="qrPoints">QR destination:</span>
-        <strong id="baseUrlDisplay">Loading...</strong>
-      </div>
-
-      <label for="regName" data-i18n="name">
-        Full name
-      </label>
-
-      <input
-        id="regName"
-        type="text"
-        placeholder="Example: Aziz"
-      >
-
-      <label for="regNationalId" data-i18n="nationalId">
-        National ID / Official ID
-      </label>
-
-      <input
-        id="regNationalId"
-        type="text"
-        inputmode="numeric"
-        autocomplete="off"
-        placeholder="Example: 1234567890"
-      >
-
-      <label for="regContact" data-i18n="contact">
-        Emergency contact
-      </label>
-
-      <input
-        id="regContact"
-        type="tel"
-        placeholder="+966 5X XXX XXXX"
-      >
-
-      <label for="regBlood" data-i18n="blood">
-        Blood type
-      </label>
-
-      <input
-        id="regBlood"
-        type="text"
-        placeholder="Example: O+"
-      >
-
-      <label for="regMedical" data-i18n="medical">
-        Medical information
-      </label>
-
-      <input
-        id="regMedical"
-        type="text"
-        placeholder="Example: No known conditions"
-      >
-
-      <div class="privacy-box">
-
-        <h4 data-i18n="pinTitle">
-          🔐 Create your PIN
-        </h4>
-
-        <p class="hint" data-i18n="pinHint">
-          This PIN unlocks the information you choose to hide.
-        </p>
-
-        <label for="regPin" data-i18n="pin">
-          Private access PIN
-        </label>
-
-        <input
-          id="regPin"
-          type="password"
-          inputmode="numeric"
-          maxlength="12"
-          autocomplete="new-password"
-          placeholder="Create a PIN"
-        >
-
-        <label for="regPinConfirm" data-i18n="pinConfirm">
-          Confirm PIN
-        </label>
-
-        <input
-          id="regPinConfirm"
-          type="password"
-          inputmode="numeric"
-          maxlength="12"
-          autocomplete="new-password"
-          placeholder="Enter PIN again"
-        >
-
-      </div>
-
-      <div class="privacy-box">
-
-        <h4 data-i18n="privacyTitle">
-          👁️ Choose what is hidden
-        </h4>
-
-        <p class="hint" data-i18n="privacyHint">
-          Checked = hidden behind your PIN. Unchecked = visible on the emergency page.
-        </p>
-
-        <label class="privacy-option">
-
-          <input type="checkbox" id="hideName">
-
-          <span class="p-text">
-            <span class="p-title" data-i18n="hideName">
-              Hide name
-            </span>
-
-            <span class="p-desc" data-i18n="hideNameDesc">
-              Requires PIN to reveal.
-            </span>
-          </span>
-
-        </label>
-
-        <label class="privacy-option">
-
-          <input type="checkbox" id="hideNationalId">
-
-          <span class="p-text">
-            <span class="p-title" data-i18n="hideNationalId">
-              Hide National ID
-            </span>
-
-            <span class="p-desc" data-i18n="hideNationalIdDesc">
-              Requires PIN to reveal.
-            </span>
-          </span>
-
-        </label>
-
-        <label class="privacy-option">
-
-          <input type="checkbox" id="hideContact">
-
-          <span class="p-text">
-            <span class="p-title" data-i18n="hideContact">
-              Hide emergency contact
-            </span>
-
-            <span class="p-desc" data-i18n="hideContactDesc">
-              Requires PIN to reveal.
-            </span>
-          </span>
-
-        </label>
-
-        <label class="privacy-option">
-
-          <input type="checkbox" id="hideBlood" checked>
-
-          <span class="p-text">
-            <span class="p-title" data-i18n="hideBlood">
-              Hide blood type
-            </span>
-
-            <span class="p-desc" data-i18n="hideBloodDesc">
-              Requires PIN to reveal.
-            </span>
-          </span>
-
-        </label>
-
-        <label class="privacy-option">
-
-          <input type="checkbox" id="hideMedical" checked>
-
-          <span class="p-text">
-            <span class="p-title" data-i18n="hideMedical">
-              Hide medical information
-            </span>
-
-            <span class="p-desc" data-i18n="hideMedicalDesc">
-              Requires PIN to reveal.
-            </span>
-          </span>
-
-        </label>
-
-      </div>
-
-      <button
-        id="generateBtn"
-        class="btn primary"
-        type="button"
-        style="width:100%;margin-top:22px"
-      >
-        🏷️ <span data-i18n="create">
-          Create Smart Thobe ID + QR
-        </span>
-      </button>
-
-      <div id="status" class="status"></div>
-
+      <p class="lead" data-i18n="reg_lead">
+        Fill in your details. We'll create a unique Tag ID, save your emergency profile, and generate a QR code that opens it on any phone.
+      </p>
     </div>
 
-    <div class="result-side">
+    <div class="register-grid">
 
-      <div id="placeholder" class="placeholder">
+      <div class="form-side">
 
-        <span class="placeholder-icon">🔲</span>
+        <div class="info-banner">
+          <span data-i18n="reg_base">🌐 QR codes will point to:</span>
+          <strong id="baseUrlDisplay">loading…</strong>
+        </div>
 
-        <span data-i18n="placeholder">
-          Your QR code will appear here after registration.
-        </span>
+        <label for="regName" data-i18n="reg_name">Name</label>
+        <input id="regName" type="text" data-i18n-ph="reg_name_ph" placeholder="Example: Ahmed">
+
+        <label for="regNationalId" data-i18n="reg_national_id">National ID / Official ID</label>
+        <input id="regNationalId" type="text" inputmode="numeric" autocomplete="off" data-i18n-ph="reg_national_id_ph" placeholder="Example: 1234567890">
+
+        <label for="regContact" data-i18n="reg_contact">Emergency contact</label>
+        <input id="regContact" type="text" data-i18n-ph="reg_contact_ph" placeholder="Example: +966 5X XXX XXXX">
+
+        <label for="regBlood" data-i18n="reg_blood">Blood type</label>
+        <input id="regBlood" type="text" data-i18n-ph="reg_blood_ph" placeholder="Example: O+">
+
+        <label for="regMedical" data-i18n="reg_medical">
+          Important medical information
+        </label>
+
+        <input id="regMedical" type="text" data-i18n-ph="reg_medical_ph" placeholder="Prototype example only">
+
+        <div class="privacy-box">
+
+          <h4 data-i18n="privacy_title">
+            🔐 Choose what stays locked
+          </h4>
+
+          <p class="hint" data-i18n="privacy_hint">
+            Select which details require the PIN you set to view. Unchecked details will be visible to any helper who scans.
+          </p>
+
+          <label class="privacy-option" for="lockName">
+            <input type="checkbox" id="lockName">
+            <span class="p-text">
+              <span class="p-title" data-i18n="privacy_name">Lock name</span>
+              <span class="p-desc" data-i18n="privacy_name_desc">Hidden until PIN is entered</span>
+            </span>
+          </label>
+
+          <label class="privacy-option" for="lockNationalId">
+            <input type="checkbox" id="lockNationalId">
+            <span class="p-text">
+              <span class="p-title" data-i18n="privacy_national_id">Lock National ID / Official ID</span>
+              <span class="p-desc" data-i18n="privacy_national_id_desc">Hidden until PIN is entered</span>
+            </span>
+          </label>
+
+          <label class="privacy-option" for="lockBlood">
+            <input type="checkbox" id="lockBlood" checked>
+
+            <span class="p-text">
+              <span class="p-title" data-i18n="privacy_blood">
+                Lock blood type
+              </span>
+
+              <span class="p-desc" data-i18n="privacy_blood_desc">
+                Hidden until PIN is entered
+              </span>
+            </span>
+          </label>
+
+          <label class="privacy-option" for="lockMedical">
+            <input type="checkbox" id="lockMedical" checked>
+
+            <span class="p-text">
+              <span class="p-title" data-i18n="privacy_medical">
+                Lock medical information
+              </span>
+
+              <span class="p-desc" data-i18n="privacy_medical_desc">
+                Hidden until PIN is entered
+              </span>
+            </span>
+          </label>
+
+          <label class="privacy-option" for="lockContact">
+            <input type="checkbox" id="lockContact">
+
+            <span class="p-text">
+              <span class="p-title" data-i18n="privacy_contact">
+                Lock emergency contact
+              </span>
+
+              <span class="p-desc" data-i18n="privacy_contact_desc">
+                Hidden until PIN is entered (off by default)
+              </span>
+            </span>
+          </label>
+
+        </div>
+
+        <label for="regPin" data-i18n="pin_label" style="margin-top:22px">Protection PIN</label>
+        <input id="regPin" type="password" inputmode="numeric" autocomplete="new-password" maxlength="12" placeholder="••••••">
+
+        <label for="regPinConfirm" data-i18n="pin_confirm_label">Confirm protection PIN</label>
+        <input id="regPinConfirm" type="password" inputmode="numeric" autocomplete="new-password" maxlength="12" placeholder="••••••">
+
+        <p class="pin-hint" data-i18n="pin_hint">6 to 12 digits. Needed to open locked details. It can't be recovered, so write it down.</p>
+
+        <button id="generateBtn" class="btn primary" data-i18n="reg_btn">
+          🏷️ Create Smart Thobe ID + QR
+        </button>
+
+        <div id="status" role="status" aria-live="polite" class="status"></div>
 
       </div>
 
-      <div id="resultContent" class="result-content">
+      <div class="result-side" id="resultSide">
 
-        <div class="check">✅</div>
+        <div class="result-placeholder" id="placeholder">
+          <span class="big-icon">🔲</span>
 
-        <h3 data-i18n="created">
-          Smart Thobe created!
-        </h3>
-
-        <p style="color:var(--text-dim);font-size:13px">
-          <span data-i18n="yourId">Your Tag ID</span>
-        </p>
-
-        <div id="tagIdDisplay" class="tag-id">
-          SAIF-000
-        </div>
-
-        <div id="qrcode" class="qr-box"></div>
-
-        <code id="targetUrl" class="target-url"></code>
-
-        <div class="result-actions">
-
-          <a
-            id="openProfileBtn"
-            class="btn primary"
-            href="#"
-            target="_blank"
-            rel="noopener"
-          >
-            👤 <span data-i18n="open">Open profile</span>
-          </a>
-
-          <button id="copyUrlBtn" class="btn secondary" type="button">
-            📋 <span data-i18n="copy">Copy link</span>
-          </button>
-
-          <button id="printQRBtn" class="btn secondary" type="button">
-            🖨️ <span data-i18n="print">Print</span>
-          </button>
-
-        </div>
-
-        <div class="warning">
-          🔐 <span data-i18n="securityNote">
-            Private information is encrypted before being placed in the QR link. The PIN is not stored in the QR code.
+          <span data-i18n="reg_placeholder">
+            Your QR code will appear here after you register.
           </span>
         </div>
 
+        <div class="result-content" id="resultContent">
+
+          <div id="printArea">
+
+            <h3 data-i18n="reg_success">
+              Smart Thobe created!
+            </h3>
+
+            <p style="color:var(--text-dim);font-size:13px;margin-top:6px" data-i18n="reg_tagid">
+              Your Tag ID
+            </p>
+
+            <div id="tagIdDisplay" class="tag-id-display">
+              SAIF-000
+            </div>
+
+            <div id="qrcode" class="qr-box"></div>
+
+            <span class="print-brand">
+              Smart Thobe ID • smart-thobe
+            </span>
+
+          </div>
+
+          <code id="targetUrl" style="color:var(--blue);font-size:11px;word-break:break-all;max-width:100%;line-height:1.5"></code>
+
+          <div class="result-actions">
+
+            <a id="openProfileBtn" class="btn primary" href="#" target="_blank" rel="noopener" data-i18n="reg_open">
+              👤 Open
+            </a>
+
+            <button id="printQRBtn" class="btn secondary" type="button" data-i18n="reg_print">
+              🖨️ Print
+            </button>
+
+            <button id="copyUrlBtn" class="btn secondary" type="button" data-i18n="reg_copy">
+              📋 Copy
+            </button>
+
+          </div>
+
+          <div class="warning-note" data-i18n="reg_warn">
+            ⚠️ Prototype: the QR contains the profile data in the link (encoded, not encrypted). Anyone with the link can read it.
+          </div>
+
+        </div>
       </div>
-
     </div>
-
   </div>
-
-</div>
-
 </section>
 
 <section class="section">
 
   <div class="section-head">
-
-    <span class="eyebrow" data-i18n="security">
+    <span class="eyebrow" data-i18n="sec_eyebrow">
       SECURITY BY DESIGN
     </span>
 
-    <h2 data-i18n="securityTitle">
-      You decide what people see.
+    <h2 data-i18n="sec_title">
+      Privacy comes first.
     </h2>
 
-    <p class="lead" data-i18n="securityLead">
-      Public information can be shown immediately. Private information stays encrypted until the correct PIN is entered.
+    <p class="lead" data-i18n="sec_lead">
+      Sensitive information should never be exposed by a public QR scan. Smart Thobe splits the profile into layers, each with its own access rules.
     </p>
-
   </div>
 
   <div class="cards">
 
     <div class="card">
-      <div style="font-size:30px">🌐</div>
-      <h3 data-i18n="publicTitle">Public</h3>
-      <p data-i18n="publicBody">
-        Information you choose to show can be viewed by an emergency helper immediately.
+      <span style="font-size:28px;display:inline-block;margin-bottom:18px">🌐</span>
+      <h3 data-i18n="sec1_title">Public layer</h3>
+      <p data-i18n="sec1_body">
+        Minimal identity and emergency actions are visible to any helper who scans — just enough to start helping.
       </p>
     </div>
 
     <div class="card">
-      <div style="font-size:30px">🔒</div>
-      <h3 data-i18n="privateTitle">Private</h3>
-      <p data-i18n="privateBody">
-        Information you hide is encrypted and requires your PIN.
+      <span style="font-size:28px;display:inline-block;margin-bottom:18px">🔐</span>
+      <h3 data-i18n="sec2_title">Protected layer</h3>
+      <p data-i18n="sec2_body">
+        Blood type, medical notes, and family details stay behind a PIN or authenticated access.
       </p>
     </div>
 
     <div class="card">
-      <div style="font-size:30px">📱</div>
-      <h3 data-i18n="phoneTitle">Any phone</h3>
-      <p data-i18n="phoneBody">
-        The QR opens through the browser without requiring a special app.
+      <span style="font-size:28px;display:inline-block;margin-bottom:18px">👤</span>
+      <h3 data-i18n="sec3_title">Owner control</h3>
+      <p data-i18n="sec3_body">
+        The owner decides what is public, what is protected, and can update their information at any time.
       </p>
     </div>
 
   </div>
-
 </section>
 
 <footer>
-
-  <strong data-i18n="footer">
+  <strong data-i18n="foot_brand">
     SAIF Prototype • Smart Thobe ID
   </strong>
 
-  <p style="margin-top:8px" data-i18n="footerNote">
-    Demo only • Do not enter real medical information.
+  <p data-i18n="foot_note">
+    Demo only • No real medical information
   </p>
-
 </footer>
 
 </main>
@@ -1140,768 +1370,519 @@ footer{
 <script>
 (function(){
 
-const I18N={
-
+const I18N = {
 en:{
 brand:"Smart Thobe ID",
-how_nav:"How it works",
-register_nav:"Register",
+nav_how:"How it works",
+nav_preview:"Preview",
+nav_register:"Register",
 
-pill:"SAIF • SECURITY + INNOVATION",
-hero1:"One scan.",
-hero2:"Critical help.",
-heroSub:"A smart emergency identification system designed for the traditional Saudi thobe.",
-registerBtn:"🏷️ Register your Smart Thobe",
+hero_pill:"SAIF • SECURITY + INNOVATION",
+hero_line1:"One scan.",
+hero_line2:"Critical help.",
 
-stat1:"ANY PHONE",
-stat2:"PRIVATE DATA",
-stat3:"EMERGENCY ID",
+hero_sub:"A smart emergency identification system designed for the traditional Saudi thobe. Scan to reveal life-saving information — instantly, safely, and respectfully.",
 
-howEyebrow:"HOW IT WORKS",
-howTitle:"Simple when every second matters.",
-howLead:"Register your information, choose what is public, then generate your QR.",
+hero_btn1:"🏷️ Register your Smart Thobe",
+hero_btn2:"🚨 Try the emergency demo",
 
-card1Title:"Register",
-card1Body:"Enter your identity and emergency information.",
-card2Title:"Choose privacy",
-card2Body:"Decide which information is public and which information requires your PIN.",
-card3Title:"Generate QR",
-card3Body:"Scan the QR from another phone to open the emergency profile.",
+stat1_value:"Instant",
+stat1_label:"Scan to open",
+stat2_value:"QR",
+stat2_label:"One code, any phone",
+stat3_value:"Private",
+stat3_label:"Layered access",
 
-setup:"SMART THOBE SETUP",
-registerTitle:"Register & generate your QR",
-registerLead:"Enter your information and decide exactly what a helper can see.",
+tag_label:"SCAN",
+tag_qr:"QR CODE",
+tag_small:"SMART THOBE",
 
-qrPoints:"QR destination:",
+how_eyebrow:"HOW IT WORKS",
+how_title:"Simple when every second matters.",
+how_lead:"Three steps that turn any thobe into a life-saving ID, without changing the way it looks or feels.",
 
-name:"Full name",
-nationalId:"National ID / Official ID",
-contact:"Emergency contact",
-blood:"Blood type",
-medical:"Medical information",
+how1_title:"Scan the code",
+how1_body:"An emergency helper scans the QR code on the thobe with any modern phone — no app required.",
 
-pinTitle:"🔐 Create your PIN",
-pinHint:"This PIN unlocks the information you choose to hide.",
-pin:"Private access PIN",
-pinConfirm:"Confirm PIN",
+how2_title:"See safe information",
+how2_body:"The emergency profile shows only the identity and contact details needed to help, keeping private data locked.",
 
-privacyTitle:"👁️ Choose what is hidden",
-privacyHint:"Checked = hidden behind your PIN. Unchecked = visible on the emergency page.",
+how3_title:"Contact family",
+how3_body:"One tap to share live location or dial the emergency contact, so family can be reached in seconds.",
 
-hideName:"Hide name",
-hideNameDesc:"Requires PIN to reveal.",
+prev_eyebrow:"WHAT A HELPER SEES",
+prev_title:"Clean, fast, and privacy-first.",
+prev_lead:"This is the emergency profile a helper opens when they scan a Smart Thobe.",
 
-hideNationalId:"Hide National ID",
-hideNationalIdDesc:"Requires PIN to reveal.",
+prev_banner:"⚠️ Emergency ID • Demo",
+prev_name:"Aziz",
+prev_id:"ID: SAIF-001",
+prev_verified:"✓ Verified",
 
-hideContact:"Hide emergency contact",
-hideContactDesc:"Requires PIN to reveal.",
+prev_contact:"Emergency contact",
+prev_contact_val:"Family Contact",
+prev_lang:"Language",
+prev_lang_val:"Arabic / English",
 
-hideBlood:"Hide blood type",
-hideBloodDesc:"Requires PIN to reveal.",
+prev_status:"Tag status",
+prev_status_val:"Active",
+prev_btn:"Open full demo →",
 
-hideMedical:"Hide medical information",
-hideMedicalDesc:"Requires PIN to reveal.",
+reg_pill:"SMART THOBE SETUP",
+reg_title:"Register & generate your QR code",
 
-create:"Create Smart Thobe ID + QR",
-placeholder:"Your QR code will appear here after registration.",
-created:"Smart Thobe created!",
-yourId:"Your Tag ID",
+reg_lead:"Fill in your details. We'll create a unique Tag ID, save your emergency profile, and generate a QR code that opens it on any phone.",
 
-open:"Open profile",
-copy:"Copy link",
-print:"Print",
+reg_base:"🌐 QR codes will point to:",
 
-securityNote:"Private information is encrypted before being placed in the QR link. The PIN is not stored in the QR code.",
+reg_name:"Name",
+reg_name_ph:"Example: Ahmed",
+reg_national_id:"National ID / Official ID",
+reg_national_id_ph:"Example: 1234567890",
 
-security:"SECURITY BY DESIGN",
-securityTitle:"You decide what people see.",
-securityLead:"Public information can be shown immediately. Private information stays encrypted until the correct PIN is entered.",
+reg_contact:"Emergency contact",
+reg_contact_ph:"Example: +966 5X XXX XXXX",
 
-publicTitle:"Public",
-publicBody:"Information you choose to show can be viewed by an emergency helper immediately.",
+reg_blood:"Blood type",
+reg_blood_ph:"Example: O+",
 
-privateTitle:"Private",
-privateBody:"Information you hide is encrypted and requires your PIN.",
+reg_medical:"Important medical information",
+reg_medical_ph:"Prototype example only",
 
-phoneTitle:"Any phone",
-phoneBody:"The QR opens through the browser without requiring a special app.",
+privacy_title:"🔐 Choose what stays locked",
 
-footer:"SAIF Prototype • Smart Thobe ID",
-footerNote:"Demo only • Do not enter real medical information.",
+privacy_hint:"Select which details require the PIN you set to view. Unchecked details will be visible to any helper who scans.",
 
-errName:"Please enter a name.",
-errPin:"Please create a PIN.",
-errPinConfirm:"Please confirm your PIN.",
-errPinMismatch:"The PINs do not match.",
-errPinLength:"PIN must be at least 4 characters.",
-errCrypto:"Your browser does not support the required secure encryption.",
-createdMsg:"Smart Thobe created! Tag ID: ",
-copied:"✅ Copied!"
+privacy_blood:"Lock blood type",
+privacy_blood_desc:"Hidden until PIN is entered",
+
+privacy_medical:"Lock medical information",
+privacy_medical_desc:"Hidden until PIN is entered",
+
+privacy_contact:"Lock emergency contact",
+privacy_contact_desc:"Hidden until PIN is entered (off by default)",
+
+reg_btn:"🏷️ Create Smart Thobe ID + QR",
+
+reg_placeholder:"Your QR code will appear here after you register.",
+
+reg_success:"Smart Thobe created!",
+reg_tagid:"Your Tag ID",
+
+reg_open:"👤 Open",
+reg_print:"🖨️ Print",
+reg_copy:"📋 Copy",
+
+reg_warn:"⚠️ Prototype: the QR contains the profile data in the link (encoded, not encrypted). Anyone with the link can read it.",
+
+sec_eyebrow:"SECURITY BY DESIGN",
+sec_title:"Privacy comes first.",
+
+sec_lead:"Sensitive information should never be exposed by a public QR scan. Smart Thobe splits the profile into layers, each with its own access rules.",
+
+sec1_title:"Public layer",
+sec1_body:"Minimal identity and emergency actions are visible to any helper who scans — just enough to start helping.",
+
+sec2_title:"Protected layer",
+sec2_body:"Blood type, medical notes, and family details stay behind a PIN or authenticated access.",
+
+sec3_title:"Owner control",
+sec3_body:"The owner decides what is public, what is protected, and can update their information at any time.",
+
+foot_brand:"SAIF Prototype • Smart Thobe ID",
+foot_note:"Demo only • No real medical information",
+
+lang_next:"العربية",
+
+err_name:"Please enter a name.",
+pin_label:"Protection PIN",
+pin_confirm_label:"Confirm protection PIN",
+pin_hint:"6 to 12 digits. Needed to open locked details. It can't be recovered, so write it down.",
+
+ok_created:"Smart Thobe created! ✅ Tag ID: ",
+
+copied:"✅ Copied!",
+copy_reset:"📋 Copy"
 },
 
 ar:{
 brand:"الهوية الذكية للثوب",
-how_nav:"كيف يعمل",
-register_nav:"تسجيل",
+nav_how:"كيف يعمل",
+nav_preview:"معاينة",
+nav_register:"تسجيل",
 
-pill:"سيف • الأمن والابتكار",
-hero1:"مسح واحد.",
-hero2:"مساعدة حرجة.",
-heroSub:"نظام تعريف طارئ ذكي مصمم للثوب السعودي التقليدي.",
-registerBtn:"🏷️ سجّل ثوبك الذكي",
+hero_pill:"سيف • الأمن والابتكار",
+hero_line1:"مسح واحد.",
+hero_line2:"مساعدة حرجة.",
 
-stat1:"أي هاتف",
-stat2:"بيانات خاصة",
-stat3:"هوية طوارئ",
+hero_sub:"نظام تعريف طارئ ذكي مصمم للثوب السعودي التقليدي. امسح الرمز للكشف عن معلومات منقذة للحياة — فوراً وبأمان واحترام.",
 
-howEyebrow:"كيف يعمل",
-howTitle:"بسيط عندما تكون كل ثانية مهمة.",
-howLead:"سجّل معلوماتك، اختر ما هو عام، ثم أنشئ رمز QR.",
+hero_btn1:"🏷️ سجّل ثوبك الذكي",
+hero_btn2:"🚨 جرّب العرض الطارئ",
 
-card1Title:"التسجيل",
-card1Body:"أدخل هويتك ومعلومات الطوارئ.",
-card2Title:"اختر الخصوصية",
-card2Body:"حدد المعلومات العامة والمعلومات التي تتطلب رمز PIN.",
-card3Title:"إنشاء QR",
-card3Body:"امسح الرمز من هاتف آخر لفتح الملف الطارئ.",
+stat1_value:"فوري",
+stat1_label:"امسح للفتح",
+stat2_value:"QR",
+stat2_label:"رمز واحد لأي هاتف",
+stat3_value:"خاص",
+stat3_label:"وصول متعدد الطبقات",
 
-setup:"إعداد الثوب الذكي",
-registerTitle:"سجّل وأنشئ رمز QR",
-registerLead:"أدخل معلوماتك وحدد بالضبط ما يستطيع المسعف رؤيته.",
+tag_label:"امسح",
+tag_qr:"رمز QR",
+tag_small:"الثوب الذكي",
 
-qrPoints:"وجهة رمز QR:",
+how_eyebrow:"كيف يعمل",
+how_title:"بسيط عندما تكون كل ثانية مهمة.",
+how_lead:"ثلاث خطوات تحوّل أي ثوب إلى هوية منقذة للحياة، دون تغيير شكله أو ملمسه.",
 
-name:"الاسم الكامل",
-nationalId:"رقم الهوية الوطنية / الرسمية",
-contact:"جهة الاتصال للطوارئ",
-blood:"فصيلة الدم",
-medical:"المعلومات الطبية",
+how1_title:"امسح الرمز",
+how1_body:"يمسح المسعف رمز QR الموجود على الثوب بأي هاتف حديث — دون الحاجة إلى تطبيق.",
 
-pinTitle:"🔐 أنشئ رمز PIN",
-pinHint:"يستخدم هذا الرمز لفتح المعلومات التي اخترت إخفاءها.",
-pin:"رمز الوصول الخاص",
-pinConfirm:"تأكيد رمز PIN",
+how2_title:"اطّلع على المعلومات الآمنة",
+how2_body:"يعرض الملف الطارئ فقط الهوية وبيانات الاتصال اللازمة للمساعدة، مع إبقاء البيانات الخاصة مقفلة.",
 
-privacyTitle:"👁️ اختر ما تريد إخفاءه",
-privacyHint:"محدد = مخفي خلف PIN. غير محدد = ظاهر في صفحة الطوارئ.",
+how3_title:"تواصل مع العائلة",
+how3_body:"نقرة واحدة لمشاركة الموقع المباشر أو الاتصال بجهة الطوارئ، ليتم الوصول إلى العائلة في ثوانٍ.",
 
-hideName:"إخفاء الاسم",
-hideNameDesc:"يتطلب PIN لإظهاره.",
+prev_eyebrow:"ما يراه المسعف",
+prev_title:"واضح، سريع، ويحفظ الخصوصية.",
+prev_lead:"هذا هو الملف الطارئ الذي يفتحه المسعف عند مسح الثوب الذكي.",
 
-hideNationalId:"إخفاء رقم الهوية",
-hideNationalIdDesc:"يتطلب PIN لإظهاره.",
+prev_banner:"⚠️ هوية طارئة • تجريبي",
+prev_name:"عزيز",
+prev_id:"الرقم: SAIF-001",
+prev_verified:"✓ موثّق",
 
-hideContact:"إخفاء جهة الاتصال",
-hideContactDesc:"يتطلب PIN لإظهارها.",
+prev_contact:"جهة الاتصال للطوارئ",
+prev_contact_val:"جهة اتصال العائلة",
+prev_lang:"اللغة",
+prev_lang_val:"العربية / الإنجليزية",
 
-hideBlood:"إخفاء فصيلة الدم",
-hideBloodDesc:"يتطلب PIN لإظهارها.",
+prev_status:"حالة الرمز",
+prev_status_val:"نشط",
+prev_btn:"افتح العرض الكامل ←",
 
-hideMedical:"إخفاء المعلومات الطبية",
-hideMedicalDesc:"يتطلب PIN لإظهارها.",
+reg_pill:"إعداد الثوب الذكي",
+reg_title:"سجّل وأنشئ رمز QR",
 
-create:"أنشئ هوية الثوب الذكي + QR",
-placeholder:"سيظهر رمز QR هنا بعد التسجيل.",
-created:"تم إنشاء الثوب الذكي!",
-yourId:"رقم الهوية",
+reg_lead:"املأ بياناتك. سننشئ رقم هوية فريداً، ونحفظ ملفك الطارئ، وننشئ رمز QR يفتحه على أي هاتف.",
 
-open:"فتح الملف",
-copy:"نسخ الرابط",
-print:"طباعة",
+reg_base:"🌐 ستشير رموز QR إلى:",
 
-securityNote:"يتم تشفير المعلومات الخاصة قبل وضعها في رابط QR. لا يتم تخزين رمز PIN داخل رمز QR.",
+reg_name:"الاسم",
+reg_name_ph:"مثال: أحمد",
+reg_national_id:"رقم الهوية الوطنية / الرسمية",
+reg_national_id_ph:"مثال: 1234567890",
 
-security:"الأمان بالتصميم",
-securityTitle:"أنت تحدد ما يراه الآخرون.",
-securityLead:"المعلومات التي تختار إظهارها تظهر فوراً. أما المعلومات الخاصة فتبقى مشفرة حتى إدخال PIN الصحيح.",
+reg_contact:"جهة الاتصال للطوارئ",
+reg_contact_ph:"مثال: +966 5X XXX XXXX",
 
-publicTitle:"عام",
-publicBody:"المعلومات التي تختار إظهارها يستطيع المسعف رؤيتها مباشرة.",
+reg_blood:"فصيلة الدم",
+reg_blood_ph:"مثال: +O",
 
-privateTitle:"خاص",
-privateBody:"المعلومات التي تخفيها يتم تشفيرها وتتطلب رمز PIN.",
+reg_medical:"معلومات طبية مهمة",
+reg_medical_ph:"مثال تجريبي فقط",
 
-phoneTitle:"أي هاتف",
-phoneBody:"يفتح QR من خلال المتصفح دون الحاجة إلى تطبيق خاص.",
+privacy_title:"🔐 اختر ما يبقى مقفلاً",
 
-footer:"نموذج سيف • الهوية الذكية للثوب",
-footerNote:"تجريبي فقط • لا تدخل معلومات طبية حقيقية.",
+privacy_hint:"حدد التفاصيل التي تتطلب الرمز الذي تحدده لعرضها. التفاصيل غير المحددة ستظهر لأي مسعف يمسح الرمز.",
 
-errName:"الرجاء إدخال الاسم.",
-errPin:"الرجاء إنشاء رمز PIN.",
-errPinConfirm:"الرجاء تأكيد رمز PIN.",
-errPinMismatch:"رمزا PIN غير متطابقين.",
-errPinLength:"يجب أن يكون PIN مكوناً من 4 أحرف أو أرقام على الأقل.",
-errCrypto:"متصفحك لا يدعم التشفير الآمن المطلوب.",
-createdMsg:"تم إنشاء الثوب الذكي! رقم الهوية: ",
-copied:"✅ تم النسخ!"
+privacy_blood:"قفل فصيلة الدم",
+privacy_blood_desc:"مخفية حتى يتم إدخال الرمز",
+
+privacy_medical:"قفل المعلومات الطبية",
+privacy_medical_desc:"مخفية حتى يتم إدخال الرمز",
+
+privacy_contact:"قفل جهة الاتصال للطوارئ",
+privacy_contact_desc:"مخفية حتى يتم إدخال الرمز (معطّلة افتراضياً)",
+
+reg_btn:"🏷️ أنشئ هوية الثوب الذكي + QR",
+
+reg_placeholder:"سيظهر رمز QR هنا بعد التسجيل.",
+
+reg_success:"تم إنشاء الثوب الذكي!",
+reg_tagid:"رقم الهوية",
+
+reg_open:"👤 فتح",
+reg_print:"🖨️ طباعة",
+reg_copy:"📋 نسخ",
+
+reg_warn:"⚠️ نموذج تجريبي: يحتوي رمز QR على بيانات الملف داخل الرابط (مشفّرة بترميز، غير معمّاة). أي شخص لديه الرابط يمكنه قراءتها.",
+
+sec_eyebrow:"الأمان بالتصميم",
+sec_title:"الخصوصية أولاً.",
+
+sec_lead:"لا ينبغي أن تُكشف المعلومات الحساسة عبر مسح QR عام. يقسّم الثوب الذكي الملف إلى طبقات، لكل منها قواعد وصول خاصة.",
+
+sec1_title:"الطبقة العامة",
+sec1_body:"تظهر للمسعف فقط الهوية المختصرة وإجراءات الطوارئ — بالحد الكافي للبدء بالمساعدة.",
+
+sec2_title:"الطبقة المحمية",
+sec2_body:"تبقى فصيلة الدم والملاحظات الطبية وبيانات العائلة خلف رمز PIN أو وصول موثّق.",
+
+sec3_title:"تحكّم المالك",
+sec3_body:"يقرّر المالك ما هو عام وما هو محمي، ويستطيع تحديث معلوماته في أي وقت.",
+
+foot_brand:"نموذج سيف • الهوية الذكية للثوب",
+foot_note:"تجريبي فقط • لا توجد معلومات طبية حقيقية",
+
+lang_next:"English",
+
+err_name:"الرجاء إدخال الاسم.",
+pin_label:"الرمز السري للحماية",
+pin_confirm_label:"تأكيد رمز الحماية",
+pin_hint:"من 6 إلى 12 رقماً. يلزم لفتح التفاصيل المقفلة. لا يمكن استرجاعه، لذا دوّنه.",
+
+ok_created:"تم إنشاء الثوب الذكي! ✅ رقم الهوية: ",
+
+copied:"✅ تم النسخ!",
+copy_reset:"📋 نسخ"
 }
-
 };
 
 let lang=localStorage.getItem("smartThobeLang")||"en";
 
-function applyLang(){
+function applyLang(l){
+  lang=l;
+  localStorage.setItem("smartThobeLang",l);
 
-const t=I18N[lang];
+  document.documentElement.lang=l;
+  document.documentElement.dir=l==="ar"?"rtl":"ltr";
 
-document.documentElement.lang=lang;
-document.documentElement.dir=lang==="ar"?"rtl":"ltr";
+  document.body.classList.toggle("lang-ar",l==="ar");
 
-document.body.classList.toggle("lang-ar",lang==="ar");
+  document.getElementById("langLabel").textContent=I18N[l].lang_next;
 
-document.getElementById("langLabel").textContent=
-lang==="en"?"العربية":"English";
+  document.querySelectorAll("[data-i18n]").forEach(el=>{
+    const k=el.getAttribute("data-i18n");
 
-document.querySelectorAll("[data-i18n]").forEach(el=>{
+    if(I18N[l][k]!==undefined){
+      el.textContent=I18N[l][k];
+    }
+  });
 
-const key=el.dataset.i18n;
+  document.querySelectorAll("[data-i18n-ph]").forEach(el=>{
+    const k=el.getAttribute("data-i18n-ph");
 
-if(t[key]!==undefined){
-el.textContent=t[key];
+    if(I18N[l][k]!==undefined){
+      el.placeholder=I18N[l][k];
+    }
+  });
 }
 
+document.getElementById("langToggle").addEventListener("click",()=>{
+  applyLang(lang==="en"?"ar":"en");
 });
 
-}
-
-document.getElementById("langToggle").onclick=()=>{
-
-lang=lang==="en"?"ar":"en";
-
-localStorage.setItem("smartThobeLang",lang);
-
-applyLang();
-
-};
-
-applyLang();
-
-/* =========================
-   BASE URL
-========================= */
-
-const githubBase=
-"https://azizmohaldawood-tech.github.io/smart-thobe";
+const GITHUB_PAGES_URL="https://azizmohaldawood-tech.github.io/smart-thobe";
 
 function getBaseUrl(){
-
-if(location.protocol==="http:" ||
-   location.protocol==="https:"){
-
-const path=location.pathname;
-
-const dir=
-path.substring(
-0,
-path.lastIndexOf("/")
-);
-
-return location.origin+dir;
-
+  const loc=window.location;
+  if(loc.protocol==="file:") return GITHUB_PAGES_URL;
+  const path=loc.pathname;
+  const dir=path.substring(0,path.lastIndexOf("/"));
+  return loc.origin+dir;
 }
 
-return githubBase;
+function bytesToBase64Url(bytes){
+  let bin="";
+  for(const b of bytes) bin+=String.fromCharCode(b);
+  return btoa(bin).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/g,"");
+}
 
+async function deriveKey(pin,salt,usage){
+  const baseKey=await crypto.subtle.importKey(
+    "raw",new TextEncoder().encode(pin),"PBKDF2",false,["deriveKey"]
+  );
+  return crypto.subtle.deriveKey(
+    {name:"PBKDF2",salt,iterations:150000,hash:"SHA-256"},
+    baseKey,{name:"AES-GCM",length:256},false,[usage]
+  );
+}
+
+async function encryptPrivate(data,pin){
+  const salt=crypto.getRandomValues(new Uint8Array(16));
+  const iv=crypto.getRandomValues(new Uint8Array(12));
+  const key=await deriveKey(pin,salt,"encrypt");
+  const cipher=new Uint8Array(await crypto.subtle.encrypt(
+    {name:"AES-GCM",iv},key,new TextEncoder().encode(JSON.stringify(data))
+  ));
+  return {
+    v:1,
+    s:bytesToBase64Url(salt),
+    iv:bytesToBase64Url(iv),
+    ct:bytesToBase64Url(cipher)
+  };
+}
+
+function encodePacket(packet){
+  return bytesToBase64Url(
+    new TextEncoder().encode(JSON.stringify(packet))
+  );
+}
+
+function makeTagId(){
+  const stamp=Date.now().toString(36).toUpperCase();
+  const random=Math.random().toString(36).slice(2,7).toUpperCase();
+  return "SAIF-"+stamp.slice(-5)+random;
 }
 
 document.getElementById("baseUrlDisplay").textContent=getBaseUrl();
 
-/* =========================
-   BASE64URL
-========================= */
+const generateBtn=document.getElementById("generateBtn");
+const statusEl=document.getElementById("status");
+const placeholder=document.getElementById("placeholder");
+const resultContent=document.getElementById("resultContent");
+const tagIdDisplay=document.getElementById("tagIdDisplay");
+const qrBox=document.getElementById("qrcode");
+const targetUrlEl=document.getElementById("targetUrl");
+const openProfileBtn=document.getElementById("openProfileBtn");
+const printBtn=document.getElementById("printQRBtn");
+const copyBtn=document.getElementById("copyUrlBtn");
+const resultSide=document.getElementById("resultSide");
 
-function bytesToBase64Url(bytes){
-
-let binary="";
-
-for(let i=0;i<bytes.length;i++){
-binary+=String.fromCharCode(bytes[i]);
+function showStatus(msg,isError){
+  statusEl.textContent=msg;
+  statusEl.classList.add("visible");
+  statusEl.classList.toggle("error",!!isError);
 }
 
-return btoa(binary)
-.replace(/\+/g,"-")
-.replace(/\//g,"_")
-.replace(/=+$/,"");
-
-}
-
-/* =========================
-   CRYPTO
-========================= */
-
-async function deriveKey(pin,salt){
-
-const encoder=new TextEncoder();
-
-const pinKey=await crypto.subtle.importKey(
-"raw",
-encoder.encode(pin),
-"PBKDF2",
-false,
-["deriveKey"]
-);
-
-return crypto.subtle.deriveKey(
-{
-name:"PBKDF2",
-salt:salt,
-iterations:150000,
-hash:"SHA-256"
-},
-pinKey,
-{
-name:"AES-GCM",
-length:256
-},
-false,
-["encrypt","decrypt"]
-);
-
-}
-
-async function encryptPrivate(data,pin){
-
-const encoder=new TextEncoder();
-
-const salt=crypto.getRandomValues(
-new Uint8Array(16)
-);
-
-const iv=crypto.getRandomValues(
-new Uint8Array(12)
-);
-
-const key=await deriveKey(pin,salt);
-
-const plaintext=encoder.encode(
-JSON.stringify(data)
-);
-
-const ciphertext=new Uint8Array(
-await crypto.subtle.encrypt(
-{
-name:"AES-GCM",
-iv:iv
-},
-key,
-plaintext
-)
-);
-
-return{
-v:1,
-s:bytesToBase64Url(salt),
-iv:bytesToBase64Url(iv),
-ct:bytesToBase64Url(ciphertext)
-};
-
-}
-
-/* =========================
-   TAG ID
-========================= */
-
-function createTagId(){
-
-const people=JSON.parse(
-localStorage.getItem("smartThobePeople")||"{}"
-);
-
-let id;
-
-do{
-
-id="SAIF-"+Math.floor(100+Math.random()*900);
-
-}while(people[id]);
-
-return id;
-
-}
-
-/* =========================
-   FORM
-========================= */
-
-const generateBtn=
-document.getElementById("generateBtn");
-
-const status=
-document.getElementById("status");
-
-function showStatus(message,error=false){
-
-status.textContent=message;
-
-status.classList.add("visible");
-
-status.classList.toggle("error",error);
-
-}
-
-generateBtn.onclick=async()=>{
-
-const t=I18N[lang];
-
-const name=
-document.getElementById("regName").value.trim();
-
-const nationalId=
-document.getElementById("regNationalId").value.trim();
-
-const contact=
-document.getElementById("regContact").value.trim();
-
-const blood=
-document.getElementById("regBlood").value.trim();
-
-const medical=
-document.getElementById("regMedical").value.trim();
-
-const pin=
-document.getElementById("regPin").value;
-
-const pinConfirm=
-document.getElementById("regPinConfirm").value;
-
-if(!name){
-
-showStatus(t.errName,true);
-return;
-
-}
-
-if(!pin){
-
-showStatus(t.errPin,true);
-return;
-
-}
-
-if(!pinConfirm){
-
-showStatus(t.errPinConfirm,true);
-return;
-
-}
-
-if(pin!==pinConfirm){
-
-showStatus(t.errPinMismatch,true);
-return;
-
-}
-
-if(pin.length<4){
-
-showStatus(t.errPinLength,true);
-return;
-
-}
-
-if(!window.crypto || !window.crypto.subtle){
-
-showStatus(t.errCrypto,true);
-return;
-
-}
-
-/* =========================
-   PRIVACY SETTINGS
-========================= */
-
-const hidden={
-
-name:
-document.getElementById("hideName").checked,
-
-nationalId:
-document.getElementById("hideNationalId").checked,
-
-contact:
-document.getElementById("hideContact").checked,
-
-blood:
-document.getElementById("hideBlood").checked,
-
-medical:
-document.getElementById("hideMedical").checked
-
-};
-
-/* =========================
-   ALL USER DATA
-========================= */
-
-const allData={
-name:name,
-nationalId:nationalId,
-contact:contact,
-blood:blood,
-medical:medical
-};
-
-/* =========================
-   SPLIT PUBLIC / PRIVATE
-========================= */
-
-const publicData={};
-const privateData={};
-
-for(const field of Object.keys(allData)){
-
-if(hidden[field]){
-
-privateData[field]=allData[field];
-
-}else{
-
-publicData[field]=allData[field];
-
-}
-
-}
-
-/* =========================
-   ENCRYPT ONLY HIDDEN DATA
-========================= */
-
-let encrypted=null;
-
-if(Object.keys(privateData).length>0){
-
-try{
-
-encrypted=
-await encryptPrivate(
-privateData,
-pin
-);
-
-}catch(error){
-
-console.error(error);
-
-showStatus(
-t.errCrypto,
-true
-);
-
-return;
-
-}
-
-}
-
-/* =========================
-   CREATE TAG
-========================= */
-
-const tagId=createTagId();
-
-/*
-IMPORTANT:
-The PIN itself is NEVER
-placed inside the QR.
-*/
-
-const packet={
-
-v:2,
-
-id:tagId,
-
-public:publicData,
-
-locked:hidden,
-
-private:encrypted
-
-};
-
-/* =========================
-   ENCODE PACKET
-========================= */
-
-const packetBytes=
-new TextEncoder().encode(
-JSON.stringify(packet)
-);
-
-const packetEncoded=
-bytesToBase64Url(
-packetBytes
-);
-
-/* =========================
-   CREATE EMERGENCY URL
-========================= */
-
-const emergencyUrl=
-getBaseUrl()+
-"/emergency.html?id="+
-encodeURIComponent(tagId)+
-"&d="+
-encodeURIComponent(packetEncoded);
-
-/* =========================
-   SAVE LOCAL COPY
-========================= */
-
-const savedPerson={
-
-name:name,
-nationalId:nationalId,
-contact:contact,
-blood:blood,
-medical:medical,
-
-locked:{
-name:hidden.name,
-nationalId:hidden.nationalId,
-contact:hidden.contact,
-blood:hidden.blood,
-medical:hidden.medical
-},
-
-encryptedPrivate:encrypted
-
-};
-
-try{
-
-const people=JSON.parse(
-localStorage.getItem("smartThobePeople")||"{}"
-);
-
-people[tagId]=savedPerson;
-
-localStorage.setItem(
-"smartThobePeople",
-JSON.stringify(people)
-);
-
-}catch(error){
-
-console.warn(
-"Could not save local registration",
-error
-);
-
-}
-
-/* =========================
-   SHOW RESULT
-========================= */
-
-document.getElementById(
-"placeholder"
-).style.display="none";
-
-document.getElementById(
-"resultContent"
-).classList.add("visible");
-
-document.getElementById(
-"tagIdDisplay"
-).textContent=tagId;
-
-const qrBox=
-document.getElementById("qrcode");
-
-qrBox.innerHTML="";
-
-new QRCode(
-qrBox,
-{
-text:emergencyUrl,
-width:220,
-height:220,
-colorDark:"#000000",
-colorLight:"#ffffff",
-correctLevel:QRCode.CorrectLevel.M
-}
-);
-
-document.getElementById(
-"targetUrl"
-).textContent=emergencyUrl;
-
-document.getElementById(
-"openProfileBtn"
-).href=emergencyUrl;
-
-showStatus(
-t.createdMsg+tagId
-);
-
-};
-
-/* =========================
-   COPY
-========================= */
-
-document.getElementById(
-"copyUrlBtn"
-).onclick=async()=>{
-
-const url=
-document.getElementById(
-"targetUrl"
-).textContent;
-
-if(!url)return;
-
-try{
-
-await navigator.clipboard.writeText(url);
-
-}catch(error){
-
-const textarea=
-document.createElement("textarea");
-
-textarea.value=url;
-
-document.body.appendChild(textarea);
-
-textarea.select();
-
-document.execCommand("copy");
-
-textarea.remove();
-
-}
-
-const button=
-document.getElementById("copyUrlBtn");
-
-const old=button.innerHTML;
-
-button.innerHTML=
-I18N[lang].copied;
-
-setTimeout(()=>{
-
-button.innerHTML=old;
-
-},1500);
-
-};
-
-/* =========================
-   PRINT
-========================= */
-
-document.getElementById(
-"printQRBtn"
-).onclick=()=>{
-
-window.print();
-
-};
+generateBtn.addEventListener("click",async()=>{
+  statusEl.classList.remove("visible","error");
+
+  const name=document.getElementById("regName").value.trim();
+  const nationalId=document.getElementById("regNationalId").value.trim();
+  const contact=document.getElementById("regContact").value.trim();
+  const blood=document.getElementById("regBlood").value.trim();
+  const medical=document.getElementById("regMedical").value.trim();
+  const pin=(document.getElementById("regPin").value||"").trim();
+  const pinConfirm=(document.getElementById("regPinConfirm").value||"").trim();
+
+  if(!name){
+    showStatus(I18N[lang].err_name,true);
+    return;
+  }
+
+  if(!/^\d{6,12}$/.test(pin)){
+    showStatus(lang==="ar"?"أدخل رمز حماية من 6 إلى 12 رقماً.":"Enter a protection PIN of 6 to 12 digits.",true);
+    return;
+  }
+
+  if(pin!==pinConfirm){
+    showStatus(lang==="ar"?"رمزا PIN غير متطابقين.":"The two PINs do not match.",true);
+    return;
+  }
+
+  const allData={
+    name,
+    nationalId,
+    contact:contact||"Not provided",
+    blood:blood||"Not provided",
+    medical:medical||"Not provided"
+  };
+
+  const locked={
+    name:document.getElementById("lockName").checked,
+    nationalId:document.getElementById("lockNationalId").checked,
+    contact:document.getElementById("lockContact").checked,
+    blood:document.getElementById("lockBlood").checked,
+    medical:document.getElementById("lockMedical").checked
+  };
+
+  const publicData={};
+  const privateData={};
+
+  Object.keys(allData).forEach(field=>{
+    if(locked[field]) privateData[field]=allData[field];
+    else publicData[field]=allData[field];
+  });
+
+  let encrypted=null;
+
+  try{
+    if(Object.keys(privateData).length>0){
+      encrypted=await encryptPrivate(privateData,pin);
+    }
+  }catch(error){
+    console.error(error);
+    showStatus(lang==="ar"?"تعذر إنشاء الحماية. افتح الموقع من GitHub Pages وحاول مرة أخرى.":"Could not create PIN protection. Open the GitHub Pages site and try again.",true);
+    return;
+  }
+
+  const tagId=makeTagId();
+
+  const packet={
+    v:2,
+    id:tagId,
+    public:publicData,
+    locked,
+    private:encrypted
+  };
+
+  const packetEncoded=encodePacket(packet);
+  const url=
+    getBaseUrl()+
+    "/emergency.html?id="+
+    encodeURIComponent(tagId)+
+    "&d="+
+    encodeURIComponent(packetEncoded);
+
+  /* Local fallback only. The QR itself is self-contained. */
+  try{
+    const people=JSON.parse(localStorage.getItem("smartThobePeople")||"{}");
+    people[tagId]={
+      ...allData,
+      locked:{...locked},
+      private:encrypted
+    };
+    localStorage.setItem("smartThobePeople",JSON.stringify(people));
+  }catch(e){}
+
+  showStatus(I18N[lang].ok_created+tagId);
+  tagIdDisplay.textContent=tagId;
+  placeholder.style.display="none";
+  resultContent.classList.add("visible");
+  resultSide.classList.add("active");
+  qrBox.innerHTML="";
+
+  new QRCode(qrBox,{
+    text:url,
+    width:300,
+    height:300,
+    colorDark:"#000000",
+    colorLight:"#ffffff",
+    correctLevel:QRCode.CorrectLevel.M
+  });
+
+  targetUrlEl.textContent=url;
+  openProfileBtn.href=url;
+
+  setTimeout(()=>{
+    if(window.innerWidth<1000){
+      resultSide.scrollIntoView({behavior:"smooth",block:"center"});
+    }
+  },150);
+});
+
+printBtn.addEventListener("click",()=>window.print());
+
+copyBtn.addEventListener("click",async()=>{
+  const url=targetUrlEl.textContent;
+  try{
+    await navigator.clipboard.writeText(url);
+  }catch(e){
+    const t=document.createElement("textarea");
+    t.value=url;
+    document.body.appendChild(t);
+    t.select();
+    try{document.execCommand("copy");}catch(err){}
+    t.remove();
+  }
+  copyBtn.textContent=I18N[lang].copied;
+  setTimeout(()=>copyBtn.textContent=I18N[lang].copy_reset,1800);
+});
+
+applyLang(lang);
 
 })();
 </script>

@@ -1042,10 +1042,36 @@ function hasLockedFields(){return fields.some(f=>locked[f]);}
 async function unlock(){
   if(!encryptedBox){
     if(!hasLockedFields()){
-      document.getElementById("protected").hidden=false;renderProtected();showStatus(I18N[lang].st_prot_opened);return;
+      document.getElementById("protected").hidden=false;
+      renderProtected();
+      showStatus(I18N[lang].st_prot_opened);
+      return;
     }
-    showStatus(I18N[lang].st_denied_pin);return;
+
+    /* DEMO PROFILE: the built-in emergency demo uses 1234. */
+    const demoPin=prompt(
+      lang==="ar"
+        ? "ما هو رمز المرور؟ (1234)"
+        : "What's the password? (1234)"
+    );
+
+    if(demoPin===null)return;
+
+    if(demoPin!=="1234"){
+      showStatus(I18N[lang].st_denied_pin);
+      return;
+    }
+
+    Object.keys(locked).forEach(key=>locked[key]=false);
+    document.getElementById("protected").hidden=false;
+    updateHeader();
+    updatePublicRows();
+    updateCallButton();
+    renderProtected();
+    showStatus(I18N[lang].st_prot_opened);
+    return;
   }
+
   const pin=prompt(lang==="ar"?"أدخل رمز PIN:":"Enter PIN:");
   if(pin===null)return;
   if(!/^\d{6,12}$/.test(pin)){showStatus(I18N[lang].st_denied_pin);return;}
